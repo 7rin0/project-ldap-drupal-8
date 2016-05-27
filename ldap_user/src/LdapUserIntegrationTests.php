@@ -36,7 +36,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
     // // @FIXME
     // // This looks like another module's variable. You'll need to rewrite this call
     // // to ensure that it uses the correct configuration object.
-    // \Drupal::config()->set('ldap_simpletest', 2)->save();
+    // \Drupal::getContainer()->get('config.factory')->getEditable('ldap_user.settings')->set('ldap_simpletest', 2)->save();
   }
 
   /**
@@ -235,18 +235,18 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // // @FIXME
       // // This looks like another module's variable. You'll need to rewrite this call
       // // to ensure that it uses the correct configuration object.
-      // \Drupal::config()->set('user_email_verification', TRUE)->save();.
+      // \Drupal::getContainer()->get('config.factory')->getEditable('ldap_user.settings')->set('user_email_verification', TRUE)->save();.
       // @FIXME
       // // @FIXME
       // // This looks like another module's variable. You'll need to rewrite this call
       // // to ensure that it uses the correct configuration object.
-      // \Drupal::config()->set('user_register', USER_REGISTER_VISITORS)->save();
+      // \Drupal::getContainer()->get('config.factory')->getEditable('ldap_user.settings')->set('user_register', USER_REGISTER_VISITORS)->save();
       // or USER_REGISTER_ADMINISTRATORS_ONLY, USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL.
       // @FIXME
       // // @FIXME
       // // This looks like another module's variable. You'll need to rewrite this call
       // // to ensure that it uses the correct configuration object.
-      // \Drupal::config()->set('user_cancel_method', 'user_cancel_block')->save();
+      // \Drupal::getContainer()->get('config.factory')->getEditable('ldap_user.settings')->set('user_cancel_method', 'user_cancel_block')->save();
       // user_cancel_block_unpublish, user_cancel_reassign, user_cancel_delete.
       $username = 'sstephens';
       $this->drupalLogout();

@@ -73,7 +73,7 @@ class LdapServerTest extends LdapServer {
    * Destructor Method.
    */
   function __destruct() {
-    // If alterations to server configuration must be maintained throughout simpletest, \Drupal::config()->set('ldap_authorization_test_server__'. $sid, array());
+    // If alterations to server configuration must be maintained throughout simpletest, \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_authorization_test_server__'. $sid, array());
   }
 
   /**
@@ -430,7 +430,7 @@ class LdapServerTest extends LdapServer {
     if ($dn && !isset($test_data['entries'][$dn])) {
       $test_data['entries'][$dn] = $ldap_entry;
       $test_data['ldap'][$dn] = $ldap_entry;
-      \Drupal::config()->set('ldap_test_server__' . $this->sid, $test_data)->save();
+      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_server__' . $this->sid, $test_data)->save();
       $this->refreshFakeData();
       $result = TRUE;
     }
@@ -480,7 +480,7 @@ class LdapServerTest extends LdapServer {
     $test_data['entries'][$dn] = $ldap_entry;
     $test_data['ldap'][$dn] = $ldap_entry;
     // debug("modifyLdapEntry:server test data before save $dn"); debug($test_data['entries'][$dn]);.
-    \Drupal::config()->set('ldap_test_server__' . $this->sid, $test_data)->save();
+    \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_server__' . $this->sid, $test_data)->save();
     $this->refreshFakeData();
     return TRUE;
 
@@ -505,7 +505,7 @@ class LdapServerTest extends LdapServer {
       }
     }
     if ($deleted) {
-      \Drupal::config()->set('ldap_test_server__' . $this->sid, $test_data)->save();
+      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_server__' . $this->sid, $test_data)->save();
       $this->refreshFakeData();
       return TRUE;
     }

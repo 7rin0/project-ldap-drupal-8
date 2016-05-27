@@ -38,7 +38,7 @@ class LdapUserUnitTests extends LdapTestCase {
     // // @FIXME
     // // This looks like another module's variable. You'll need to rewrite this call
     // // to ensure that it uses the correct configuration object.
-    // \Drupal::config()->set('ldap_simpletest', 2)->save();
+    // \Drupal::getContainer()->get('config.factory')->getEditable('ldap_user.settings')->set('ldap_simpletest', 2)->save();
   }
 
   /**

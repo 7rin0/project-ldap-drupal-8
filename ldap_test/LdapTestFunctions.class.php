@@ -42,9 +42,9 @@ class LdapTestFunctions {
   function configureLdapServers($sids, $feetures = FALSE, $feature_name = NULL) {
     foreach ($sids as $i => $sid) {
       $current_sids[$sid] = $sid;
-      \Drupal::config()->set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid])->save();
+      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid])->save();
     }
-    \Drupal::config()->set('ldap_test_servers', $current_sids)->save();
+    \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_servers', $current_sids)->save();
   }
 
   /**
@@ -53,7 +53,7 @@ class LdapTestFunctions {
   function setFakeServerProperty($sid, $prop, $value) {
     $test_data = \Drupal::config()->get('ldap_test_server__' . $sid, array());
     $test_data['properties'][$prop] = $value;
-    \Drupal::config()->set('ldap_test_server__' . $sid, $test_data)->save();
+    \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_server__' . $sid, $test_data)->save();
   }
 
   /**
@@ -72,7 +72,7 @@ class LdapTestFunctions {
     $count_set = (int) isset($test_data['ldap'][$dn][$attr_name]['count']);
     // don't count the 'count'.
     $test_data['ldap'][$dn][$attr_name]['count'] = count($test_data['ldap'][$dn][$attr_name]) - $count_set;
-    \Drupal::config()->set('ldap_test_server__' . $sid, $test_data)->save();
+    \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_server__' . $sid, $test_data)->save();
     // Clear server cache;.
     $ldap_server = ldap_servers_get_servers($sid, NULL, TRUE, TRUE);
   }
@@ -307,10 +307,10 @@ class LdapTestFunctions {
 
     $this->data['ldap_servers'][$sid]['ldap'] = $this->ldapData['ldap_servers'][$sid];
     $this->data['ldap_servers'][$sid]['csv'] = $this->csvTables;
-    \Drupal::config()->set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid])->save();
+    \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid])->save();
     $current_sids = \Drupal::config()->get('ldap_test_servers', array());
     $current_sids[] = $sid;
-    \Drupal::config()->set('ldap_test_servers', array_unique($current_sids))->save();
+    \Drupal::getContainer()->get('config.factory')->getEditable('ldap_test.settings')->set('ldap_test_servers', array_unique($current_sids))->save();
   }
 
   /**

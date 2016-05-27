@@ -44,7 +44,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
       'ldap_test',
     // don't need any real servers, configured, just ldap_servers code base.
     ));
-    \Drupal::config()->set('ldap_simpletest', 2)->save();
+    \Drupal::getContainer()->get('config.factory')->getEditable('ldap_authentication.settings')->set('ldap_simpletest', 2)->save();
   }
 
   /**
