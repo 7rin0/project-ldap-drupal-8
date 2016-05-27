@@ -548,7 +548,7 @@ function ldap_user_form_user_login_block_alter(&$form, \Drupal\Core\Form\FormSta
 /**
  * Implements hook_form_FORM_ID_alter(). for user_login_form.
  */
-function ldap_user_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function ldap_user_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   array_unshift($form['#validate'], 'ldap_user_grab_password_validate');
 }
 

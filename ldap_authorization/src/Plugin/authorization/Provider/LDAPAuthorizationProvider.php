@@ -24,7 +24,7 @@ class LDAPAuthorizationProvider extends ProviderPluginBase {
   /**
    *
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $profile = $this->configuration['profile'];
 
     $tokens = $this->getTokens();
@@ -131,7 +131,7 @@ Representations of groups derived from LDAP might initially look like:
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function validateConfigurationForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $mappings = $values['filter_and_mappings']['mappings'];
     $mappings = $this->normalizeMappings($this->pipeListToArray($mappings, TRUE));
@@ -142,7 +142,7 @@ Representations of groups derived from LDAP might initially look like:
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function submitConfigurationForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $values = $form_state->getValues();
     // @TODO what does this do?
 
@@ -172,7 +172,7 @@ Representations of groups derived from LDAP might initially look like:
   /**
    *
    */
-  public function buildRowForm(array $form, FormStateInterface $form_state, $index) {
+  public function buildRowForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state, $index) {
     $row = array();
     $mappings = $this->configuration['profile']->getProviderMappings();
     $row['query'] = array(

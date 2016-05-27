@@ -20,7 +20,7 @@ class LdapUserTestForm extends FormBase {
   /**
    *
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $op = NULL) {
+  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state, $op = NULL) {
 
     $username = @$_SESSION['ldap_user_test_form']['testing_drupal_username'];
 
@@ -81,7 +81,7 @@ class LdapUserTestForm extends FormBase {
   /**
    *
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     if ($form_state->getValue(['test_mode']) == 'execute' && count(array_filter($form_state->getValue([
       'action',
     ]))) > 1) {
@@ -93,7 +93,7 @@ class LdapUserTestForm extends FormBase {
   /**
    *
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
     $username = $form_state->getValue(['testing_drupal_username']);
     $selected_actions = $form_state->getValue(['action']);

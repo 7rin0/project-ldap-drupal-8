@@ -23,7 +23,7 @@ function ldap_user_admin_form($form, \Drupal\Core\Form\FormStateInterface $form_
 function ldap_user_admin_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
   $ldap_user_conf_admin = ldap_user_conf('admin');
-  list($errors, $warnings) = $ldap_user_conf_admin->drupalFormValidate($form_state['values'], $form['#storage']);
+  list($errors, $warnings) = $ldap_user_conf_admin->drupalFormValidate($form_state->getValues(), $form['#storage']);
   foreach ($errors as $error_name => $error_text) {
     form_set_error($error_name, t($error_text));
   }

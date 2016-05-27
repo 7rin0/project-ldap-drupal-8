@@ -35,7 +35,7 @@ class ServerDeleteForm extends EntityConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $this->entity->delete();
 
     \Drupal::logger('ldap_servers')->notice('@type: deleted %title.',

@@ -20,7 +20,7 @@ class LdapServersSettings extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $encryption = $values['encryption'] ? $values['encryption'] : LDAP_SERVERS_ENC_TYPE_CLEARTEXT;
     $this->config('ldap_servers.settings')
@@ -44,7 +44,7 @@ class LdapServersSettings extends ConfigFormBase {
   /**
    *
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
     if (!ldap_servers_ldap_extension_loaded()) {
       drupal_set_message(t('PHP LDAP Extension is not loaded.'), "warning");
     }
@@ -118,7 +118,7 @@ class LdapServersSettings extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function _submitForm(array &$form, FormStateInterface $form_state) {
+  public function _submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     if ($form_state->isSubmitted()) {
       $new_encryption = $form_state->getValue(['encryption']);
       $old_encryption = $form_state->getValue(['previous_encryption']);
