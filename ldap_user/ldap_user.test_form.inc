@@ -17,7 +17,7 @@
  * @return
  *   The form structure.
  */
-function ldap_user_test_form($form, &$form_state, $op = NULL) {
+function ldap_user_test_form($form, \Drupal\Core\Form\FormStateInterface $form_state, $op = NULL) {
 
   $username = @$_SESSION['ldap_user_test_form']['testing_drupal_username'];
 
@@ -76,7 +76,7 @@ function ldap_user_test_form($form, &$form_state, $op = NULL) {
 /**
  *
  */
-function ldap_user_test_form_validate($form, &$form_state) {
+function ldap_user_test_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
   if ($form_state['values']['test_mode'] == 'execute'  &&
     count(array_filter($form_state['values']['action'])) > 1) {
     form_set_error('test_mode', t('Only one action may be selected for "Execute Action" testing mode.'));
@@ -87,7 +87,7 @@ function ldap_user_test_form_validate($form, &$form_state) {
 /**
  * Submit hook for the LDAP server form.
  */
-function ldap_user_test_form_submit($form, &$form_state) {
+function ldap_user_test_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
   $username = $form_state['values']['testing_drupal_username'];
   $selected_actions = $form_state['values']['action'];

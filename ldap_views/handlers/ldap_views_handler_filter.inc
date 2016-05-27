@@ -142,7 +142,7 @@ class ldap_views_handler_filter extends views_handler_filter {
   /**
    * Provide a simple textfield for equality.
    */
-  function value_form(&$form, &$form_state) {
+  function value_form(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     // We have to make some choices when creating this as an exposed
     // filter form. For example, if the operator is locked and thus
     // not rendered, we can't render dependencies; instead we only

@@ -171,7 +171,7 @@ function _ldap_user_orphans($ldap_user_conf) {
   }
 
   if (count($email_list) > 0) {
-    $site_email = config('system.site')->get('mail');
+    $site_email = \Drupal::config('system.site')->get('mail');
     $params = array('accounts' => $email_list);
     if ($site_email) {
       drupal_mail(

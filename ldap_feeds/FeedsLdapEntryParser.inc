@@ -87,7 +87,7 @@ class FeedsLdapEntryParser extends FeedsParser {
   /**
    * Override parent::configForm().
    */
-  public function configForm(&$form_state) {
+  public function configForm(\Drupal\Core\Form\FormStateInterface $form_state) {
     $form = array();
     return $form;
   }

@@ -40,7 +40,7 @@ class LdapServerTest extends LdapServer {
       $sid = $test_data['sid'];
     }
     else {
-      $test_data = variable_get('ldap_test_server__' . $sid, array());
+      $test_data = \Drupal::config()->get('ldap_test_server__' . $sid, array());
     }
 
     $bindpw = (isset($test_data['bindpw'])) ? $test_data['bindpw'] : 'goodpwd';
@@ -54,12 +54,12 @@ class LdapServerTest extends LdapServer {
    */
   public function refreshFakeData() {
     // debug("refreshFakeData sid=". $this->sid);.
-    $test_data = variable_get('ldap_test_server__' . $this->sid, array());
+    $test_data = \Drupal::config()->get('ldap_test_server__' . $this->sid, array());
     $this->methodResponses = (is_array($test_data) && isset($test_data['methodResponses'])) ? $test_data['methodResponses'] : array();
     $this->entries = (is_array($test_data) && isset($test_data['ldap'])) ? $test_data['ldap'] : array();
     // debug('this->entries');debug($this->entries);.
     $this->searchResults = (isset($test_data['search_results'])) ? $test_data['search_results'] : array();
-    $this->detailedWatchdogLog = config('ldap_help.settings')->get('watchdog_detail');
+    $this->detailedWatchdogLog = \Drupal::config('ldap_help.settings')->get('watchdog_detail');
     foreach ($test_data['properties'] as $property_name => $property_value) {
       $this->{$property_name} = $property_value;
     }
@@ -73,7 +73,7 @@ class LdapServerTest extends LdapServer {
    * Destructor Method.
    */
   function __destruct() {
-    // If alterations to server configuration must be maintained throughout simpletest, variable_set('ldap_authorization_test_server__'. $sid, array());
+    // If alterations to server configuration must be maintained throughout simpletest, \Drupal::config()->set('ldap_authorization_test_server__'. $sid, array());
   }
 
   /**
@@ -361,7 +361,7 @@ class LdapServerTest extends LdapServer {
    */
   function dnExists($find_dn, $return = 'boolean', $attributes = array('objectclass')) {
     $this->refreshFakeData();
-    $test_data = variable_get('ldap_test_server__' . $this->sid, array());
+    $test_data = \Drupal::config()->get('ldap_test_server__' . $this->sid, array());
     foreach ($this->entries as $entry_dn => $entry) {
       $match = (strcasecmp($entry_dn, $find_dn) == 0);
 
@@ -392,7 +392,7 @@ class LdapServerTest extends LdapServer {
       $servers[$sid] = new LdapServerTest($sid);
     }
     else {
-      $server_ids = variable_get('ldap_test_servers', array());
+      $server_ids = \Drupal::config()->get('ldap_test_servers', array());
       foreach ($server_ids as $sid => $_sid) {
         $servers[$sid] = new LdapServerTest($sid);
       }
@@ -420,7 +420,7 @@ class LdapServerTest extends LdapServer {
    */
   public function createLdapEntry($ldap_entry, $dn = NULL) {
     $result = FALSE;
-    $test_data = variable_get('ldap_test_server__' . $this->sid, array());
+    $test_data = \Drupal::config()->get('ldap_test_server__' . $this->sid, array());
 
     if (isset($ldap_entry['dn'])) {
       $dn = $ldap_entry['dn'];
@@ -430,7 +430,7 @@ class LdapServerTest extends LdapServer {
     if ($dn && !isset($test_data['entries'][$dn])) {
       $test_data['entries'][$dn] = $ldap_entry;
       $test_data['ldap'][$dn] = $ldap_entry;
-      variable_set('ldap_test_server__' . $this->sid, $test_data);
+      \Drupal::config()->set('ldap_test_server__' . $this->sid, $test_data)->save();
       $this->refreshFakeData();
       $result = TRUE;
     }
@@ -444,7 +444,7 @@ class LdapServerTest extends LdapServer {
     if (!$attributes) {
       $attributes = array();
     }
-    $test_data = variable_get('ldap_test_server__' . $this->sid, array());
+    $test_data = \Drupal::config()->get('ldap_test_server__' . $this->sid, array());
     if (!isset($test_data['entries'][$dn])) {
       return FALSE;
     }
@@ -480,7 +480,7 @@ class LdapServerTest extends LdapServer {
     $test_data['entries'][$dn] = $ldap_entry;
     $test_data['ldap'][$dn] = $ldap_entry;
     // debug("modifyLdapEntry:server test data before save $dn"); debug($test_data['entries'][$dn]);.
-    variable_set('ldap_test_server__' . $this->sid, $test_data);
+    \Drupal::config()->set('ldap_test_server__' . $this->sid, $test_data)->save();
     $this->refreshFakeData();
     return TRUE;
 
@@ -495,7 +495,7 @@ class LdapServerTest extends LdapServer {
    */
   public function delete($dn) {
 
-    $test_data = variable_get('ldap_test_server__' . $this->sid, array());
+    $test_data = \Drupal::config()->get('ldap_test_server__' . $this->sid, array());
     // debug("test ldap server, delete=$dn, test data="); debug(array_keys($test_data['users']));.
     $deleted = FALSE;
     foreach (array('entries', 'users', 'groups', 'ldap') as $test_data_sub_array) {
@@ -505,7 +505,7 @@ class LdapServerTest extends LdapServer {
       }
     }
     if ($deleted) {
-      variable_set('ldap_test_server__' . $this->sid, $test_data);
+      \Drupal::config()->set('ldap_test_server__' . $this->sid, $test_data)->save();
       $this->refreshFakeData();
       return TRUE;
     }

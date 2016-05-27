@@ -44,7 +44,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
       'ldap_test',
     // don't need any real servers, configured, just ldap_servers code base.
     ));
-    variable_set('ldap_simpletest', 2);
+    \Drupal::config()->set('ldap_simpletest', 2)->save();
   }
 
   /**
@@ -655,7 +655,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
         module_exists('ldap_user') &&
         module_exists('ldap_servers') &&
         module_exists('ldap_authentication') &&
-        config('ldap_test.settings')->get('simpletest')
+        \Drupal::config('ldap_test.settings')->get('simpletest')
         (config('ldap_test.settings')->get('simpletest') > 0)
       );
     $this->assertTrue($setup_success, ' ldap_authentication UI setup successful', $this->testId('user interface tests'));

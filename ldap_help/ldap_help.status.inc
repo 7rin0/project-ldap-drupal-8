@@ -263,7 +263,7 @@ function ldap_help_parsePHPModules() {
  */
 function ldap_help_get_user_settings() {
 
-  $user_register = config('user.settings')->get('register');
+  $user_register = \Drupal::config('user.settings')->get('register');
   $options = array(
     USER_REGISTER_ADMINISTRATORS_ONLY => t('Administrators only'),
     USER_REGISTER_VISITORS => t('Visitors'),

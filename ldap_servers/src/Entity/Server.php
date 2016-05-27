@@ -893,14 +893,14 @@ class Server extends ConfigEntityBase implements ServerInterface {
       unlink($fileuri);
       // Create file object.
       // @todo needs to change to reflect new approach to user picture: http://drupal.org/node/1851200
-      $file = file_save_data($thumb, 'public://' . variable_get('user_picture_path') . '/' . $filename . '.' . $info['extension']);
+      $file = file_save_data($thumb, 'public://' . \Drupal::config()->get('user_picture_path') . '/' . $filename . '.' . $info['extension']);
       $file->md5Sum = $md5thumb;
       // Standard Drupal validators for user pictures.
       // @todo needs to change to reflect new approach to user picture: http://drupal.org/node/1851200
       $validators = array(
         'file_validate_is_image' => array(),
-        'file_validate_image_resolution' => array(variable_get('user_picture_dimensions', '85x85')),
-        'file_validate_size' => array(variable_get('user_picture_file_size', '30') * 1024),
+        'file_validate_image_resolution' => array(\Drupal::config()->get('user_picture_dimensions', '85x85')),
+        'file_validate_size' => array(\Drupal::config()->get('user_picture_file_size', '30') * 1024),
       );
       $errors = file_validate($file, $validators);
       if (empty($errors)) {

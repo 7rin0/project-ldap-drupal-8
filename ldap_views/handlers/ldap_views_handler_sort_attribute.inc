@@ -22,7 +22,7 @@ class ldap_views_handler_sort_attribute extends ldap_views_handler_sort {
   /**
    *
    */
-  function options_form(&$form, &$form_state) {
+  function options_form(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
     /*
     $current_display = $this->view->display[$this->view->current_display];
     $did             = isset($current_display->display_options['query']['options']['did']) ? $current_display->display_options['query']['options']['did']

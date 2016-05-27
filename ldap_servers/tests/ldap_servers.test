@@ -45,7 +45,7 @@ class LdapServersTestCase extends LdapTestCase {
    */
   function setUp() {
     parent::setUp(array('ldap_test'));
-    variable_set('ldap_simpletest', 2);
+    \Drupal::config()->set('ldap_simpletest', 2)->save();
   }
 
   /**
@@ -70,7 +70,7 @@ class LdapServersTestCase extends LdapTestCase {
       $this->prepTestData('hogwarts', array($sid));
 
       $group = "ldap_servers: functions: $ldap_type";
-      $test_data = variable_get('ldap_test_server__' . $sid, array());
+      $test_data = \Drupal::config()->get('ldap_test_server__' . $sid, array());
       ldap_servers_module_load_include('php', 'ldap_test', 'LdapServerTest.class');
       $ldap_server = LdapServerTest::getLdapServerObjects($sid, NULL, TRUE);
 
@@ -260,7 +260,7 @@ class LdapServersTestCase extends LdapTestCase {
         // module_disable(array('ctools'));.
       }
 
-      $ldap_simpletest_initial = config('ldap_test.settings')->get('simpletest');
+      $ldap_simpletest_initial = \Drupal::config('ldap_test.settings')->get('simpletest');
       // Need to be out of fake server mode to test ui.
       variable_del('ldap_simpletest');
       $this->privileged_user = $this->drupalCreateUser(array(
@@ -383,7 +383,7 @@ class LdapServersTestCase extends LdapTestCase {
       $this->assertTrue(count(array_keys($ldap_servers)) == 0, 'Delete form for ldap server deleted server.', $this->ldapTestId . '.Delete Server');
 
       // Return to fake server mode.
-      variable_set('ldap_simpletest', $ldap_simpletest_initial);
+      \Drupal::config()->set('ldap_simpletest', $ldap_simpletest_initial)->save();
     }
   }
 

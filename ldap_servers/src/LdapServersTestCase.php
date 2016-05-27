@@ -40,7 +40,7 @@ class LdapServersTestCase extends LdapTestCase {
     // // @FIXME
     // // This looks like another module's variable. You'll need to rewrite this call
     // // to ensure that it uses the correct configuration object.
-    // variable_set('ldap_simpletest', 2);
+    // \Drupal::config()->set('ldap_simpletest', 2)->save();
   }
 
   /**
@@ -77,7 +77,7 @@ class LdapServersTestCase extends LdapTestCase {
       // // @FIXME
       // // The correct configuration object could not be determined. You'll need to
       // // rewrite this call manually.
-      // $test_data = variable_get('ldap_test_server__' . $sid, array());
+      // $test_data = \Drupal::config()->get('ldap_test_server__' . $sid, array());
       ldap_servers_module_load_include('php', 'ldap_test', 'LdapServerTest.class');
       $ldap_server = LdapServerTest::getLdapServerObjects($sid, NULL, TRUE);
 
@@ -275,7 +275,7 @@ class LdapServersTestCase extends LdapTestCase {
       // // @FIXME
       // // This looks like another module's variable. You'll need to rewrite this call
       // // to ensure that it uses the correct configuration object.
-      // $ldap_simpletest_initial = variable_get('ldap_simpletest', 2);
+      // $ldap_simpletest_initial = \Drupal::config()->get('ldap_simpletest', 2);
       // @FIXME
       // // @FIXME
       // // This looks like another module's variable. You'll need to rewrite this call
@@ -405,7 +405,7 @@ class LdapServersTestCase extends LdapTestCase {
       // // @FIXME
       // // This looks like another module's variable. You'll need to rewrite this call
       // // to ensure that it uses the correct configuration object.
-      // variable_set('ldap_simpletest', $ldap_simpletest_initial);
+      // \Drupal::config()->set('ldap_simpletest', $ldap_simpletest_initial)->save();
       // return to fake server mode
     }
   }

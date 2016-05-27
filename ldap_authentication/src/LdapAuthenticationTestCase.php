@@ -41,7 +41,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
     // // @FIXME
     // // This looks like another module's variable. You'll need to rewrite this call
     // // to ensure that it uses the correct configuration object.
-    // variable_set('ldap_simpletest', 2);.
+    // \Drupal::config()->set('ldap_simpletest', 2)->save();.
   }
 
   /**
@@ -683,7 +683,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
     //         module_exists('ldap_user') &&
     //         module_exists('ldap_servers') &&
     //         module_exists('ldap_authentication') &&
-    //         (variable_get('ldap_simpletest', 2) > 0)
+    //         (\Drupal::config()->get('ldap_simpletest', 2) > 0)
     //       );.
     $this->assertTrue($setup_success, ' ldap_authentication UI setup successful', $this->testId('user interface tests'));
 

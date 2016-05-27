@@ -240,7 +240,7 @@ class LdapUserConf {
     }
     // Determine account creation configuration.
     // @FIXME
-    // $user_register = variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);.
+    // $user_register = \Drupal::config()->get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);.
     $user_register = \Drupal::config('user.settings')->get("register_no_approval_required");
     if ($this->acctCreation == LDAP_USER_ACCT_CREATION_LDAP_BEHAVIOR_DEFAULT || $user_register == USER_REGISTER_VISITORS) {
       $this->createLDAPAccounts = TRUE;

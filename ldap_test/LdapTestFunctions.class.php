@@ -42,18 +42,18 @@ class LdapTestFunctions {
   function configureLdapServers($sids, $feetures = FALSE, $feature_name = NULL) {
     foreach ($sids as $i => $sid) {
       $current_sids[$sid] = $sid;
-      variable_set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid]);
+      \Drupal::config()->set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid])->save();
     }
-    variable_set('ldap_test_servers', $current_sids);
+    \Drupal::config()->set('ldap_test_servers', $current_sids)->save();
   }
 
   /**
    *
    */
   function setFakeServerProperty($sid, $prop, $value) {
-    $test_data = variable_get('ldap_test_server__' . $sid, array());
+    $test_data = \Drupal::config()->get('ldap_test_server__' . $sid, array());
     $test_data['properties'][$prop] = $value;
-    variable_set('ldap_test_server__' . $sid, $test_data);
+    \Drupal::config()->set('ldap_test_server__' . $sid, $test_data)->save();
   }
 
   /**
@@ -61,7 +61,7 @@ class LdapTestFunctions {
    */
   function setFakeServerUserAttribute($sid, $dn, $attr_name, $attr_value, $i = 0) {
     $attr_name = drupal_strtolower($attr_name);
-    $test_data = variable_get('ldap_test_server__' . $sid, array());
+    $test_data = \Drupal::config()->get('ldap_test_server__' . $sid, array());
 
     $test_data['entries'][$dn][$attr_name][$i] = $attr_value;
     $count_set = (int) isset($test_data['entries'][$dn][$attr_name]['count']);
@@ -72,7 +72,7 @@ class LdapTestFunctions {
     $count_set = (int) isset($test_data['ldap'][$dn][$attr_name]['count']);
     // don't count the 'count'.
     $test_data['ldap'][$dn][$attr_name]['count'] = count($test_data['ldap'][$dn][$attr_name]) - $count_set;
-    variable_set('ldap_test_server__' . $sid, $test_data);
+    \Drupal::config()->set('ldap_test_server__' . $sid, $test_data)->save();
     // Clear server cache;.
     $ldap_server = ldap_servers_get_servers($sid, NULL, TRUE, TRUE);
   }
@@ -307,10 +307,10 @@ class LdapTestFunctions {
 
     $this->data['ldap_servers'][$sid]['ldap'] = $this->ldapData['ldap_servers'][$sid];
     $this->data['ldap_servers'][$sid]['csv'] = $this->csvTables;
-    variable_set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid]);
-    $current_sids = variable_get('ldap_test_servers', array());
+    \Drupal::config()->set('ldap_test_server__' . $sid, $this->data['ldap_servers'][$sid])->save();
+    $current_sids = \Drupal::config()->get('ldap_test_servers', array());
     $current_sids[] = $sid;
-    variable_set('ldap_test_servers', array_unique($current_sids));
+    \Drupal::config()->set('ldap_test_servers', array_unique($current_sids))->save();
   }
 
   /**

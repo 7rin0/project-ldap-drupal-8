@@ -10,7 +10,7 @@
  *
  * @todo if form is being generated on non https and is set in preferences, set warning and end form development
  */
-function _ldap_authentication_login_form_alter(&$form, &$form_state, $form_id) {
+function _ldap_authentication_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
 
   if (!$auth_conf = ldap_authentication_get_valid_conf()) {
     return;
@@ -41,7 +41,7 @@ function _ldap_authentication_login_form_alter(&$form, &$form_state, $form_id) {
   }
 
   if ($form_id == 'user_login_block') {
-    $user_register = config('user.settings')->get('register');
+    $user_register = \Drupal::config('user.settings')->get('register');
     $vars = array(
       'show_reset_pwd' => ldap_authentication_show_reset_pwd(),
       'auth_conf' => $auth_conf,
@@ -112,7 +112,7 @@ function _ldap_authentication_form_user_profile_form_alter(&$form, $form_state) 
  * -- form_set_error() to invalidate authentication process
  * -- setting $form_state['uid'] to indicate successful authentication
  */
-function _ldap_authentication_user_login_authenticate_validate(&$form_state, $return_user) {
+function _ldap_authentication_user_login_authenticate_validate(\Drupal\Core\Form\FormStateInterface $form_state, $return_user) {
 
   $detailed_watchdog_log = \Drupal::config('ldap_help.settings')->get('watchdog_detail');
   // $authname is the name the user is authenticated with from the logon form // patch 1599632.
@@ -329,7 +329,7 @@ function _ldap_authentication_user_login_authenticate_validate(&$form_state, $re
      */
 
     if ($auth_conf->ldapUser->acctCreation == LDAP_AUTHENTICATION_ACCT_CREATION_USER_SETTINGS_FOR_LDAP &&
-        config('user.settings')->get('register') == USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL) {
+        \Drupal::config('user.settings')->get('register') == USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL) {
       // If admin approval required, set status to 0.
       $user_edit = array('name' => $drupal_accountname, 'status' => 0);
     }

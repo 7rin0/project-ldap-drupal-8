@@ -43,7 +43,7 @@ class LdapUserUnitTests extends LdapTestCase {
    */
   function setUp() {
     parent::setUp(array('ldap_servers', 'ldap_user', 'ldap_authentication', 'ldap_test'));
-    variable_set('ldap_simpletest', 2);
+    \Drupal::config()->set('ldap_simpletest', 2)->save();
   }
 
   /**
@@ -710,7 +710,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
    */
   function setUp() {
     parent::setUp(array('ldap_user', 'ldap_test'));
-    variable_set('ldap_simpletest', 2);
+    \Drupal::config()->set('ldap_simpletest', 2)->save();
   }
 
   /**
@@ -887,11 +887,11 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $ldap_user_conf->save();
       $ldap_user_conf = ldap_user_conf('default', TRUE);
       // debug('ldap_user_conf after provisionToLdapEmailVerification setup'); debug($ldap_user_conf);
-      variable_set('user_email_verification', TRUE);
+      \Drupal::config()->set('user_email_verification', TRUE)->save();
       // Or USER_REGISTER_ADMINISTRATORS_ONLY, USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL.
-      variable_set('user_register', USER_REGISTER_VISITORS);
+      \Drupal::config()->set('user_register', USER_REGISTER_VISITORS)->save();
       // user_cancel_block_unpublish, user_cancel_reassign, user_cancel_delete.
-      variable_set('user_cancel_method', 'user_cancel_block');
+      \Drupal::config()->set('user_cancel_method', 'user_cancel_block')->save();
       $username = 'sstephens';
       $this->drupalLogout();
       if ($sstephens = user_load_by_name($username)) {
@@ -1267,7 +1267,7 @@ class LdapUserUITests extends LdapTestCase {
    */
   function setUp() {
     parent::setUp(array('ldap_user', 'ldap_test'));
-    variable_set('ldap_simpletest', 2);
+    \Drupal::config()->set('ldap_simpletest', 2)->save();
   }
 
   /**

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * Form for adding, updating, and deleting a single ldap authorization mapping.
  */
-function ldap_user_admin_form($form, &$form_state) {
+function ldap_user_admin_form($form, \Drupal\Core\Form\FormStateInterface $form_state) {
   $ldap_user_conf = ldap_user_conf('admin');
   $form = $ldap_user_conf->drupalForm();
   return $form;
@@ -20,7 +20,7 @@ function ldap_user_admin_form($form, &$form_state) {
 /**
  * Validate handler for the ldap_user_admin_form.
  */
-function ldap_user_admin_form_validate($form, &$form_state) {
+function ldap_user_admin_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
   $ldap_user_conf_admin = ldap_user_conf('admin');
   list($errors, $warnings) = $ldap_user_conf_admin->drupalFormValidate($form_state['values'], $form['#storage']);
@@ -36,7 +36,7 @@ function ldap_user_admin_form_validate($form, &$form_state) {
 /**
  * Submit handler function for ldap_user_admin_form.
  */
-function ldap_user_admin_form_submit($form, &$form_state) {
+function ldap_user_admin_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
   $ldap_user_conf = ldap_user_conf('admin');
   // Add form data to object and save or create.
