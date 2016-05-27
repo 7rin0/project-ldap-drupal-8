@@ -1010,7 +1010,8 @@ function ldap_user_user_login($account) {
  * @FIXME hook_user_insert has gone away (Core).
  * @FIXME $user_edit is deprecated (LDAP).
  */
-function ldap_user_user_insert(&$user_edit, $account, $category) {
+// (Drupal\Core\Entity\EntityInterface $entity)
+function ldap_user_user_insert(Drupal\Core\Entity\EntityInterface $user_edit, $account, $category) {
 
   global $user;
   $not_associated = ldap_user_ldap_exclude($account, $user_edit);
@@ -1059,7 +1060,7 @@ function ldap_user_user_insert(&$user_edit, $account, $category) {
  *
  * @FIXME $user_edit is deprecated (LDAP).
  */
-function ldap_user_user_update(&$user_edit, $account, $category) {
+function ldap_user_user_update(Drupal\Core\Entity\EntityInterface $user_edit, $account, $category) {
   // debug("ldap_user_user_update, category=$category"); debug($user_edit); debug($account); // ldap_user_user_insert, category='. $category . 'account->status = ' . $account->status);.
   if (ldap_user_ldap_exclude($account, $user_edit)) {
     return;
@@ -1108,7 +1109,8 @@ function ldap_user_user_update(&$user_edit, $account, $category) {
  * @FIXME hook_user_presave has gone away (Core).
  * @FIXME $user_edit is deprecated (LDAP).
  */
-function ldap_user_user_presave(&$user_edit, $account, $category) {
+// (Drupal\Core\Entity\EntityInterface $entity)
+function ldap_user_user_presave(Drupal\Core\Entity\EntityInterface $user_edit, $account, $category) {
   // debug("ldap_user_user_presave, category=$category"); debug($user_edit); debug($account); // ldap_user_user_insert, category='. $category . 'account->status = ' . $account->status);.
   if (ldap_user_ldap_exclude($account, $user_edit)) {
     return;
