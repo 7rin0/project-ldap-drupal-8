@@ -422,7 +422,8 @@ class ldap_views_plugin_query_ldap extends views_plugin_query {
   /* Only when adding dynamic fields in ldap_views_views_data_alter()
   function options_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   parent::options_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state);
-  if ($form_state['values']['query']['options']['qid'] != $form_state['view']->query->options['qid']) {
+  if ($form_state->getValue('query')['options']['qid'] != $form_state['view']->query->options['qid']) {
+  if ($form_state->getValue('query')['options']['qid'] != $form_state['view']->query->options['qid']) {
   views_invalidate_cache();
   }
   }

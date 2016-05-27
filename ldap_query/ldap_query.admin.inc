@@ -65,7 +65,7 @@ function ldap_query_admin_form($form, \Drupal\Core\Form\FormStateInterface $form
 function ldap_query_admin_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
   $op = drupal_strtolower($form_state['clicked_button']['#value']);
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
-  $server = new LdapQueryAdmin($form_state['values']['qid']);
+  $server = new LdapQueryAdmin($form_state->getValue('qid'));
 
   $errors = $server->drupalFormValidate($op, $form_state['values']);
   foreach ($errors as $error_name => $error_text) {
@@ -86,7 +86,7 @@ function ldap_query_admin_form_submit($form, \Drupal\Core\Form\FormStateInterfac
   $op = ($button == 'add') ? 'add' : 'edit';
   $verb = ($op == 'edit') ? 'edited' : $op . 'ed';
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
-  $query = new LdapQueryAdmin($form_state['values']['qid']);
+  $query = new LdapQueryAdmin($form_state->getValue('qid'));
   // Add form data to object and save or create.
   $query->drupalFormSubmit($op, $form_state['values']);
 

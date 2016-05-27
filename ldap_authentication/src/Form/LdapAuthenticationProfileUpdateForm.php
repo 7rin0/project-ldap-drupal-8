@@ -59,7 +59,7 @@ class LdapAuthenticationProfileUpdateForm extends FormBase {
     // @FIXME
     // user_save() is now a method of the user entity.
     // if (user_save($user, array(
-    //     'mail' => $form_state['values']['mail'],
+    //     'mail' => $form_state->getValue('mail'],
     //   ))) {
     //     // prevents the cached setting from being used again.
     //     unset($_SESSION['ldap_authentication_template']);

@@ -77,8 +77,8 @@ function ldap_user_test_form($form, \Drupal\Core\Form\FormStateInterface $form_s
  *
  */
 function ldap_user_test_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  if ($form_state['values']['test_mode'] == 'execute'  &&
-    count(array_filter($form_state['values']['action'])) > 1) {
+  if ($form_state->getValue('test_mode') == 'execute'  &&
+    count(array_filter($form_state->getValue('action'))) > 1) {
     form_set_error('test_mode', t('Only one action may be selected for "Execute Action" testing mode.'));
   }
 
@@ -89,8 +89,8 @@ function ldap_user_test_form_validate($form, \Drupal\Core\Form\FormStateInterfac
  */
 function ldap_user_test_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
-  $username = $form_state['values']['testing_drupal_username'];
-  $selected_actions = $form_state['values']['action'];
+  $username = $form_state->getValue('testing_drupal_username');
+  $selected_actions = $form_state->getValue('action');
 
   if ($username && count($selected_actions) > 0) {
 
@@ -137,8 +137,8 @@ function ldap_user_test_form_submit($form, \Drupal\Core\Form\FormStateInterface 
     $results['User Authmap'] = $authmaps;
     $results['LDAP User Configuration Object'] = $ldap_user_conf;
 
-    $save = ($form_state['values']['test_mode'] == 'execute');
-    $test_query = ($form_state['values']['test_mode'] != 'execute');
+    $save = ($form_state->getValue('test_mode') == 'execute');
+    $test_query = ($form_state->getValue('test_mode') != 'execute');
     $user_edit = array('name' => $username);
 
     foreach (array_filter($selected_actions) as $i => $synch_trigger) {
@@ -199,8 +199,8 @@ function ldap_user_test_form_submit($form, \Drupal\Core\Form\FormStateInterface 
     }
   }
 
-  $_SESSION['ldap_user_test_form']['action'] = $form_state['values']['action'];
-  $_SESSION['ldap_user_test_form']['test_mode'] = $form_state['values']['test_mode'];
+  $_SESSION['ldap_user_test_form']['action'] = $form_state->getValue('action');
+  $_SESSION['ldap_user_test_form']['test_mode'] = $form_state->getValue('test_mode');
   $_SESSION['ldap_user_test_form']['testing_drupal_username'] = $username;
 
   $form_state['redirect'] = LDAP_USER_TEST_FORM_PATH;
