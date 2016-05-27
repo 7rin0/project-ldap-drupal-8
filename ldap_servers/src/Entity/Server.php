@@ -57,7 +57,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
    *
    * @var Resource
    */
-  protected $connection;
+  public $connection;
 
   /**
    * Connect Method.
