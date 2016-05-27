@@ -174,7 +174,7 @@ function ldap_servers_test_form($form, \Drupal\Core\Form\FormStateInterface $for
  * Validate hook for the LDAP server form.
  */
 function ldap_servers_test_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  $values = $form_state['values'];
+  $values = $form_state->getValues();
   if (!$values['sid']) {
     form_set_error(NULL, t('No server id found in form'));
   }
@@ -194,7 +194,7 @@ function ldap_servers_test_form_submit($form, \Drupal\Core\Form\FormStateInterfa
   ldap_servers_module_load_include('inc', 'ldap_servers', 'ldap_servers.functions');
   $errors = FALSE;
   $has_errors = FALSE;
-  $values = $form_state['values'];
+  $values = $form_state->getValues();
   $sid = $values['sid'];
   $ldap_server = ldap_servers_get_servers($sid, 'all', TRUE);
 

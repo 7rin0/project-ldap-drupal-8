@@ -438,7 +438,7 @@ EOT;
    * Validate submitted form.
    *
    * @param array $values
-   *   as $form_state['values'] from drupal form api
+   *   as $form_state->getValues() from drupal form api
    * @param array $storage
    *   as $form_state['storage'] from drupal form api
    *
@@ -496,7 +496,7 @@ EOT;
    * Validate object, not form.
    *
    * @param array $values
-   *   as $form_state['values'] from drupal form api
+   *   as $form_state->getValues() from drupal form api
    *
    * @return array in form array($errors, $warnings)to be thrown by form api
    *
@@ -609,7 +609,7 @@ EOT;
    * Populate object with data from form values.
    *
    * @param array $values
-   *   as $form_state['values'] from drupal form api
+   *   as $form_state->getValues() from drupal form api
    * @param array $storage
    *   as $form_state['storage'] from drupal form api
    */
@@ -639,7 +639,7 @@ EOT;
    * Extract synch mappings array from mapping table in admin form.
    *
    * @param array $values
-   *   as $form_state['values'] from drupal form api
+   *   as $form_state->getValues() from drupal form api
    * @param array $storage
    *   as $form_state['storage'] from drupal form api
    *
@@ -716,7 +716,7 @@ EOT;
    * Method to respond to successfully validated form submit.
    *
    * @param array $values
-   *   as $form_state['values'] from drupal form api
+   *   as $form_state->getValues() from drupal form api
    * @param array $storage
    *   as $form_state['storage'] from drupal form api
    *

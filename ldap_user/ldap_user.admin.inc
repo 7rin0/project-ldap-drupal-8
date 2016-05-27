@@ -40,7 +40,7 @@ function ldap_user_admin_form_submit($form, \Drupal\Core\Form\FormStateInterface
 
   $ldap_user_conf = ldap_user_conf('admin');
   // Add form data to object and save or create.
-  $ldap_user_conf->drupalFormSubmit($form_state['values'], $form['#storage']);
+  $ldap_user_conf->drupalFormSubmit($form_state->getValues(), $form['#storage']);
 
   if ($ldap_user_conf->hasError == FALSE) {
     drupal_set_message(t('LDAP user configuration saved'), 'status');

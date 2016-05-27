@@ -67,11 +67,11 @@ function ldap_query_admin_form_validate($form, \Drupal\Core\Form\FormStateInterf
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $server = new LdapQueryAdmin($form_state->getValue('qid'));
 
-  $errors = $server->drupalFormValidate($op, $form_state['values']);
+  $errors = $server->drupalFormValidate($op, $form_state->getValues());
   foreach ($errors as $error_name => $error_text) {
     form_set_error($error_name, t($error_text));
   }
-  // $warnings = $server->drupalFormWarnings($op, $form_state['values']);
+  // $warnings = $server->drupalFormWarnings($op, $form_state->getValues());
   // foreach ($warnings as $warning_name => $warning_text) {
   // drupal_set_message($warning_text, 'warning');
   // }
@@ -88,7 +88,7 @@ function ldap_query_admin_form_submit($form, \Drupal\Core\Form\FormStateInterfac
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $query = new LdapQueryAdmin($form_state->getValue('qid'));
   // Add form data to object and save or create.
-  $query->drupalFormSubmit($op, $form_state['values']);
+  $query->drupalFormSubmit($op, $form_state->getValues());
 
   if ($query->hasError() == FALSE) {
     drupal_set_message(t('LDAP Query %name !verb.', array('!verb' => $verb, '%name' => $query->name)), 'status');
@@ -154,7 +154,7 @@ function ldap_query_admin_delete($form, \Drupal\Core\Form\FormStateInterface $fo
  * Submit handler for the LDAP server delete page.
  */
 function ldap_query_admin_delete_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  $values = $form_state['values'];
+  $values = $form_state->getValues();
   $qid = $values['qid'];
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $ldap_query = new LdapQueryAdmin($qid);
@@ -224,7 +224,7 @@ function ldap_query_admin_enable_disable($form, \Drupal\Core\Form\FormStateInter
  * Submit hook for the LDAP server delete page.
  */
 function ldap_query_admin_enable_disable_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  $values = $form_state['values'];
+  $values = $form_state->getValues();
   $qid = $values['qid'];
   $status = ($values['action'] == 'enable') ? 1 : 0;
   if ($values['confirm'] && $qid) {
