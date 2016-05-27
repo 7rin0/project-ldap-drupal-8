@@ -52,12 +52,12 @@ class LdapServersTestCase extends LdapTestCase {
     // // @FIXME
     // // This looks like another module's variable. You'll need to rewrite this call
     // // to ensure that it uses the correct configuration object.
-    // variable_del('ldap_help_watchdog_detail');
+    // \Drupal::state()->delete('ldap_help_watchdog_detail');
     // @FIXME
     // // @FIXME
     // // This looks like another module's variable. You'll need to rewrite this call
     // // to ensure that it uses the correct configuration object.
-    // variable_del('ldap_simpletest');
+    // \Drupal::state()->delete('ldap_simpletest');
   }
 
   /**
@@ -280,7 +280,7 @@ class LdapServersTestCase extends LdapTestCase {
       // // @FIXME
       // // This looks like another module's variable. You'll need to rewrite this call
       // // to ensure that it uses the correct configuration object.
-      // variable_del('ldap_simpletest');
+      // \Drupal::state()->delete('ldap_simpletest');
       // need to be out of fake server mode to test ui.
       $this->privileged_user = $this->drupalCreateUser(array(
         'administer site configuration',

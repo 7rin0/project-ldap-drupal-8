@@ -58,8 +58,8 @@ class LdapTestCase extends DrupalWebTestCase {
    */
   function tearDown() {
     parent::tearDown();
-    variable_del('ldap_help_watchdog_detail');
-    variable_del('ldap_simpletest');
+    \Drupal::state()->delete('ldap_help_watchdog_detail');
+    \Drupal::state()->delete('ldap_simpletest');
   }
 
   /**

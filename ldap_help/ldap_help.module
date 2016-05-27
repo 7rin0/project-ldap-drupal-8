@@ -102,14 +102,14 @@ function ldap_help_form_ldap_servers_settings_alter(&$form, \Drupal\Core\Form\Fo
  */
 function ldap_help_watchdog_detail_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
   if ($form_state->isSubmitted()) {
-    $watchdog_detail = $form_state['values']['watchdog_detail'];
+    $watchdog_detail = $form_state->getValue('watchdog_detail');
     if ($watchdog_detail != \Drupal::config('ldap_help.settings')->get('watchdog_detail')) {
       \Drupal::config()->set('ldap_help_watchdog_detail', $watchdog_detail)->save();
     }
-    if ($form_state['values']['user_data_clear'] != \Drupal::config('ldap_help.settings')->get('user_data_clear')) {
-      \Drupal::config()->set('ldap_help_user_data_clear', $form_state['values']['user_data_clear'])->save();
+    if ($form_state->getValue('user_data_clear') != \Drupal::config('ldap_help.settings')->get('user_data_clear')) {
+      \Drupal::config()->set('ldap_help_user_data_clear', $form_state->getValue('user_data_clear'))->save();
     }
-    if ($form_state['values']['user_data_clear_date'] != 0) {
+    if ($form_state->getValue('user_data_clear_date') != 0) {
       \Drupal::config()->set('ldap_help_user_data_clear_set_date', time())->save();
     }
   }

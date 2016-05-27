@@ -12,7 +12,7 @@ deal with all system_settings_form() instances and resulting variables
 deal with large setting arrays stored in single variables: ldap_authentication_conf, ldap_user_conf
 deal with configurations that are backended by tables (ldapServers, ldap_query, etc.)
 deal with \Drupal::config()->get('ldap_test_server__' . $sid, NULL);
-deal with all instances of variable_del()
+deal with all instances of \Drupal::state()->delete()
 deal with all instances of \Drupal::config()->set()
 need to deal with changes to pictures and related variables (user_picture_*):  //@todo needs to change to reflect new approach to user picture: http://drupal.org/node/1851200
 remove all ctools requirements and load process for ldap_servers, ldap_query, etc.
