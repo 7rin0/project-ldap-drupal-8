@@ -542,7 +542,8 @@ function ldap_user_help($path, $arg) {
  * Implements hook_form_FORM_ID_alter(). for user_login_block.
  */
 function ldap_user_form_user_login_block_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  array_unshift($form['#validate'], 'ldap_user_grab_password_validate');
+  array_unshift($form['#validate'], '
+  ');
 }
 
 /**
@@ -555,7 +556,7 @@ function ldap_user_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStat
 /**
  * Implements hook_form_FORM_ID_alter(). for user_register_form.
  */
-function ldap_user_form_user_profile_form_alter(&$form, $form_state) {
+function ldap_user_form_user_profile_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   array_unshift($form['#submit'], 'ldap_user_grab_password_validate');
 }
 
@@ -625,7 +626,7 @@ function ldap_user_identities_delete($uid) {
 /**
  * Implements hook_form_FORM_ID_alter(). for user_register_form.
  */
-function ldap_user_form_user_register_form_alter(&$form, $form_state) {
+function ldap_user_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
   array_unshift($form['#submit'], 'ldap_user_grab_password_validate');
 

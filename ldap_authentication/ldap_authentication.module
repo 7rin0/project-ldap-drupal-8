@@ -288,7 +288,7 @@ function ldap_authentication_form_user_pass_alter(&$form, \Drupal\Core\Form\Form
 
 /**
  * A validate handler on the login form. Check supplied username/password
- * against local users table. If successful, \Drupal\Core\Form\FormStateInterface $form_state->id()
+ * against local users table. If successful, $form_state->id()
  * is set to the matching user ID.
  */
 function ldap_authentication_core_override_user_login_authenticate_validate($form, FormStateInterface \Drupal\Core\Form\FormStateInterface $form_state) {

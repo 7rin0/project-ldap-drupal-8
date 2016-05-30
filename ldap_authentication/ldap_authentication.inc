@@ -142,7 +142,7 @@ function _ldap_authentication_user_login_authenticate_validate(\Drupal\Core\Form
   /**
   * I. Test for previous module authentication success.
   *
-  * if already succeeded at authentication, \Drupal\Core\Form\FormStateInterface $form_state->id() will be set by other authentication module.
+  * if already succeeded at authentication, $form_state->id() will be set by other authentication module.
   * - if LDAP Mixed mode is set, return and don't disrupt authentication process
   * - otherwise override other authenication by setting $form_state->id() = NULL
   */
@@ -186,7 +186,7 @@ function _ldap_authentication_user_login_authenticate_validate(\Drupal\Core\Form
   /**
    * IV. test credentials and if available get corresponding ldap user and ldap server
    */
-  list($authentication_result, $ldap_user, $ldap_server_authenticated_on) = ldap_authentication_test_credentials($auth_conf, $sso_login, $authname, \Drupal\Core\Form\FormStateInterface $form_state->getValue('pass'), $watchdog_tokens);
+  list($authentication_result, $ldap_user, $ldap_server_authenticated_on) = ldap_authentication_test_credentials($auth_conf, $sso_login, $authname, $form_state->getValue('pass'), $watchdog_tokens);
   if ($authentication_result != LDAP_AUTHENTICATION_RESULT_SUCCESS) {
     ldap_authentication_fail_response($authentication_result, $auth_conf, $detailed_watchdog_log, $watchdog_tokens);
     return;
