@@ -91,7 +91,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
      * LDAP_authen.MM.ULT.user1.goodpwd -- result: Successful logon as user 1
      */
 
-    $user1 = user_load(1);
+    $user1 = Drupal\Core\Entity\User::load(1);
     $password = $this->randomString(20);
     require_once DRUPAL_ROOT . '/includes/password.inc';
     $account = array(
@@ -207,7 +207,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
      * LDAP_authen.EM.ULT.user1.goodpwd -- result: Successful logon as user 1
      */
 
-    $user1 = user_load(1);
+    $user1 = Drupal\Core\Entity\User::load(1);
     $password = $this->randomString(20);
     require_once DRUPAL_ROOT . '/includes/password.inc';
     $account = array(
@@ -421,7 +421,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
      * LDAP_authen.WL.user1  test for user 1 being excluded from white and black list tests
      */
 
-    $user1 = user_load(1);
+    $user1 = Drupal\Core\Entity\User::load(1);
     $password = $this->randomString(20);
     require_once DRUPAL_ROOT . '/includes/password.inc';
     $account = array(

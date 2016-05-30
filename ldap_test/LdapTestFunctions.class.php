@@ -159,7 +159,7 @@ class LdapTestFunctions {
   function removeRoleFromUser($user, $role_name) {
 
     if (is_numeric($user)) {
-      $user = user_load($user);
+      $user = Drupal\Core\Entity\User::load($user);
     }
     $key = array_search($role_name, $user->roles);
     if ($key == TRUE) {

@@ -360,7 +360,7 @@ class LdapUserUnitTests extends LdapTestCase {
 
     // Delete and recreate test account to make sure account is in correct state.
     $ldap_user_conf->deleteDrupalAccount('hpotter');
-    $this->assertFalse(user_load($hpotter_uid, TRUE), t('deleteDrupalAccount deleted hpotter successfully'), $this->testId());
+    $this->assertFalse(Drupal\Core\Entity\User::load($hpotter_uid, TRUE), t('deleteDrupalAccount deleted hpotter successfully'), $this->testId());
 
     $ldap_server = ldap_servers_get_servers('activedirectory1', 'enabled', TRUE, TRUE);
     $ldap_server->refreshFakeData();
@@ -1099,8 +1099,8 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // Delete 10 ldap entries.
       $clone_first_uid = $cn_to_account[$first_clone_username]->uid;
       $clone_last_uid = $cn_to_account[$last_clone_username]->uid;
-      $clone_first = user_load($clone_first_uid, TRUE);
-      $clone_last = user_load($clone_last_uid, TRUE);
+      $clone_first = Drupal\Core\Entity\User::load($clone_first_uid, TRUE);
+      $clone_last = Drupal\Core\Entity\User::load($clone_last_uid, TRUE);
 
       // debug("pre ldap delete, clone0 and cloneN $first_clone_username and $last_clone_username"); debug($clone_first);debug($clone_last); //debug($ldap_server->entries);.
       $delete = LDAP_TEST_USER_ORPHAN_CLONE_COUNT - LDAP_TEST_USER_ORPHAN_CLONE_REMOVE_COUNT;
@@ -1112,12 +1112,12 @@ class LdapUserIntegrationTests extends LdapTestCase {
         $ldap_server->delete($account->ldap_user_current_dn['und'][0]['value']);
       }
 
-      $clone_first = user_load($clone_first_uid, TRUE);
-      $clone_last = user_load($clone_last_uid, TRUE);
+      $clone_first = Drupal\Core\Entity\User::load($clone_first_uid, TRUE);
+      $clone_last = Drupal\Core\Entity\User::load($clone_last_uid, TRUE);
       // debug("post ldap delete and pre cron, clone0 and cloneN"); debug($clone_first->status);debug($clone_last->status);// debug($ldap_server->entries);.
       drupal_cron_run();
-      $clone_first = user_load($clone_first_uid, TRUE);
-      $clone_last = user_load($clone_last_uid, TRUE);
+      $clone_first = Drupal\Core\Entity\User::load($clone_first_uid, TRUE);
+      $clone_last = Drupal\Core\Entity\User::load($clone_last_uid, TRUE);
       // debug("post cron, clone0 and cloneN"); debug($clone_first->status);debug($clone_last->status); //debug($ldap_server->entries);.
       switch ($account_option) {
 
@@ -1183,7 +1183,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
             }
           }
           if ($success) {
-            $clone_last = user_load($clone_last_uid, TRUE);
+            $clone_last = Drupal\Core\Entity\User::load($clone_last_uid, TRUE);
             $success = ($clone_last && $clone_last->status == 1);
           }
           break;
@@ -1205,7 +1205,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           $success = (count($accounts) == LDAP_TEST_USER_ORPHAN_CLONE_COUNT);
 
           if ($success) {
-            $clone_last = user_load($clone_last_uid, TRUE);
+            $clone_last = Drupal\Core\Entity\User::load($clone_last_uid, TRUE);
             $success = ($clone_last && $clone_last->status == 1);
           }
           break;
@@ -1231,7 +1231,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
     $user_edit = array('name' => $name);
     $user = $ldap_user_conf->provisionDrupalAccount($account, $user_edit, NULL, TRUE);
 
-    return user_load($user->uid, TRUE);
+    return Drupal\Core\Entity\User::load($user->uid, TRUE);
   }
 
 }

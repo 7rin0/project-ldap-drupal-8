@@ -110,8 +110,8 @@ function ldap_servers_test_form($form, \Drupal\Core\Form\FormStateInterface $for
     '#weight' => 100,
   );
 
-  if (!empty($form_state['ldap_server_test_data'])) {
-    $test_data = $form_state['ldap_server_test_data'];
+  if (!empty($form_state->get('ldap_server_test_data'))) {
+    $test_data = $form_state->get('ldap_server_test_data');
 
     // @FIXME
     // if (isset($test_data['username']) && isset($test_data['ldap_user'])) {
@@ -158,7 +158,7 @@ function ldap_servers_test_form($form, \Drupal\Core\Form\FormStateInterface $for
         dpm("Corresponding Drupal user object for: $user_name");
         dpm($user);
         if (function_exists('entity_load_single')) {
-          $user_entity = entity_load_single('user', $user->uid);
+          $user_entity = entity_load_single('user', $user->uid());
           dpm("Drupal user entity for: $user_name");
           dpm($user_entity);
         }

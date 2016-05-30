@@ -105,7 +105,7 @@ function ldap_user_update_8301(&$sandbox) {
   // Iterate over the old table and create entries in the new table.
   foreach ($result as $identity) {
     // Load the user as the service expects an account.
-    $account = user_load($identity->uid);
+    $account = Drupal\Core\Entity\User::load($identity->uid);
     $authmap = \Drupal::service('externalauth.authmap');
     $authmap->save($account, 'ldap_user', $identity->identifier);
 
