@@ -46,7 +46,7 @@ class LdapAuthenticationProfileUpdateForm extends FormBase {
     }
     $auth = ldap_authentication_get_valid_conf();
     $regex = '`' . $auth->templateUsagePromptRegex . '`i';
-    if (preg_match($regex, $form_state->getValue(['mail']))) {
+    if (preg_match($regex, \Drupal\Core\Form\FormStateInterface $form_state->getValue(['mail']))) {
       $form_state->setErrorByName('mail', t('This email address still matches the invalid email template.'));
     }
   }

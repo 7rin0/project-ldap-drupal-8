@@ -67,11 +67,11 @@ function ldap_query_admin_form_validate($form, \Drupal\Core\Form\FormStateInterf
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $server = new LdapQueryAdmin($form_state->getValue('qid'));
 
-  $errors = $server->drupalFormValidate($op, $form_state->getValues());
+  $errors = $server->drupalFormValidate($op, \Drupal\Core\Form\FormStateInterface $form_state->getValues());
   foreach ($errors as $error_name => $error_text) {
     $form_state->setErrorByName($error_name, t($error_text));
   }
-  // $warnings = $server->drupalFormWarnings($op, $form_state->getValues());
+  // $warnings = $server->drupalFormWarnings($op, \Drupal\Core\Form\FormStateInterface $form_state->getValues());
   // foreach ($warnings as $warning_name => $warning_text) {
   // drupal_set_message($warning_text, 'warning');
   // }
@@ -88,7 +88,7 @@ function ldap_query_admin_form_submit($form, \Drupal\Core\Form\FormStateInterfac
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $query = new LdapQueryAdmin($form_state->getValue('qid'));
   // Add form data to object and save or create.
-  $query->drupalFormSubmit($op, $form_state->getValues());
+  $query->drupalFormSubmit($op, \Drupal\Core\Form\FormStateInterface $form_state->getValues());
 
   if ($query->hasError() == FALSE) {
     drupal_set_message(t('LDAP Query %name !verb.', array('!verb' => $verb, '%name' => $query->name)), 'status');

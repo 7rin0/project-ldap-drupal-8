@@ -38,7 +38,7 @@ class ldap_views_handler_argument_attribute extends views_handler_argument {
       return;
     }
 
-    parent::options_form($form, $form_state);
+    parent::options_form($form, \Drupal\Core\Form\FormStateInterface $form_state);
 
     $options         = array();
     foreach ($ldap_data->attributes as $attribute) {

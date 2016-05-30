@@ -273,7 +273,7 @@ function ldap_authentication_show_reset_pwd($user = NULL) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function ldap_authentication_form_user_pass_alter(&$form, $form_state) {
+function ldap_authentication_form_user_pass_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   // The following could be in a theme preproces function.
   $auth_conf = ldap_authentication_get_valid_conf();
   $form['ldap_warning'] = array(
@@ -288,7 +288,7 @@ function ldap_authentication_form_user_pass_alter(&$form, $form_state) {
 
 /**
  * A validate handler on the login form. Check supplied username/password
- * against local users table. If successful, $form_state->id()
+ * against local users table. If successful, \Drupal\Core\Form\FormStateInterface $form_state->id()
  * is set to the matching user ID.
  */
 function ldap_authentication_core_override_user_login_authenticate_validate($form, FormStateInterface \Drupal\Core\Form\FormStateInterface $form_state) {
@@ -299,7 +299,7 @@ function ldap_authentication_core_override_user_login_authenticate_validate($for
   }
 
   $original_form = $form_state->getFormObject();
-  $original_form->validateAuthentication($form, $form_state);
+  $original_form->validateAuthentication($form, \Drupal\Core\Form\FormStateInterface $form_state);
 }
 
 /**
@@ -334,9 +334,9 @@ function ldap_authentication_user_pass_validate(FormStateInterface \Drupal\Core\
 /**
  * Implements hook_form_FORM_ID_alter(). for user_profile_form.
  */
-function ldap_authentication_form_user_profile_form_alter(&$form, $form_state) {
+function ldap_authentication_form_user_profile_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
-  _ldap_authentication_form_user_profile_form_alter($form, $form_state, 'user_login');
+  _ldap_authentication_form_user_profile_form_alter($form, \Drupal\Core\Form\FormStateInterface $form_state, 'user_login');
 
 }
 
@@ -345,7 +345,7 @@ function ldap_authentication_form_user_profile_form_alter(&$form, $form_state) {
  */
 function ldap_authentication_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
-  _ldap_authentication_login_form_alter($form, $form_state, 'user_login');
+  _ldap_authentication_login_form_alter($form, \Drupal\Core\Form\FormStateInterface $form_state, 'user_login');
 
 }
 
@@ -354,7 +354,7 @@ function ldap_authentication_form_user_login_form_alter(&$form, \Drupal\Core\For
  */
 function ldap_authentication_form_user_login_block_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
-  _ldap_authentication_login_form_alter($form, $form_state, 'user_login_block');
+  _ldap_authentication_login_form_alter($form, \Drupal\Core\Form\FormStateInterface $form_state, 'user_login_block');
 
 }
 

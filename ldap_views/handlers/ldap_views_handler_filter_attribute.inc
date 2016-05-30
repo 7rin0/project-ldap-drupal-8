@@ -86,7 +86,7 @@ class ldap_views_handler_filter_attribute extends ldap_views_handler_filter {
       );
     }
 
-    parent::value_form($form, $form_state);
+    parent::value_form($form, \Drupal\Core\Form\FormStateInterface $form_state);
   }
 
   /**

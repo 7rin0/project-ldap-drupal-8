@@ -103,10 +103,10 @@ function ldap_help_form_ldap_servers_settings_alter(&$form, \Drupal\Core\Form\Fo
 function ldap_help_watchdog_detail_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
   if ($form_state->isSubmitted()) {
     if ($form_state->getValue('watchdog_detail') != \Drupal::config('ldap_help.settings')->get('watchdog_detail')) {
-      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('watchdog_detail', $form_state->getValue('watchdog_detail'))->save();
+      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('watchdog_detail', \Drupal\Core\Form\FormStateInterface $form_state->getValue('watchdog_detail'))->save();
     }
     if ($form_state->getValue('user_data_clear') != \Drupal::config('ldap_help.settings')->get('user_data_clear')) {
-      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('ldap_help_user_data_clear', $form_state->getValue('user_data_clear'))->save();
+      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('ldap_help_user_data_clear', \Drupal\Core\Form\FormStateInterface $form_state->getValue('user_data_clear'))->save();
     }
     if ($form_state->getValue('user_data_clear_date') != 0) {
       \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('ldap_help_user_data_clear_set_date', time())->save();

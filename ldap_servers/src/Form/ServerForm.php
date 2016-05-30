@@ -16,7 +16,7 @@ class ServerForm extends EntityForm {
    * {@inheritdoc}
    */
   public function form(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
-    $form = parent::form($form, $form_state);
+    $form = parent::form($form, \Drupal\Core\Form\FormStateInterface $form_state);
 
     $server = $this->entity;
 
