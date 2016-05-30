@@ -166,7 +166,7 @@ Representations of groups derived from LDAP might initially look like:
       $form_state->setValue($key, $value);
     }
 
-    parent::submitConfigurationForm($form, \Drupal\Core\Form\FormStateInterface $form_state);
+    parent::submitConfigurationForm($form, $form_state);
   }
 
   /**

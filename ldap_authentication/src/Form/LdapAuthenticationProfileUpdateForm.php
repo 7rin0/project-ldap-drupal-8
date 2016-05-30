@@ -63,7 +63,7 @@ class LdapAuthenticationProfileUpdateForm extends FormBase {
     //   ))) {
     //     // prevents the cached setting from being used again.
     //     unset($_SESSION['ldap_authentication_template']);
-    //     $form_state['redirect'] = isset($_GET['next']) ? $_GET['next'] : '<front>';
+    //     $form_state->setRedirectUrl(isset($_GET['next']) ? $_GET['next'] : '<front>');
     //     drupal_set_message(t('Your profile has been updated.'));
     //   }
   }

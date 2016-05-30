@@ -30,7 +30,7 @@ class LdapServersSettings extends ConfigFormBase {
       ->save();
 
     if (method_exists($this, '_submitForm')) {
-      $this->_submitForm($form, \Drupal\Core\Form\FormStateInterface $form_state);
+      $this->_submitForm($form, $form_state);
     }
   }
 
@@ -111,7 +111,7 @@ class LdapServersSettings extends ConfigFormBase {
       $form['encryption']['encryption']['#description'] .= ' <strong>' . t('Encryption is not supported on this web server.') . '</strong>';
     }
 
-    $form = parent::buildForm($form, \Drupal\Core\Form\FormStateInterface $form_state);
+    $form = parent::buildForm($form, $form_state);
     return $form;
   }
 

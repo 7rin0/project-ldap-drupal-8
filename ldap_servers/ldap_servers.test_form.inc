@@ -377,13 +377,14 @@ function ldap_servers_test_form_submit($form, \Drupal\Core\Form\FormStateInterfa
     foreach ($tokens as $key => $value) {
       $results_tables['tokens'][] = array($key, $value);
     }
-    $form_state['ldap_server_test_data'] = array(
+    $ldap_server_test_data_value = array(
       'username' => $values['testing_drupal_username'],
       'group_entry' => $group_entry,
       'results_tables' => $results_tables,
     );
     if (isset($ldap_user)) {
-      $form_state['ldap_server_test_data']['ldap_user'] = $ldap_user;
+      $ldap_server_test_data_value['ldap_user'] = $ldap_user;
+      $form_state->set('ldap_server_test_data', $ldap_server_test_data_value);
     }
   }
 }

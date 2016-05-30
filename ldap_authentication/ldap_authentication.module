@@ -299,7 +299,7 @@ function ldap_authentication_core_override_user_login_authenticate_validate($for
   }
 
   $original_form = $form_state->getFormObject();
-  $original_form->validateAuthentication($form, \Drupal\Core\Form\FormStateInterface $form_state);
+  $original_form->validateAuthentication($form, $form_state);
 }
 
 /**
@@ -336,7 +336,7 @@ function ldap_authentication_user_pass_validate(FormStateInterface \Drupal\Core\
  */
 function ldap_authentication_form_user_profile_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
-  _ldap_authentication_form_user_profile_form_alter($form, \Drupal\Core\Form\FormStateInterface $form_state, 'user_login');
+  _ldap_authentication_form_user_profile_form_alter($form, $form_state, 'user_login');
 
 }
 
@@ -345,7 +345,7 @@ function ldap_authentication_form_user_profile_form_alter(&$form, \Drupal\Core\F
  */
 function ldap_authentication_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
-  _ldap_authentication_login_form_alter($form, \Drupal\Core\Form\FormStateInterface $form_state, 'user_login');
+  _ldap_authentication_login_form_alter($form, $form_state, 'user_login');
 
 }
 
@@ -354,7 +354,7 @@ function ldap_authentication_form_user_login_form_alter(&$form, \Drupal\Core\For
  */
 function ldap_authentication_form_user_login_block_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
-  _ldap_authentication_login_form_alter($form, \Drupal\Core\Form\FormStateInterface $form_state, 'user_login_block');
+  _ldap_authentication_login_form_alter($form, $form_state, 'user_login_block');
 
 }
 

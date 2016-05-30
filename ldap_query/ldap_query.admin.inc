@@ -229,7 +229,7 @@ function ldap_query_admin_enable_disable_submit($form, \Drupal\Core\Form\FormSta
   $status = ($values['action'] == 'enable') ? 1 : 0;
   if ($values['confirm'] && $qid) {
 
-    $form_state['redirect'] = LDAP_QUERY_MENU_BASE_PATH . '/query';
+    $form_state->setRedirectUrl(LDAP_QUERY_MENU_BASE_PATH . '/query');
     $ldap_query = new LdapQueryAdmin($qid);
 
     $ldap_query->status = $status;
