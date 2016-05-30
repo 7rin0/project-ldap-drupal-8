@@ -75,7 +75,7 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
         '#value' => $action,
       ];
       // Return $form;.
-      return parent::buildForm($form, \Drupal\Core\Form\FormStateInterface $form_state);
+      return parent::buildForm($form, $form_state);
 
       // Return confirm_form($form, t('Are you sure you want to') . t($action) . ' ' . t('the LDAP server named <em><strong>%name</strong></em>?', [
       //   '%name' => $ldap_server->name
