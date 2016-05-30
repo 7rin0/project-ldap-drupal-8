@@ -159,7 +159,7 @@ function _ldap_authentication_user_login_authenticate_validate(\Drupal\Core\Form
         \Drupal::logger('ldap_authentication')->debug('%username : Previously authenticated in exclusive mode or uid is not 1.  Clear uid in form_state and attempt ldap authentication.', $watchdog_tokens);
       }
       // Passed previous authentication, but only ldap should be used so override.
-      $form_state->id() = NULL;
+      // $form_state->id() = NULL;
     }
   }
 
