@@ -326,7 +326,7 @@ function ldap_authentication_user_pass_validate(FormStateInterface \Drupal\Core\
       }
     }
     if (!empty($error)) {
-      form_set_error('name', theme('ldap_authentication_user_pass_validate_ldap_authenticated', $vars));
+      $form_state->setErrorByName('name', theme('ldap_authentication_user_pass_validate_ldap_authenticated', $vars));
     }
   }
 }

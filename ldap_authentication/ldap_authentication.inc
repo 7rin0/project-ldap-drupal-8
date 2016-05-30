@@ -109,7 +109,7 @@ function _ldap_authentication_form_user_profile_form_alter(&$form, $form_state) 
  *   array from user logon form
  *
  * @return null, but success or failure is indicated by:
- * -- form_set_error() to invalidate authentication process
+ * -- $form_state->setErrorByName() to invalidate authentication process
  * -- setting $form_state['uid'] to indicate successful authentication
  */
 function _ldap_authentication_user_login_authenticate_validate(\Drupal\Core\Form\FormStateInterface $form_state, $return_user) {
@@ -607,7 +607,7 @@ function ldap_authentication_fail_response($authentication_result, $auth_conf, $
         LDAP_AUTHENTICATION_EXCLUSIVE is set to true.  So need to stop authentication of Drupal user that is not user 1.
         error message: %err_text', $watchdog_tokens);
     }
-    // form_set_error('name', $watchdog_tokens['%err_text']);.
+    // $form_state->setErrorByName('name', $watchdog_tokens['%err_text']);.
     drupal_set_message("TODO: Form set error replacement.", "error");
   }
   else {
