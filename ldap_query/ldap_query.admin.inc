@@ -63,7 +63,7 @@ function ldap_query_admin_form($form, \Drupal\Core\Form\FormStateInterface $form
  * Validate hook for the LDAP server form.
  */
 function ldap_query_admin_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  $op = drupal_strtolower($form_state['clicked_button']['#value']);
+  $op = drupal_strtolower($form_state->getTriggeringElement()['clicked_button']['#value']);
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $server = new LdapQueryAdmin($form_state->getValue('qid'));
 
@@ -82,7 +82,7 @@ function ldap_query_admin_form_validate($form, \Drupal\Core\Form\FormStateInterf
  * Submit hook for the LDAP server form.
  */
 function ldap_query_admin_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  $button = drupal_strtolower($form_state['clicked_button']['#value']);
+  $button = drupal_strtolower($form_state->getTriggeringElement());
   $op = ($button == 'add') ? 'add' : 'edit';
   $verb = ($op == 'edit') ? 'edited' : $op . 'ed';
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');

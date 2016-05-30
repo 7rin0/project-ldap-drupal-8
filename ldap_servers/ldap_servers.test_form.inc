@@ -189,7 +189,7 @@ function ldap_servers_test_form_validate($form, \Drupal\Core\Form\FormStateInter
 function ldap_servers_test_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
   // Pass data back to form builder.
-  $form_state['rebuild'] = TRUE;
+  $form_state->setRebuild(TRUE);
 
   ldap_servers_module_load_include('inc', 'ldap_servers', 'ldap_servers.functions');
   $errors = FALSE;
