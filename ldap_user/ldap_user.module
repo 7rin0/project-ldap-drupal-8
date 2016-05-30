@@ -570,7 +570,7 @@ function ldap_user_form_password_policy_password_tab_alter(&$form, \Drupal\Core\
  * Store password from logon forms in ldap_user_ldap_provision_pwd static variable
  * for use in provisioing to ldap.
  */
-function ldap_user_grab_password_validate($form, FormState \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_grab_password_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
   // This is not a login form but profile form and user is insertingpassword to update email.
   if (!empty($form_state->getValue('current_pass_required_values'))) {
     if (!empty($form_state->getValue('current_pass')) && empty($form_state->getValue('pass'))) {
@@ -1107,19 +1107,20 @@ function ldap_user_user_update(Drupal\Core\Entity\EntityInterface $user_edit, $a
  * Implements hook_user_presave()
  *
  * @FIXME hook_user_presave has gone away (Core).
- * @FIXME $user_edit is deprecated (LDAP).
+ * @FIXME $entity is deprecated (LDAP).
  */
 // (Drupal\Core\Entity\EntityInterface $entity)
-function ldap_user_user_presave(Drupal\Core\Entity\EntityInterface $user_edit, $account, $category) {
-  // debug("ldap_user_user_presave, category=$category"); debug($user_edit); debug($account); // ldap_user_user_insert, category='. $category . 'account->status = ' . $account->status);.
-  if (ldap_user_ldap_exclude($account, $user_edit)) {
+function ldap_user_user_presave(Drupal\Core\Entity\EntityInterface $entity) {
+  $account = $entity->original;
+  // debug("ldap_user_user_presave, category=$category"); debug($entity); debug($account); // ldap_user_user_insert, category='. $category . 'account->status = ' . $account->status);.
+  if (ldap_user_ldap_exclude($account, $entity)) {
     return;
   }
-  if (isset($account->name)) {
-    $drupal_username = $account->name;
+  if (isset($account->get('name')->getValue()[0]['value'])) {
+    $drupal_username = $account->get('name')->getValue()[0]['value'];
   }
-  elseif (!empty($user_edit['name'])) {
-    $drupal_username = $user_edit['name'];
+  elseif (!empty($entity->get('name')->getValue()[0]['value'])) {
+    $drupal_username = $entity->get('name')->getValue()[0]['value'];
   }
   else {
     return;
@@ -1131,7 +1132,7 @@ function ldap_user_user_presave(Drupal\Core\Entity\EntityInterface $user_edit, $
     if (ldap_user_is_ldap_associated($account, LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER)) {
       $ldap_user = ldap_servers_get_user_ldap_data($drupal_username, $ldap_user_conf->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
       $ldap_server = ldap_servers_get_servers($ldap_user_conf->drupalAcctProvisionServer, NULL, TRUE);
-      $ldap_user_conf->entryToUserEdit($ldap_user, $user_edit, $ldap_server, LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, array(LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER));
+      $ldap_user_conf->entryToUserEdit($ldap_user, $entity, $ldap_server, LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, array(LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER));
     }
   }
 
