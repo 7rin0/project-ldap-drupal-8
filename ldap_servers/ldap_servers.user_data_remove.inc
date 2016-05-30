@@ -90,7 +90,7 @@ function ldap_authorization_generate_users() {
       'data' => array('ldap_authorizations' => array('og_group' => 7, 'drupal_role' => 8)),
     );
 
-    $user_response = entity_create('user', $user_edit);
+    $user_response = \Drupal\node\Entity\User::create('user', $user_edit);
     $user_response->is_new = TRUE;
     $user_response->name = "user" . $i;
 
