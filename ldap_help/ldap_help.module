@@ -5,6 +5,8 @@
  * The ldaphelp module is a module to help admins debug ldap_integration modules.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_menu().
  */
@@ -100,17 +102,20 @@ function ldap_help_form_ldap_servers_settings_alter(&$form, \Drupal\Core\Form\Fo
 /**
  *
  */
-function ldap_help_watchdog_detail_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_help_watchdog_detail_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   if ($form_state->isSubmitted()) {
-    if ($form_state->getValue('watchdog_detail') != \Drupal::config('ldap_help.settings')->get('watchdog_detail')) {
-      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('watchdog_detail', $form_state->getValue('watchdog_detail'))->save();
+    $config = \Drupal::configFactory()->getEditable('ldap_help.settings');
+    $watchdog_detail = $form_state->getValue('watchdog_detail');
+    if ($watchdog_detail != $config->get('watchdog_detail')) {
+      $config->set('watchdog_detail', $watchdog_detail);
     }
-    if ($form_state->getValue('user_data_clear') != \Drupal::config('ldap_help.settings')->get('user_data_clear')) {
-      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('ldap_help_user_data_clear', $form_state->getValue('user_data_clear'))->save();
+    if ($form_state->getValue('user_data_clear') != $config->get('user_data_clear')) {
+      $config->set('user_data_clear', $form_state->getValue('user_data_clear'));
     }
     if ($form_state->getValue('user_data_clear_date') != 0) {
-      \Drupal::getContainer()->get('config.factory')->getEditable('ldap_help.settings')->set('ldap_help_user_data_clear_set_date', time())->save();
+      $config->set('user_data_clear_set_date', time());
     }
+    $config->save();
   }
 }
 
