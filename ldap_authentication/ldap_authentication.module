@@ -185,9 +185,55 @@ function ldap_authentication_ldap_authenticated($user) {
     return FALSE;
   }
 
-  $authname = ldap_user_get_authname($user);
+  // @FIXME ?!
+  // $authname = ldap_user_get_authname($user);
+
   return !empty($authname);
 
+}
+
+function ldap_user_get_authname($user) {
+  $cache = &drupal_static(__FUNCTION__, array());
+
+  $authname = NULL;
+  $uid = NULL;
+
+  if (is_object($user)) {
+    // Object - set id() if object has id() and id() > 0
+    if (!empty($user->id())) {
+      $uid = $user->id();
+    }
+  }
+  elseif (is_numeric($user) && intval($user) == $user) {
+    // Integer - set id() number is an integer > 0
+    if ($user > 0) {
+      $uid = $user;
+    }
+  }
+  elseif (is_string($user)) {
+    // String - load account and set id() if id() > 0
+    $account = user_load_by_name($user);
+    if (!empty($account->id())) {
+      $uid = $account->id();
+    }
+  }
+
+  // Exit if no uid found
+  if (empty($uid)) {
+    return NULL;
+  }
+
+  // Run query if uid is not statically cached
+  if (!array_key_exists($uid, $cache)) {
+    $authname = db_query('SELECT authname FROM {authmap} WHERE uid = :uid AND module = :module', array(
+      ':uid' => $uid,
+      ':module' => 'ldap_user',
+    ))->fetchField();
+
+    $cache [$uid] = !empty($authname) ? $authname : NULL;
+  }
+
+  return $cache [$uid];
 }
 
 /**
