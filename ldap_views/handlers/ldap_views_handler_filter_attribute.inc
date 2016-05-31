@@ -6,6 +6,8 @@
  * Includes new criterias.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  *
  */
@@ -54,7 +56,7 @@ class ldap_views_handler_filter_attribute extends ldap_views_handler_filter {
   /**
    * Provide a simple textfield for equality.
    */
-  function value_form(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  function value_form(&$form, FormStateInterface $form_state) {
     /*
     $current_display = $this->view->display[$this->view->current_display];
     $qid             = isset($current_display->display_options['query']['options']['qid']) ? $current_display->display_options['query']['options']['qid']

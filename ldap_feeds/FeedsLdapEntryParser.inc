@@ -5,6 +5,8 @@
  * Provides the Parser for an ldap entry array.
  */
 
+ use Drupal\Core\Form\FormStateInterface;
+
 /**
  *
  */
@@ -87,7 +89,7 @@ class FeedsLdapEntryParser extends FeedsParser {
   /**
    * Override parent::configForm().
    */
-  public function configForm(\Drupal\Core\Form\FormStateInterface $form_state) {
+  public function configForm($form_state) {
     $form = array();
     return $form;
   }

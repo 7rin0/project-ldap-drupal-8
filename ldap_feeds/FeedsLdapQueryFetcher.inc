@@ -5,6 +5,8 @@
  * FeedsLdapQueryFetcher.
  */
 
+ use Drupal\Core\Form\FormStateInterface;
+
 /**
  * FeedsLdapQueryFetcherResult.
  */
@@ -66,7 +68,7 @@ class FeedsLdapQueryFetcher extends FeedsFetcher {
   /**
    * Override parent::configForm().
    */
-  public function configForm(\Drupal\Core\Form\FormStateInterface $form_state) {
+  public function configForm($form_state) {
     $queries = ldap_query_get_queries(NULL, 'enabled');
     $query_options = array(0 => '--- select one or more queries ---');
     foreach ($queries as $qid => $query) {

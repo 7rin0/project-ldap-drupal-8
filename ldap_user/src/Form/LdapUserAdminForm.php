@@ -40,7 +40,7 @@ class LdapUserAdminForm extends ConfigFormBase {
   /**
    *
    */
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form = $this->ldap_user_conf_admin->drupalForm();
     return $form;
   }
@@ -48,7 +48,7 @@ class LdapUserAdminForm extends ConfigFormBase {
   /**
    *
    */
-  public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     list($errors, $warnings) = $this->ldap_user_conf_admin->drupalFormValidate($form_state->getValues(), $form['#storage']);
     foreach ($errors as $error_name => $error_text) {
       $form_state->setErrorByName($error_name, $error_text);
@@ -62,7 +62,7 @@ class LdapUserAdminForm extends ConfigFormBase {
   /**
    *
    */
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     // Add form data to object and save or create.
     $this->ldap_user_conf_admin->drupalFormSubmit($form_state->getValues(), $form['#storage']);
 

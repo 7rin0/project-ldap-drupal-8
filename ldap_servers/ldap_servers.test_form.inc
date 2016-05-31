@@ -4,6 +4,8 @@
  * @file
  */
 
+ use Drupal\Core\Form\FormStateInterface;
+
 module_load_include('inc', 'ldap_servers', 'ldap_servers.functions');
 
 /**
@@ -23,7 +25,7 @@ module_load_include('inc', 'ldap_servers', 'ldap_servers.functions');
  * @return
  *   The form structure.
  */
-function ldap_servers_test_form($form, \Drupal\Core\Form\FormStateInterface $form_state, $op = NULL, $sid = NULL) {
+function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NULL, $sid = NULL) {
 
   $ldap_server = ldap_servers_get_servers($sid, 'all', TRUE);
 
@@ -173,7 +175,7 @@ function ldap_servers_test_form($form, \Drupal\Core\Form\FormStateInterface $for
 /**
  * Validate hook for the LDAP server form.
  */
-function ldap_servers_test_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_servers_test_form_validate($form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
   if (!$values['sid']) {
     $form_state->setErrorByName(NULL, t('No server id found in form'));
@@ -186,7 +188,7 @@ function ldap_servers_test_form_validate($form, \Drupal\Core\Form\FormStateInter
 /**
  * Submit hook for the LDAP server form.
  */
-function ldap_servers_test_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
 
   // Pass data back to form builder.
   $form_state->setRebuild(TRUE);

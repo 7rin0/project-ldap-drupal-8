@@ -4,6 +4,8 @@
  * @file
  */
 
+ use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_ctools_plugin_api().
  */
@@ -102,7 +104,7 @@ function ldap_feeds_drupal_user_attributes() {
 /**
  * Show some sample ldap user data to help with mapping interface.
  */
-function ldap_feeds_form_feeds_ui_mapping_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+function ldap_feeds_form_feeds_ui_mapping_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   $importer = feeds_importer_load($form['#importer']);
 

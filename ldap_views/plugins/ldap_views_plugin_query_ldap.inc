@@ -5,6 +5,8 @@
  * Defines the default query object which builds and execute a ldap query.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  *
  */
@@ -382,7 +384,7 @@ class ldap_views_plugin_query_ldap extends views_plugin_query {
   /**
    *
    */
-  function options_form(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  function options_form(&$form, FormStateInterface $form_state) {
     /**
  * $ldap_data = entity_load('ldap_data', FALSE);
  * $options   = array();
@@ -420,8 +422,8 @@ class ldap_views_plugin_query_ldap extends views_plugin_query {
   }
 
   /* Only when adding dynamic fields in ldap_views_views_data_alter()
-  function options_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  parent::options_submit(&$form, $form_state);
+  function options_submit(&$form, FormStateInterface $form_state) {
+  parent::options_submit(&$form, FormStateInterface $form_state);
   if ($form_state->getValue('query')['options']['qid'] != $form_state['view']->query->options['qid']) {
   if ($form_state->getValue('query')['options']['qid'] != $form_state['view']->query->options['qid']) {
   views_invalidate_cache();

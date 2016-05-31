@@ -44,7 +44,7 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
   /**
    *
    */
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state, $action = NULL, $sid = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $action = NULL, $sid = NULL) {
 
     if ($ldap_server = ldap_servers_get_servers($sid, 'all', TRUE)) {
       $variables = [
@@ -87,7 +87,7 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
   /**
    *
    */
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $name = $values['name'];
     $sid = $values['sid'];

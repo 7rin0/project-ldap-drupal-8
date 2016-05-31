@@ -5,6 +5,8 @@
  * FeedsDrupalUserLdapEntryFetcher.
  */
 
+ use Drupal\Core\Form\FormStateInterface;
+
 define('LDAP_FEEDS_DRUPAL_USER_FETCHER_FILTER_AUTHENTICATED', FALSE);
 define('LDAP_FEEDS_DRUPAL_USER_FETCHER_FILTER_ROLES', FALSE);
 /**
@@ -105,7 +107,7 @@ class FeedsDrupalUserLdapEntryFetcher extends FeedsFetcher {
   /**
    * Override parent::configForm().
    */
-  public function configForm(\Drupal\Core\Form\FormStateInterface $form_state) {
+  public function configForm($form_state) {
 
     $form = array();
     $form['filterLdapAuthenticated'] = array(

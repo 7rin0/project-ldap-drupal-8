@@ -20,7 +20,7 @@ class ServerTestForm extends EntityForm {
   /**
    *
    */
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state, $ldap_server = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, $ldap_server = NULL) {
     // @FIXME
     // drupal_set_title() has been removed. There are now a few ways to set the title
     // dynamically, depending on the situation.
@@ -215,7 +215,7 @@ class ServerTestForm extends EntityForm {
   /**
    *
    */
-  public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
 
     if (!$values['id']) {
@@ -231,7 +231,7 @@ class ServerTestForm extends EntityForm {
   /**
    *
    */
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
 
     // Pass data back to form builder.
     $form_state->setRebuild(TRUE);

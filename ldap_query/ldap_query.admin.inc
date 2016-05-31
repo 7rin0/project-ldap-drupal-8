@@ -5,6 +5,8 @@
  * Defines functions for administrative interface for servers.
  */
 
+ use Drupal\Core\Form\FormStateInterface;
+
 /**
  * @return index of ldap queries
  */
@@ -52,7 +54,7 @@ function ldap_query_list($qid = NULL, $actions = FALSE) {
  * @return
  *   The form structure.
  */
-function ldap_query_admin_form($form, \Drupal\Core\Form\FormStateInterface $form_state, $op = NULL, $qid = NULL) {
+function ldap_query_admin_form($form, FormStateInterface $form_state, $op = NULL, $qid = NULL) {
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $server = new LdapQueryAdmin($qid);
   $form = $server->drupalForm($op);
@@ -62,7 +64,7 @@ function ldap_query_admin_form($form, \Drupal\Core\Form\FormStateInterface $form
 /**
  * Validate hook for the LDAP server form.
  */
-function ldap_query_admin_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_query_admin_form_validate($form, FormStateInterface $form_state) {
   $op = drupal_strtolower($form_state->getTriggeringElement()['clicked_button']['#value']);
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
   $server = new LdapQueryAdmin($form_state->getValue('qid'));
@@ -81,7 +83,7 @@ function ldap_query_admin_form_validate($form, \Drupal\Core\Form\FormStateInterf
 /**
  * Submit hook for the LDAP server form.
  */
-function ldap_query_admin_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_query_admin_form_submit($form, FormStateInterface $form_state) {
   $button = drupal_strtolower($form_state->getTriggeringElement());
   $op = ($button == 'add') ? 'add' : 'edit';
   $verb = ($op == 'edit') ? 'edited' : $op . 'ed';
@@ -119,7 +121,7 @@ function ldap_query_admin_form_submit($form, \Drupal\Core\Form\FormStateInterfac
  * @return
  *   The form structure.
  */
-function ldap_query_admin_delete($form, \Drupal\Core\Form\FormStateInterface $form_state, $op = NULL, $qid = NULL) {
+function ldap_query_admin_delete($form, FormStateInterface $form_state, $op = NULL, $qid = NULL) {
 
   if ($qid && ($ldap_query = ldap_query_get_queries($qid, 'all', TRUE))) {
     // array()
@@ -153,7 +155,7 @@ function ldap_query_admin_delete($form, \Drupal\Core\Form\FormStateInterface $fo
 /**
  * Submit handler for the LDAP server delete page.
  */
-function ldap_query_admin_delete_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_query_admin_delete_submit($form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
   $qid = $values['qid'];
   ldap_servers_module_load_include('php', 'ldap_query', 'LdapQueryAdmin.class');
@@ -186,7 +188,7 @@ function ldap_query_admin_delete_submit($form, \Drupal\Core\Form\FormStateInterf
  * @return
  *   The form structure.
  */
-function ldap_query_admin_enable_disable($form, \Drupal\Core\Form\FormStateInterface $form_state, $action = NULL, $qid = NULL) {
+function ldap_query_admin_enable_disable($form, FormStateInterface $form_state, $action = NULL, $qid = NULL) {
 
   if ($ldap_query = ldap_query_get_queries($qid, 'all', TRUE)) {
     $variables = array(
@@ -223,7 +225,7 @@ function ldap_query_admin_enable_disable($form, \Drupal\Core\Form\FormStateInter
 /**
  * Submit hook for the LDAP server delete page.
  */
-function ldap_query_admin_enable_disable_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_query_admin_enable_disable_submit($form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
   $qid = $values['qid'];
   $status = ($values['action'] == 'enable') ? 1 : 0;

@@ -4,6 +4,8 @@
  * @file
  */
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements the LDAP user test page.
  *
@@ -17,7 +19,7 @@
  * @return
  *   The form structure.
  */
-function ldap_user_test_form($form, \Drupal\Core\Form\FormStateInterface $form_state, $op = NULL) {
+function ldap_user_test_form($form, FormStateInterface $form_state, $op = NULL) {
 
   $username = @$_SESSION['ldap_user_test_form']['testing_drupal_username'];
 
@@ -76,7 +78,7 @@ function ldap_user_test_form($form, \Drupal\Core\Form\FormStateInterface $form_s
 /**
  *
  */
-function ldap_user_test_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_test_form_validate($form, FormStateInterface $form_state) {
   if ($form_state->getValue('test_mode') == 'execute'  &&
     count(array_filter($form_state->getValue('action'))) > 1) {
     $form_state->setErrorByName('test_mode', t('Only one action may be selected for "Execute Action" testing mode.'));
@@ -87,7 +89,7 @@ function ldap_user_test_form_validate($form, \Drupal\Core\Form\FormStateInterfac
 /**
  * Submit hook for the LDAP server form.
  */
-function ldap_user_test_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_test_form_submit($form, FormStateInterface $form_state) {
 
   $username = $form_state->getValue('testing_drupal_username');
   $selected_actions = $form_state->getValue('action');

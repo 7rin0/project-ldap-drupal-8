@@ -28,7 +28,7 @@ class LdapAuthenticationAdminForm extends ConfigFormBase {
   /**
    *
    */
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     ldap_servers_module_load_include('php', 'ldap_authentication', 'LdapAuthenticationConfAdmin.class');
     $auth_conf = new \LdapAuthenticationConfAdmin();
     return $auth_conf->drupalForm();
@@ -37,7 +37,7 @@ class LdapAuthenticationAdminForm extends ConfigFormBase {
   /**
    *
    */
-  public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
 
     ldap_servers_module_load_include('php', 'ldap_authentication', 'LdapAuthenticationConfAdmin.class');
     $auth_conf = new \LdapAuthenticationConfAdmin();
@@ -51,7 +51,7 @@ class LdapAuthenticationAdminForm extends ConfigFormBase {
   /**
    *
    */
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
 
     ldap_servers_module_load_include('php', 'ldap_authentication', 'LdapAuthenticationConfAdmin.class');
     $auth_conf = new \LdapAuthenticationConfAdmin();

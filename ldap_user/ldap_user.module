@@ -541,7 +541,7 @@ function ldap_user_help($path, $arg) {
 /**
  * Implements hook_form_FORM_ID_alter(). for user_login_block.
  */
-function ldap_user_form_user_login_block_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_form_user_login_block_alter(&$form, FormStateInterface $form_state) {
   array_unshift($form['#validate'], '
   ');
 }
@@ -549,21 +549,21 @@ function ldap_user_form_user_login_block_alter(&$form, \Drupal\Core\Form\FormSta
 /**
  * Implements hook_form_FORM_ID_alter(). for user_login_form.
  */
-function ldap_user_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+function ldap_user_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   array_unshift($form['#validate'], 'ldap_user_grab_password_validate');
 }
 
 /**
  * Implements hook_form_FORM_ID_alter(). for user_register_form.
  */
-function ldap_user_form_user_profile_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_form_user_profile_form_alter(&$form, FormStateInterface $form_state) {
   array_unshift($form['#submit'], 'ldap_user_grab_password_validate');
 }
 
 /**
  * Implements hook_form_FORM_ID_alter(). for password_policy_password_tab.
  */
-function ldap_user_form_password_policy_password_tab_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_form_password_policy_password_tab_alter(&$form, FormStateInterface $form_state) {
   array_unshift($form['#validate'], 'ldap_user_grab_password_validate');
 }
 
@@ -571,7 +571,7 @@ function ldap_user_form_password_policy_password_tab_alter(&$form, \Drupal\Core\
  * Store password from logon forms in ldap_user_ldap_provision_pwd static variable
  * for use in provisioing to ldap.
  */
-function ldap_user_grab_password_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_grab_password_validate($form, FormStateInterface $form_state) {
   // This is not a login form but profile form and user is insertingpassword to update email.
   if (!empty($form_state->getValue('current_pass_required_values'))) {
     if (!empty($form_state->getValue('current_pass')) && empty($form_state->getValue('pass'))) {
@@ -626,7 +626,7 @@ function ldap_user_identities_delete($uid) {
 /**
  * Implements hook_form_FORM_ID_alter(). for user_register_form.
  */
-function ldap_user_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
 
   array_unshift($form['#submit'], 'ldap_user_grab_password_validate');
 
@@ -693,7 +693,7 @@ function ldap_user_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormS
 /**
  *
  */
-function ldap_user_form_register_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_form_register_form_validate($form, FormStateInterface $form_state) {
 
   $values = $form_state->getValues();
   $user_ldap_entry = NULL;
@@ -729,7 +729,7 @@ function ldap_user_form_register_form_validate($form, \Drupal\Core\Form\FormStat
 
 /**
  * Called after user_register_form_submit .**/
-function ldap_user_form_register_form_submit2(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_user_form_register_form_submit2(&$form, FormStateInterface $form_state) {
   // It's only called when a user who can create a new user does so using the register form.
   $values = $form_state->getValues();
   $ldap_user_association_set = FALSE;

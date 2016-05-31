@@ -51,13 +51,14 @@ class ServerListBuilder extends ConfigEntityListBuilder {
         'url' => Url::fromRoute('entity.ldap_server.test_form', ['ldap_server' => $entity->id()]),
       );
     }
-    if ($entity->get('status') == 1) {
-      $operations['disable'] = array(
-        'title' => $this->t('Disable'),
-        'weight' => 15,
-        'url' => Url::fromRoute('entity.ldap_server.enable_disable', ['action' => 'disable', 'id' => $entity->id()]),
-      );
-    }
+    // @FIXME
+    // if ($entity->get('status') == 1) {
+    //   $operations['disable'] = array(
+    //     'title' => $this->t('Disable'),
+    //     'weight' => 15,
+    //     'url' => Url::fromRoute('entity.ldap_server.enable_disable', ['action' => 'disable', 'id' => $entity->id()]),
+    //   );
+    // }
     else {
       $operations['enable'] = array(
         'title' => $this->t('Enable'),

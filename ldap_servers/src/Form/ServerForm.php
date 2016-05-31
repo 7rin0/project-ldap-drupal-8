@@ -15,7 +15,7 @@ class ServerForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function form(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
     $server = $this->entity;
@@ -488,7 +488,7 @@ class ServerForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function save(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function save(array $form, FormStateInterface $form_state) {
     $server = $this->entity;
 
     // Handle the password as the form is empty

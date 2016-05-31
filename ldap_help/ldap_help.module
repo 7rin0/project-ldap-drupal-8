@@ -73,7 +73,7 @@ function ldap_help_menu() {
 /**
  *
  */
-function ldap_help_form_ldap_servers_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_help_form_ldap_servers_settings_alter(&$form, FormStateInterface $form_state) {
   $form['watchdog_detail'] = array('#type' => 'fieldset', '#title' => t('Development'));
   $form['watchdog_detail']['watchdog_detail'] = array(
     '#type' => 'checkbox',
@@ -102,7 +102,7 @@ function ldap_help_form_ldap_servers_settings_alter(&$form, \Drupal\Core\Form\Fo
 /**
  *
  */
-function ldap_help_watchdog_detail_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function ldap_help_watchdog_detail_submit(array &$form, FormStateInterface $form_state) {
   if ($form_state->isSubmitted()) {
     $config = \Drupal::configFactory()->getEditable('ldap_help.settings');
     $watchdog_detail = $form_state->getValue('watchdog_detail');

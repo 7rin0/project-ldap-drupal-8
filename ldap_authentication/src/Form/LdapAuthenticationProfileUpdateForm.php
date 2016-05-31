@@ -20,7 +20,7 @@ class LdapAuthenticationProfileUpdateForm extends FormBase {
   /**
    *
    */
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form['mail'] = [
       '#type' => 'textfield',
       '#required' => TRUE,
@@ -36,7 +36,7 @@ class LdapAuthenticationProfileUpdateForm extends FormBase {
   /**
    *
    */
-  public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state) {
     if (!filter_var($form_state->getValue(['mail']), FILTER_VALIDATE_EMAIL)) {
       $form_state->setErrorByName('mail', t('You must specify a valid email address.'));
     }
@@ -54,7 +54,7 @@ class LdapAuthenticationProfileUpdateForm extends FormBase {
   /**
    *
    */
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $user = \Drupal::currentUser();
     // @FIXME
     // user_save() is now a method of the user entity.
