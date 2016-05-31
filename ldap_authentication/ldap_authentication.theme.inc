@@ -31,7 +31,7 @@ function theme_ldap_authentication_user_login_block_links($variables) {
     $items[] = l(t($auth_conf->ldapUserHelpLinkText), $auth_conf->ldapUserHelpLinkUrl);
   }
 
-  $output = theme('item_list', array('items' => $items));
+  $output = \Drupal::theme()->render('item_list', array('items' => $items));
   return $output;
 }
 

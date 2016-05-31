@@ -51,7 +51,7 @@ function theme_ldap_query_list($variables) {
   else {
     $table['rows'] = array();
   }
-  $output = theme('table', $table);
+  $output = \Drupal::theme()->render('table', $table);
 
   return $output;
 }
@@ -106,7 +106,7 @@ function theme_ldap_query_results($variables) {
   // $ldap_query, $results, $show_query.
   extract($variables);
 
-  $query = theme('ldap_query', array('ldap_query' => $ldap_query));
+  $query = \Drupal::theme()->render('ldap_query', array('ldap_query' => $ldap_query));
   $results_text = t('LDAP Query Results: count=%count', array('%count' => $results['count']));
 
   if (!$results['count']) {

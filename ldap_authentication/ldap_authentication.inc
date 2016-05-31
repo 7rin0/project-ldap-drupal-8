@@ -49,7 +49,7 @@ function _ldap_authentication_login_form_alter(&$form, FormStateInterface $form_
       'auth_conf' => $auth_conf,
     );
 
-    $form['links']['#markup'] = theme('ldap_authentication_user_login_block_links', $vars);
+    $form['links']['#markup'] = \Drupal::theme()->render('ldap_authentication_user_login_block_links', $vars);
   }
   ldap_servers_disable_http_check($form);
 

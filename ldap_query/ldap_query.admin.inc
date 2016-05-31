@@ -36,7 +36,7 @@ function ldap_query_list($qid = NULL, $actions = FALSE) {
     'type' => 'table',
   );
 
-  $html = theme('ldap_query_list', $variables);
+  $html = \Drupal::theme()->render('ldap_query_list', $variables);
 
   return $html;
 }
@@ -252,7 +252,7 @@ function ldap_query_test($qid) {
 
   $ldap_query = ldap_query_get_queries($qid, 'all', TRUE);
   $results = $ldap_query->query();
-  $display = theme('ldap_query_results', array('results' => $results, 'ldap_query' => $ldap_query, 'show_query' => TRUE));
+  $display = \Drupal::theme()->render('ldap_query_results', array('results' => $results, 'ldap_query' => $ldap_query, 'show_query' => TRUE));
 
   return $display;
 

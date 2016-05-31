@@ -429,7 +429,7 @@ class ServerTestForm extends EntityForm {
           //
           //
           // @see https://www.drupal.org/node/2195739
-          // $result = theme('item_list', array('items' => $memberships, 'type' => 'ul'));
+          // $result = \Drupal::theme()->render('item_list', array('items' => $memberships, 'type' => 'ul'));
           $settings = array(
             '#theme' => 'item_list',
             '#items' => $memberships,
@@ -459,7 +459,7 @@ class ServerTestForm extends EntityForm {
             //
             //
             // @see https://www.drupal.org/node/2195739
-            // $result = theme('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
+            // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
             $settings = array(
               '#theme' => 'item_list',
               '#items' => $groupusermembershipsfromuserattr,
@@ -486,7 +486,7 @@ class ServerTestForm extends EntityForm {
             //
             //
             // @see https://www.drupal.org/node/2195739
-            // $result = theme('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
+            // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
             $settings = array(
               '#theme' => 'item_list',
               '#items' => $groupusermembershipsfromentry,
@@ -515,7 +515,7 @@ class ServerTestForm extends EntityForm {
             //
             //
             // @see https://www.drupal.org/node/2195739
-            // $result1 = theme('item_list', array('items' => $diff1, 'type' => 'ul'));
+            // $result1 = \Drupal::theme()->render('item_list', array('items' => $diff1, 'type' => 'ul'));
             $settings = array(
               '#theme' => 'item_list',
               '#items' => $diff1,
@@ -531,7 +531,7 @@ class ServerTestForm extends EntityForm {
             //
             //
             // @see https://www.drupal.org/node/2195739
-            // $result2 = theme('item_list', array('items' => $diff2, 'type' => 'ul'));
+            // $result2 = \Drupal::theme()->render('item_list', array('items' => $diff2, 'type' => 'ul'));
             $settings = array(
               '#theme' => 'item_list',
               '#items' => $diff2,

@@ -266,7 +266,7 @@ class LdapUserConfAdmin extends LdapUserConf {
  *    $urls = t('URLs are not available until a key is create a key and urls will be generated');
  *  }
  *  else {
- *    $urls = theme('item_list',
+ *    $urls = \Drupal::theme()->render('item_list',
  *      array(
  *        'items' => ldap_user_ws_urls_item_list(),
  *        'title' => 'REST urls',

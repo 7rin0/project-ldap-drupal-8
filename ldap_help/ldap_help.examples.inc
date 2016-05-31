@@ -57,7 +57,7 @@ function ldap_help_examples() {
           $li[] = "$attr: " . $values[0] . '<br/>';
         }
         else {
-          $li[]  = theme('item_list', array('items' => $values, 'type' => 'ul', 'title' => $attr));
+          $li[]  = \Drupal::theme()->render('item_list', array('items' => $values, 'type' => 'ul', 'title' => $attr));
         }
       }
       $form[$sample_ldap_id][$ou][$dn] = array(

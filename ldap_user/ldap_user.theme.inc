@@ -153,8 +153,8 @@ function theme_ldap_user_conf_form($variables) {
     $table['header'] = $header;
     $table['attributes'] = array('class' => array('ldap-provision-' . $direction_text));
     array_unshift($table['rows'], $second_header);
-    $table_themed = theme('table', $table);
-    $rendered_table = theme('table', $table);
+    $table_themed = \Drupal::theme()->render('table', $table);
+    $rendered_table = \Drupal::theme()->render('table', $table);
     $output = str_replace('[replace_with_table__' . $direction . ']', $rendered_table, $output);
   }
 

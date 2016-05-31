@@ -117,7 +117,7 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
 
     // @FIXME
     // if (isset($test_data['username']) && isset($test_data['ldap_user'])) {
-    //   $form['#prefix'] = theme('ldap_server_ldap_entry_table',
+    //   $form['#prefix'] = \Drupal::theme()->render('ldap_server_ldap_entry_table',
     //     array(
     //       'entry' => $test_data['ldap_user']['attr'],
     //       'username' => $test_data['username'],
@@ -125,7 +125,7 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
     //     ));
     // }
     if (isset($test_data['username']) && isset($test_data['ldap_user'])) {
-      $form['#prefix'] = _theme('ldap_server_ldap_entry_table',
+      $form['#prefix'] = \Drupal::theme()->render('ldap_server_ldap_entry_table',
         array(
           'entry' => $test_data['ldap_user']['attr'],
           'username' => $test_data['username'],
@@ -317,8 +317,8 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
         // This is the parent function that will call FromUserAttr or FromEntry.
         $memberships = $ldap_server->groupMembershipsFromUser($user, 'group_dns', $nested);
         // @FIXME
-        // $result = theme('item_list', array('items' => $memberships, 'type' => 'ul'));
-        $result = _theme('item_list', array('items' => $memberships, 'type' => 'ul'));
+        // $result = \Drupal::theme()->render('item_list', array('items' => $memberships, 'type' => 'ul'));
+        $result = \Drupal::theme()->render('item_list', array('items' => $memberships, 'type' => 'ul'));
         $results_tables['group2'][] = array("ldap_server->groupMembershipsFromUser($user, 'group_dns', nested=$nested_display)<br/>count=" . count($memberships), $result);
 
         $result = ($ldap_server->groupIsMember($group_dn, $user, $nested)) ? 'Yes' : 'No';
@@ -328,8 +328,8 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
           $groupusermembershipsfromuserattr = $ldap_server->groupUserMembershipsFromUserAttr($user, $nested);
           $count = count($groupusermembershipsfromuserattr);
           // @FIXME
-          // $result = theme('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
-          $result = _theme('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
+          // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
+          $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
         }
         else {
           $groupusermembershipsfromuserattr = array();
@@ -342,8 +342,8 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
         if ($ldap_server->groupGroupEntryMembershipsConfigured) {
           $groupusermembershipsfromentry = $ldap_server->groupUserMembershipsFromEntry($user, $nested);
           // @FIXME
-          // $result = theme('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
-          $result = _theme('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
+          // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
+          $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
         }
         else {
           $groupusermembershipsfromentry = array();
@@ -357,10 +357,10 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
           $diff1 = array_diff($groupusermembershipsfromuserattr, $groupusermembershipsfromentry);
           $diff2 = array_diff($groupusermembershipsfromentry, $groupusermembershipsfromuserattr);
           // @FIXME
-          // $result1 = theme('item_list', array('items' => $diff1, 'type' => 'ul'));
-          $result1 = _theme('item_list', array('items' => $diff1, 'type' => 'ul'));
-          // $result2 = theme('item_list', array('items' => $diff2, 'type' => 'ul'));.
-          $result2 = _theme('item_list', array('items' => $diff2, 'type' => 'ul'));
+          // $result1 = \Drupal::theme()->render('item_list', array('items' => $diff1, 'type' => 'ul'));
+          $result1 = \Drupal::theme()->render('item_list', array('items' => $diff1, 'type' => 'ul'));
+          // $result2 = \Drupal::theme()->render('item_list', array('items' => $diff2, 'type' => 'ul'));.
+          $result2 = \Drupal::theme()->render('item_list', array('items' => $diff2, 'type' => 'ul'));
           $results_tables['group2'][] = array("groupUserMembershipsFromEntry and FromUserAttr Diff)", $result1);
           $results_tables['group2'][] = array("FromUserAttr and groupUserMembershipsFromEntry Diff)", $result2);
         }
