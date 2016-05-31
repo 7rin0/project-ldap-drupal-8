@@ -105,7 +105,7 @@ class LdapUserConfAdmin extends LdapUserConf {
       return $form;
     }
     $form['#storage'] = array();
-    $form['#theme'] = 'ldap_user_conf_form';
+    $form['#theme'] = array('ldap_user_conf_form');
 
     $form['intro'] = array(
       '#type' => 'item',
@@ -1049,7 +1049,7 @@ EOT;
       // FIXME: Is col used?
       $col++;
       // FIXME: $id never used.
-      $id = $id_prefix . join('__', array('sm', $prov_event, $row));
+      // $id = $id_prefix . join('__', array('sm', $prov_event, $row));
       $result[$prov_event] = array(
         '#type' => 'checkbox',
         '#title' => $prov_event,

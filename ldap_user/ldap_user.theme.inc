@@ -8,7 +8,7 @@
 /**
  * Turns array of variables to a form embedded in one table for each ldap server.
  */
-function theme_ldap_user_conf_form($variables) {
+function ldap_user_conf_form_theme($variables) {
   $form = $variables['form'];
   $tables = array();
 
