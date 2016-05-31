@@ -114,7 +114,7 @@ function _ldap_authentication_form_user_profile_form_alter(&$form, FormStateInte
  * -- $form_state->setErrorByName() to invalidate authentication process
  * -- setting $form_state->id() to indicate successful authentication
  */
-function _ldap_authentication_user_login_authenticate_validate($form_state, $return_user) {
+function _ldap_authentication_user_login_authenticate_validate($form, FormStateInterface $form_state, $return_user) {
 
   $detailed_watchdog_log = \Drupal::config('ldap_help.settings')->get('watchdog_detail');
   // $authname is the name the user is authenticated with from the logon form // patch 1599632.
