@@ -339,31 +339,36 @@ function ldap_servers_ldap_user_attrs_list_alter(&$available_user_attrs, &$param
     ) + $available_user_attrs[$token];
 
     if ($ldap_user_conf->provisionsDrupalAccountsFromLdap) {
-      if (!isset($available_user_attrs['[property.name]']) || !is_array($available_user_attrs['[property.name]'])) {
+      if ((!isset($available_user_attrs['[property.name]']) || !is_array($available_user_attrs['[property.name]']))) {
         $available_user_attrs['[property.name]'] = array();
       }
-      $available_user_attrs['[property.name]'] = array(
-        'name' => 'Property: Username',
-        'source' => '[' . $ldap_server->get('user_attr') . ']',
-        'direction' => LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER,
-        'enabled' => TRUE,
-        'prov_events' => array(LDAP_USER_EVENT_CREATE_DRUPAL_USER, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER),
-        'config_module' => 'ldap_servers',
-        'prov_module' => 'ldap_user',
-      ) + $available_user_attrs['[property.name]'];
+      if (!empty($ldap_server->get('user_attr'))) {
+        $available_user_attrs['[property.name]'] = array();
+        $available_user_attrs['[property.name]'] = array(
+          'name' => 'Property: Username',
+          'source' => '[' . $ldap_server->get('user_attr') . ']',
+          'direction' => LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER,
+          'enabled' => TRUE,
+          'prov_events' => array(LDAP_USER_EVENT_CREATE_DRUPAL_USER, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER),
+          'config_module' => 'ldap_servers',
+          'prov_module' => 'ldap_user',
+        ) + $available_user_attrs['[property.name]'];
+      }
 
       if (!isset($available_user_attrs['[property.mail]']) || !is_array($available_user_attrs['[property.mail]'])) {
         $available_user_attrs['[property.mail]'] = array();
       }
-      $available_user_attrs['[property.mail]'] = array(
-        'name' => 'Property: Email',
-        'source' => ($ldap_server->get('mail_template')) ? $ldap_server->get('mail_template') : '[' . $ldap_server->get('mail_attr') . ']',
-        'direction' => LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER,
-        'enabled' => TRUE,
-        'prov_events' => array(LDAP_USER_EVENT_CREATE_DRUPAL_USER, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER),
-        'config_module' => 'ldap_servers',
-        'prov_module' => 'ldap_user',
-      ) + $available_user_attrs['[property.mail]'];
+      if($ldap_server->get('mail_attr') || $ldap_server->get('mail_template')) {
+        $available_user_attrs['[property.mail]'] = array(
+          'name' => 'Property: Email',
+          'source' => ($ldap_server->get('mail_template')) ? $ldap_server->get('mail_template') : '[' . $ldap_server->get('mail_attr') . ']',
+          'direction' => LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER,
+          'enabled' => TRUE,
+          'prov_events' => array(LDAP_USER_EVENT_CREATE_DRUPAL_USER, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER),
+          'config_module' => 'ldap_servers',
+          'prov_module' => 'ldap_user',
+        ) + $available_user_attrs['[property.mail]'];
+      }
 
       if ($ldap_server->get('picture_attr')) {
         if (!isset($available_user_attrs['[property.picture]']) || !is_array($available_user_attrs['[property.picture]'])) {

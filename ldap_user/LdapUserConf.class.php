@@ -208,13 +208,11 @@ class LdapUserConf {
 
     $this->provisionsDrupalAccountsFromLdap = (
       $this->drupalAcctProvisionServer &&
-      $this->drupalAcctProvisionServer &&
       (count(array_filter(array_values($this->drupalAcctProvisionTriggers))) > 0)
     );
 
     $this->provisionsLdapEntriesFromDrupalUsers = (
-      $this->ldapEntryProvisionServer
-      && $this->ldapEntryProvisionServer
+    $this->ldapEntryProvisionServer
       && (count(array_filter(array_values($this->ldapEntryProvisionTriggers))) > 0)
       );
 

@@ -194,8 +194,7 @@ class LdapUserConfAdmin extends LdapUserConf {
       '#title' => t('Action to perform on Drupal account that no longer have a
         corresponding LDAP entry'),
       '#required' => 0,
-      // @FIX ME
-      // '#default_value' => $this->orphanedDrupalAcctBehavior,
+      '#default_value' => $this->orphanedDrupalAcctBehavior,
       '#options' => $account_options,
       '#description' => t($this->orphanedDrupalAcctBehaviorDescription),
     );
@@ -615,14 +614,13 @@ EOT;
    *   as $form_state['storage'] from drupal form api
    */
   protected function populateFromDrupalForm($values, $storage) {
-    $this->drupalAcctProvisionServer = ($values['drupalAcctProvisionServer'] == 'none') ? 'none' : $values['drupalAcctProvisionServer'];
-    $this->ldapEntryProvisionServer = ($values['ldapEntryProvisionServer'] == 'none') ? 'none' : $values['ldapEntryProvisionServer'];
-
+    // print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+    $this->drupalAcctProvisionServer = $values['drupalAcctProvisionServer'];
+    $this->ldapEntryProvisionServer = $values['ldapEntryProvisionServer'];
     $this->drupalAcctProvisionTriggers = $values['drupalAcctProvisionTriggers'];
     $this->ldapEntryProvisionTriggers = $values['ldapEntryProvisionTriggers'];
     $this->orphanedDrupalAcctBehavior = $values['orphanedDrupalAcctBehavior'];
     $this->orphanedCheckQty = $values['orphanedCheckQty'];
-
     $this->manualAccountConflict = $values['manualAccountConflict'];
     $this->userConflictResolve  = ($values['userConflictResolve']) ? (int) $values['userConflictResolve'] : NULL;
     $this->acctCreation  = ($values['acctCreation']) ? (int) $values['acctCreation'] : NULL;
@@ -632,8 +630,7 @@ EOT;
     //    $this->wsUserIps[$i] = trim($ip);
     //  }
     // $this->wsEnabled  = ($values['wsEnabled']) ? (int)$values['wsEnabled'] : 0;.
-    $this->ldapUserSynchMappings = $this->synchMappingsFromForm($values, $storage);
-
+    // $this->ldapUserSynchMappings = $this->synchMappingsFromForm($values, $storage);
   }
 
   /**
@@ -672,7 +669,6 @@ EOT;
 
     $mappings = array();
     foreach ($values as $field_name => $value) {
-
       $parts = explode('__', $field_name);
       if ($parts[0] != 'mappings') {
         continue;
@@ -685,7 +681,7 @@ EOT;
           continue;
         }
 
-        // TODO: Not used remove ?
+        // TODO: remove unused variable or it is a new feature not yet implemented ?
         // $action = $storage['synch_mapping_fields'][$direction][$row_descriptor]['action'];
 
         $key = ($direction == LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) ? _ldap_user_sanitise($columns['user_attr']) : _ldap_user_sanitise($columns['ldap_attr']);
@@ -726,7 +722,6 @@ EOT;
    */
   public function drupalFormSubmit($values, $storage) {
     $this->populateFromDrupalForm($values, $storage);
-
     try {
       $save_result = $this->save();
       return TRUE;
