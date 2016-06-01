@@ -219,7 +219,7 @@ class LdapUserTestForm extends FormBase {
     $_SESSION['ldap_user_test_form']['test_mode'] = $form_state->getValue(['test_mode']);
     $_SESSION['ldap_user_test_form']['testing_drupal_username'] = $username;
 
-    $form_state->set(['redirect'], LDAP_USER_TEST_FORM_PATH);
+    $form_state->setRedirectUrl(LDAP_USER_TEST_FORM_PATH);
 
   }
 

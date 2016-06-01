@@ -5,7 +5,6 @@ namespace Drupal\ldap_user\Form;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use \Drupal\Core\Config\ConfigFactoryInterface;
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -56,7 +55,7 @@ class LdapUserAdminForm extends ConfigFormBase {
     foreach ($warnings as $warning_name => $warning_text) {
       drupal_set_message($warning_text, 'warning');
     }
-    $form_state->set(['ldap_warnings'], (boolean) (count($warnings) > 0));
+    $form_state->set('ldap_warnings', (boolean) (count($warnings) > 0));
   }
 
   /**

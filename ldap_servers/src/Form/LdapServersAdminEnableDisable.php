@@ -94,7 +94,7 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
 
     if ($values['confirm'] && $sid) {
 
-      $form_state->set(['redirect'], LDAP_SERVERS_MENU_BASE_PATH . '/servers');
+      $form_state->setRedirectUrl(LDAP_SERVERS_MENU_BASE_PATH . '/servers');
       $ldap_server = new LdapServerAdmin($sid);
 
       $ldap_server->status = $status;
