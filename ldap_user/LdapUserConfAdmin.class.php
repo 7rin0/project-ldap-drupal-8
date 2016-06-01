@@ -457,7 +457,8 @@ EOT;
         continue;
       }
       list($direction, $discard, $column_name, $i) = $parts;
-      $action = $storage['synch_mapping_fields'][$direction][$i]['action'];
+      // TODO: Remove unused variable or is a tmp state?
+      // $action = $storage['synch_mapping_fields'][$direction][$i]['action'];
       $tokens = array();
       $row_mappings = array();
       foreach (array('remove', 'configurable_to_drupal', 'configurable_to_ldap', 'convert', 'direction', 'ldap_attr', 'user_attr', 'user_tokens') as $column_name) {
@@ -614,8 +615,8 @@ EOT;
    *   as $form_state['storage'] from drupal form api
    */
   protected function populateFromDrupalForm($values, $storage) {
-    $this->drupalAcctProvisionServer = ($values['drupalAcctProvisionServer'] == 'none') ? 0 : $values['drupalAcctProvisionServer'];
-    $this->ldapEntryProvisionServer = ($values['ldapEntryProvisionServer'] == 'none') ? 0 : $values['ldapEntryProvisionServer'];
+    $this->drupalAcctProvisionServer = ($values['drupalAcctProvisionServer'] == 'none') ? 'none' : $values['drupalAcctProvisionServer'];
+    $this->ldapEntryProvisionServer = ($values['ldapEntryProvisionServer'] == 'none') ? 'none' : $values['ldapEntryProvisionServer'];
 
     $this->drupalAcctProvisionTriggers = $values['drupalAcctProvisionTriggers'];
     $this->ldapEntryProvisionTriggers = $values['ldapEntryProvisionTriggers'];
@@ -684,7 +685,8 @@ EOT;
           continue;
         }
 
-        $action = $storage['synch_mapping_fields'][$direction][$row_descriptor]['action'];
+        // TODO: Not used remove ?
+        // $action = $storage['synch_mapping_fields'][$direction][$row_descriptor]['action'];
 
         $key = ($direction == LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) ? _ldap_user_sanitise($columns['user_attr']) : _ldap_user_sanitise($columns['ldap_attr']);
         // Only save if its configurable and has an ldap and drupal attributes. The others are optional.
