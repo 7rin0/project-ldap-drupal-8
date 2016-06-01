@@ -579,17 +579,17 @@ class ServerTestForm extends EntityForm {
     foreach ($tokens as $key => $value) {
       $results_tables['tokens'][] = [$key, $value];
     }
-    $form_state->set(['ldap_server_test_data'], [
+    $form_state->setValue(['ldap_server_test_data'], [
       'username' => $values['testing_drupal_username'],
       'results_tables' => $results_tables,
     ]);
 
     if (isset($ldap_user)) {
-      $form_state->set(['ldap_server_test_data', 'ldap_user'], $ldap_user);
+      $form_state->setValue(['ldap_server_test_data', 'ldap_user'], $ldap_user);
     }
 
     if (isset($group_entry)) {
-      $form_state->set(['ldap_server_test_data', 'group_entry'], $group_entry);
+      $form_state->setValue(['ldap_server_test_data', 'group_entry'], $group_entry);
     }
 
   }

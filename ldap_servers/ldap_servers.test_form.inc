@@ -386,7 +386,7 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
     );
     if (isset($ldap_user)) {
       $ldap_server_test_data_value['ldap_user'] = $ldap_user;
-      $form_state->set('ldap_server_test_data', $ldap_server_test_data_value);
+      $form_state->setValue('ldap_server_test_data', $ldap_server_test_data_value);
     }
   }
 }

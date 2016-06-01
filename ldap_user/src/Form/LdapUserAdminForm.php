@@ -55,7 +55,7 @@ class LdapUserAdminForm extends ConfigFormBase {
     foreach ($warnings as $warning_name => $warning_text) {
       drupal_set_message($warning_text, 'warning');
     }
-    $form_state->set('ldap_warnings', (boolean) (count($warnings) > 0));
+    $form_state->setValue('ldap_warnings', (boolean) (count($warnings) > 0));
   }
 
   /**
