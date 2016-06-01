@@ -507,9 +507,7 @@ EOT;
     $errors = array();
     $warnings = array();
     $tokens = array();
-
-
-    $has_drupal_acct_prov_servers  = $this->drupalAcctProvisionServer === 'none' = 0 : 1;
+    $has_drupal_acct_prov_servers = $this->drupalAcctProvisionServer === 'none' ? 0 : 1;
     $has_drupal_acct_prov_settings_options  = (count(array_filter($this->drupalAcctProvisionTriggers)) > 0);
 
     if (!$has_drupal_acct_prov_servers && $has_drupal_acct_prov_settings_options) {
@@ -533,7 +531,7 @@ EOT;
       foreach ($this->ldapUserSynchMappings as $synch_direction => $mappings) {
         $map_index = array();
         // $tokens['%sid'] = $this->drupalAcctProvisionServer;
-        $tokens['%sid'] = $this->drupalAcctProvisionServer === 'none' = 0 : $this->drupalAcctProvisionServer;
+        $tokens['%sid'] = $this->drupalAcctProvisionServer === 'none' ? 0 : $this->drupalAcctProvisionServer;
         $to_drupal_user_mappings_exist = FALSE;
         $to_ldap_entries_mappings_exist = FALSE;
 
