@@ -144,6 +144,7 @@ class ldap_views_handler_filter extends views_handler_filter {
   /**
    * Provide a simple textfield for equality.
    */
+  // @FIXME Use setters and getter on $form_state object
   function value_form(&$form, FormStateInterface $form_state) {
     // We have to make some choices when creating this as an exposed
     // filter form. For example, if the operator is locked and thus

@@ -161,7 +161,7 @@ function _ldap_authentication_user_login_authenticate_validate($form, FormStateI
         \Drupal::logger('ldap_authentication')->debug('%username : Previously authenticated in exclusive mode or uid is not 1.  Clear uid in form_state and attempt ldap authentication.', $watchdog_tokens);
       }
       // Passed previous authentication, but only ldap should be used so override.
-      // $form_state->getValue('uid') = NULL;
+      $form_state->set('uid', NULL);
     }
   }
 
@@ -363,7 +363,6 @@ function _ldap_authentication_user_login_authenticate_validate($form, FormStateI
   // $fake_form_state = array('uid' => $drupal_account->uid);
   // user_login_submit(array(), $fake_form_state);
   // global $user;
-  // $form_state->getValue('uid') = $user->uid;.
   // The uid is returned so that special login modules, namely ldap sso, can manually call this function.
   return ($return_user) ? $drupal_account : NULL;
 }
