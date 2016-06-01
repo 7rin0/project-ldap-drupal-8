@@ -112,7 +112,7 @@ function _ldap_authentication_form_user_profile_form_alter(&$form, FormStateInte
  *
  * @return null, but success or failure is indicated by:
  * -- $form_state->setErrorByName() to invalidate authentication process
- * -- setting $form_state->id() to indicate successful authentication
+ * -- setting $form_state->getValue('uid') to indicate successful authentication
  */
 function _ldap_authentication_user_login_authenticate_validate($form, FormStateInterface $form_state, $return_user) {
 
@@ -144,12 +144,12 @@ function _ldap_authentication_user_login_authenticate_validate($form, FormStateI
   /**
   * I. Test for previous module authentication success.
   *
-  * if already succeeded at authentication, $form_state->id() will be set by other authentication module.
+  * if already succeeded at authentication, $form_state->getValue('uid') will be set by other authentication module.
   * - if LDAP Mixed mode is set, return and don't disrupt authentication process
-  * - otherwise override other authenication by setting $form_state->id() = NULL
+  * - otherwise override other authenication by setting $form_state->getValue('uid') = NULL
   */
-  if (NULL !== $form_state->id() && is_numeric($form_state->id())) {
-    if ($auth_conf->authenticationMode == LDAP_AUTHENTICATION_MIXED || $form_state->id() == 1) {
+  if (NULL !== $form_state->getValue('uid') && is_numeric($form_state->getValue('uid'))) {
+    if ($auth_conf->authenticationMode == LDAP_AUTHENTICATION_MIXED || $form_state->getValue('uid') == 1) {
       if ($detailed_watchdog_log) {
         \Drupal::logger('ldap_authentication')->debug('%username : Previously authenticated in mixed mode or uid=1', $watchdog_tokens);
       }
@@ -161,7 +161,7 @@ function _ldap_authentication_user_login_authenticate_validate($form, FormStateI
         \Drupal::logger('ldap_authentication')->debug('%username : Previously authenticated in exclusive mode or uid is not 1.  Clear uid in form_state and attempt ldap authentication.', $watchdog_tokens);
       }
       // Passed previous authentication, but only ldap should be used so override.
-      // $form_state->id() = NULL;
+      // $form_state->getValue('uid') = NULL;
     }
   }
 
@@ -363,7 +363,7 @@ function _ldap_authentication_user_login_authenticate_validate($form, FormStateI
   // $fake_form_state = array('uid' => $drupal_account->uid);
   // user_login_submit(array(), $fake_form_state);
   // global $user;
-  // $form_state->id() = $user->uid;.
+  // $form_state->getValue('uid') = $user->uid;.
   // The uid is returned so that special login modules, namely ldap sso, can manually call this function.
   return ($return_user) ? $drupal_account : NULL;
 }
