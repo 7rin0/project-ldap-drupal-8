@@ -808,7 +808,7 @@ class LdapUserConf {
     );
 
     if (
-        (!$ldap_user  && !isset($drupal_user->name)) ||
+        (!$ldap_user  && !isset($drupal_user->getAccountName())) ||
         (!$drupal_user && $save) ||
         ($ldap_user && !isset($ldap_user['sid']))
     ) {
@@ -817,7 +817,7 @@ class LdapUserConf {
     }
 
     if (!$ldap_user && $this->drupalAcctProvisionServer) {
-      $ldap_user = ldap_servers_get_user_ldap_data($drupal_user->name, $this->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
+      $ldap_user = ldap_servers_get_user_ldap_data($drupal_user->getAccountName(), $this->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
     }
 
     if (!$ldap_user) {

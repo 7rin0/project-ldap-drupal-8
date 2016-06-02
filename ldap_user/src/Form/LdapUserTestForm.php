@@ -93,9 +93,9 @@ class LdapUserTestForm extends FormBase {
   /**
    *
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(&$form, FormStateInterface $form_state) {
 
-    $username = $form_state->getValue(['testing_drupal_username']);
+    $username = $form_state->getValue('testing_drupal_username');
     $selected_actions = $form_state->getValue(['action']);
 
     if ($username && count($selected_actions) > 0) {

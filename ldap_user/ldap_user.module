@@ -994,7 +994,7 @@ function ldap_user_user_login($account) {
   $prov_enabled = $ldap_user_conf->provisionEnabled(LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, LDAP_USER_LDAP_ENTRY_PROV_ON_AUTHENTICATE);
 
   if ($ldap_user_conf->provisionsDrupalAccountsFromLdap && in_array(LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER, array_keys($ldap_user_conf->provisionsDrupalEvents))) {
-    $ldap_user = ldap_servers_get_user_ldap_data($account, $ldap_user_conf->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
+    $ldap_user = ldap_servers_get_user_ldap_data($account->getAccountName(), $ldap_user_conf->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
     if ($ldap_user) {
       $ldap_server = ldap_servers_get_servers($ldap_user_conf->drupalAcctProvisionServer, NULL, TRUE);
       $ldap_user_conf->entryToUserEdit($ldap_user, $account, $ldap_server, LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, array(LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER));

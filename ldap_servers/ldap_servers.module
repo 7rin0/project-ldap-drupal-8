@@ -597,16 +597,16 @@ function ldap_servers_binary($value) {
  * @param scalar $ldap_context
  */
 function ldap_servers_get_user_ldap_data($drupal_user, $id = NULL, $ldap_context = NULL) {
-  if (is_object($drupal_user) && property_exists($drupal_user, 'uid') && $authname = ldap_user_get_identifier_from_map($drupal_user->id())) {
+  if ($drupal_user && $drupal_user->id() && $authname = ldap_user_get_identifier_from_map($drupal_user->id())) {
     $drupal_username = $authname;
   }
   else {
-    $drupal_username = (is_object($drupal_user)) ? $drupal_user->getUsername() : $drupal_user;
+    $drupal_username = $drupal_user ? $drupal_user->getUsername() : $drupal_user;
   }
   // If no explicit $id, find most appropriate one.
   if (\Drupal::moduleHandler()->moduleExists('ldap_user')) {
-    if ($account && $account->get('ldap_user_puid_sid')->getValue()) {
-      $id = $account->get('ldap_user_puid_sid')->getValue();
+    if ($drupal_user && $drupal_user->get('ldap_user_puid_sid')->getValue()) {
+      $id = $drupal_user->get('ldap_user_puid_sid')->getValue();
     }
     else {
       $ldap_user_conf = ldap_user_conf();
