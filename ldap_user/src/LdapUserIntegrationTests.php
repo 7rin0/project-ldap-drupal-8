@@ -92,8 +92,8 @@ class LdapUserIntegrationTests extends LdapTestCase {
       );
       $user_acct = new stdClass();
       $user_acct->is_new = TRUE;
-      $user_acct->field_fname['und'][0]['value'] = 'Bercilak';
-      $user_acct->field_lname['und'][0]['value'] = 'Hautdesert';
+      $user_acct->set('field_fname', 'Bercilak');
+      $user_acct->set('field_lname', 'Hautdesert');
 
       $servers = ldap_servers_get_servers(NULL, NULL, FALSE, TRUE);
       $desired_dn = "cn=bhautdeser,ou=people,dc=hogwarts,dc=edu";
@@ -128,8 +128,8 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $ldap_entry_pre = $servers[$test_sid]->dnExists($desired_dn, 'ldap_entry');
       $user_acct_pre = user_load_by_name('bhautdeser');
       $edit = array();
-      $edit['field_fname']['und'][0]['value'] = 'Bredbeddle';
-      $edit['field_lname']['und'][0]['value'] = 'Hautdesert';
+      $edit->set('field_fname', 'Bredbeddle');
+      $edit->set('field_lname', 'Hautdesert');
       // @FIXME
       // user_save() is now a method of the user entity.
       // $user_acct = user_save($user_acct, $edit);
@@ -160,8 +160,8 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $ldap_entry_pre = $servers[$test_sid]->dnExists($desired_dn, 'ldap_entry');
       $user_acct_pre = user_load_by_name('bhautdeser');
       $edit = array();
-      $edit['field_fname']['und'][0]['value'] = 'Bredbeddle';
-      $edit['field_lname']['und'][0]['value'] = 'Hautdesert';
+      $edit->set('field_fname', 'Bredbeddle');
+      $edit->set('field_lname', 'Hautdesert');
       // @FIXME
       // user_save() is now a method of the user entity.
       // $user_acct = user_save($user_acct, $edit);
@@ -364,8 +364,8 @@ class LdapUserIntegrationTests extends LdapTestCase {
       );
       $user_acct = new stdClass();
       $user_acct->is_new = TRUE;
-      $user_acct->field_fname['und'][0]['value'] = 'Bercilak';
-      $user_acct->field_lname['und'][0]['value'] = 'Hautdesert';
+      $user_acct->set('field_fname', 'Bredbeddle');
+      $user_acct->set('field_lname', 'Hautdesert');
 
       $servers = ldap_servers_get_servers(NULL, NULL, FALSE, TRUE);
       $desired_dn = "cn=bhautdeser,ou=people,dc=hogwarts,dc=edu";
@@ -475,9 +475,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       for ($i = 0; $i < $delete; $i++) {
         $name = "clone" . $i;
         $account = $cn_to_account[$name];
-        // debug("delete ldap entry: ". $account->ldap_user_current_dn['und'][0]['value']);
-        //  ?? is it possible the ldap delete hook is causing the drupal user to get populated with empty values?
-        $ldap_server->delete($account->ldap_user_current_dn['und'][0]['value']);
+        $ldap_server->delete($account->get('ldap_user_current_dn')->getValue());
       }
 
       // @FIXME
