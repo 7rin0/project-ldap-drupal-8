@@ -20,7 +20,7 @@ class ServerTestForm extends EntityForm {
   /**
    *, $ldap_server = NULL
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, $ldap_server = NULL) {
     // @FIXME
     // drupal_set_title() has been removed. There are now a few ways to set the title
     // dynamically, depending on the situation.
@@ -58,7 +58,7 @@ class ServerTestForm extends EntityForm {
     $form['id'] = [
       '#type' => 'hidden',
       '#title' => t('Machine name for this server'),
-      '#default_value' => $ldap_server->id,
+      '#default_value' => $ldap_server->id(),
     ];
 
     $form['binding']['bindpw'] = [
@@ -72,7 +72,7 @@ class ServerTestForm extends EntityForm {
     $form['testing_drupal_username'] = [
       '#type' => 'textfield',
       '#title' => t('Testing Drupal Username'),
-      '#default_value' => $ldap_server->testing_drupal_username,
+      '#default_value' => $ldap_server->get('testing_drupal_username'),
       '#size' => 30,
       '#maxlength' => 255,
       '#description' => t('This is optional and used for testing this server\'s configuration against an actual username.  The user need not exist in Drupal and testing will not affect the user\'s LDAP or Drupal Account.'),
@@ -81,7 +81,7 @@ class ServerTestForm extends EntityForm {
     $form['testing_drupal_user_dn'] = [
       '#type' => 'textfield',
       '#title' => t('Testing Drupal DN'),
-      '#default_value' => $ldap_server->testing_drupal_user_dn,
+      '#default_value' => $ldap_server->get('testing_drupal_user_dn'),
       '#size' => 120,
       '#maxlength' => 255,
       '#description' => t('This is optional and used for testing this server\'s configuration against an actual username.  The user need not exist in Drupal and testing will not affect the user\'s LDAP or Drupal Account.'),
@@ -90,7 +90,7 @@ class ServerTestForm extends EntityForm {
     $form['grp_test_grp_dn'] = [
       '#type' => 'textfield',
       '#title' => t('Testing Group DN'),
-      '#default_value' => $ldap_server->grp_test_grp_dn,
+      '#default_value' => $ldap_server->get('grp_test_grp_dn'),
       '#size' => 120,
       '#maxlength' => 255,
       '#description' => t('This is optional and used for testing this server\'s group configuration.'),
@@ -99,14 +99,14 @@ class ServerTestForm extends EntityForm {
     $form['grp_test_grp_dn_writeable'] = [
       '#type' => 'textfield',
       '#title' => t('Testing Group DN that is writeable. Warning!  In test, this group will be deleted, created, have members added to it!'),
-      '#default_value' => $ldap_server->grp_test_grp_dn_writeable,
+      '#default_value' => $ldap_server->get('grp_test_grp_dn_writeable'),
       '#size' => 120,
       '#maxlength' => 255,
       '#description' => t('This is optional and used for testing this server\'s group configuration.'),
     ];
 
     // If ($ldap_server->bind_method == LDAP_SERVERS_BIND_METHOD_ANON_USER) {.
-    if ($ldap_server->bind_method == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
+    if ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
       $form['testing_drupal_userpw'] = [
         '#type' => 'password',
         '#title' => t('Testing Drupal User Password'),
@@ -529,17 +529,17 @@ class ServerTestForm extends EntityForm {
     foreach ($tokens as $key => $value) {
       $results_tables['tokens'][] = [$key, $value];
     }
-    $form_state->setValue(['ldap_server_test_data'], [
+    $form_state->set(['ldap_server_test_data'], [
       'username' => $values['testing_drupal_username'],
       'results_tables' => $results_tables,
     ]);
 
     if (isset($ldap_user)) {
-      $form_state->setValue(['ldap_server_test_data', 'ldap_user'], $ldap_user);
+      $form_state->set(['ldap_server_test_data', 'ldap_user'], $ldap_user);
     }
 
     if (isset($group_entry)) {
-      $form_state->setValue(['ldap_server_test_data', 'group_entry'], $group_entry);
+      $form_state->set(['ldap_server_test_data', 'group_entry'], $group_entry);
     }
 
   }
