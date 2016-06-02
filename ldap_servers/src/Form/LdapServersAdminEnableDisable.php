@@ -44,7 +44,7 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
   /**
    *
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $action = NULL, $sid = NULL) {
+  public function buildForm($form, FormStateInterface $form_state, $action = NULL, $sid = NULL) {
 
     if ($ldap_server = ldap_servers_get_servers($sid, 'all', TRUE)) {
       $variables = [

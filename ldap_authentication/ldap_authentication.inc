@@ -68,9 +68,9 @@ function _ldap_authentication_login_form_alter($form, FormStateInterface $form_s
 /**
  * Alter user editing form (profile form) based on ldap authentication configuration.
  *
- * @param array $form
+ * @param $form
  *   array from user profile
- * @param array $form_state
+ * @param $form_state
  *   from user profile
  *
  * @return NULL (alters $form by reference)
@@ -107,7 +107,7 @@ function _ldap_authentication_form_user_profile_form_alter($form, FormStateInter
  * User form validation will take care of username, pwd fields
  * this function validates ldap authentication specific.
  *
- * @param array $form_state
+ * @param $form_state
  *   array from user logon form
  *
  * @return null, but success or failure is indicated by:

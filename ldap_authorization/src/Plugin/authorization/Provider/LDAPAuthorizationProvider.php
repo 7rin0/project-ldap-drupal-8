@@ -23,7 +23,7 @@ class LDAPAuthorizationProvider extends ProviderPluginBase {
   /**
    *
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm($form, FormStateInterface $form_state) {
     $profile = $this->configuration['profile'];
 
     $tokens = $this->getTokens();
@@ -171,7 +171,7 @@ Representations of groups derived from LDAP might initially look like:
   /**
    *
    */
-  public function buildRowForm(array $form, FormStateInterface $form_state, $index) {
+  public function buildRowForm($form, FormStateInterface $form_state, $index) {
     $row = array();
     $mappings = $this->configuration['profile']->getProviderMappings();
     $row['query'] = array(

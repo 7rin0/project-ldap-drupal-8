@@ -20,7 +20,7 @@ class LdapUserTestForm extends FormBase {
   /**
    *
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $op = NULL) {
+  public function buildForm($form, FormStateInterface $form_state, $op = NULL) {
 
     $username = $_SESSION['ldap_user_test_form']['testing_drupal_username'];
 

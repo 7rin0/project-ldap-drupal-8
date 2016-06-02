@@ -44,7 +44,7 @@ class LdapServersSettings extends ConfigFormBase {
   /**
    *
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm($form, FormStateInterface $form_state) {
     if (!ldap_servers_ldap_extension_loaded()) {
       drupal_set_message(t('PHP LDAP Extension is not loaded.'), "warning");
     }

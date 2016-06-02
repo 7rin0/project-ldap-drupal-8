@@ -736,7 +736,7 @@ function ldap_servers_convert_attribute($value, $conversion = NULL) {
 /**
  * Disable a logon form if ldap preferences exclude http logon forms.
  *
- * @param drupal logon form array $form
+ * @param drupal logon form $form
  */
 function ldap_servers_disable_http_check($form) {
 

@@ -93,7 +93,7 @@ class LdapUserConfAdmin extends LdapUserConf {
   /**
    * Generate admin form for ldapUserConf object.
    *
-   * @return array $form as drupal form api form array
+   * @return $form as drupal form api form array
    */
   public function drupalForm() {
     if (count($this->drupalAcctProvisionServerOptions) == 0) {
@@ -930,7 +930,7 @@ EOT;
   /**
    * Get mapping form row to ldap user provisioning mapping admin form table.
    *
-   * @param drupal form array $form
+   * @param drupal form $form
    * @param string $action
    *   is 'add', 'update', or 'nonconfigurable'
    * @param enum $direction

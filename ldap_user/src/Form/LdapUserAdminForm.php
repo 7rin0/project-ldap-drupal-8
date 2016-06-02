@@ -40,7 +40,7 @@ class LdapUserAdminForm extends ConfigFormBase {
   /**
    *
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm($form, FormStateInterface $form_state) {
     $form = $this->ldap_user_conf_admin->drupalForm();
     return $form;
   }
