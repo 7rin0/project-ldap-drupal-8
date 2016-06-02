@@ -110,7 +110,7 @@ function hook_ldap_entry_post_provision(&$ldap_entries, $ldap_server, $context) 
  */
 function hook_ldap_attributes_needed_alter(&$attributes, $params) {
 
-  $attributes['dn'] = ldap_servers_set_attribute_map(@$attributes['dn'], 'ldap_dn');
+  $attributes['dn'] = ldap_servers_set_attribute_map($attributes['dn'], 'ldap_dn');
   // Puid attributes are server specific.
   if ($params['sid']) {
     $ldap_server = (is_object($params['sid'])) ? $params['sid'] : ldap_servers_get_servers($params['sid'], 'enabled', TRUE);
@@ -129,7 +129,7 @@ function hook_ldap_attributes_needed_alter(&$attributes, $params) {
         }
 
         ldap_servers_token_extract_attributes($attributes, $ldap_server_obj->mail_template);
-        $attributes[$ldap_server->unique_persistent_attr] = ldap_servers_set_attribute_map(@$attributes[$ldap_server->unique_persistent_attr]);
+        $attributes[$ldap_server->unique_persistent_attr] = ldap_servers_set_attribute_map($attributes[$ldap_server->unique_persistent_attr]);
 
         break;
     }

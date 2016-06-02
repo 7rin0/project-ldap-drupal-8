@@ -199,7 +199,7 @@ function ldap_server_find_key($key, $array) {
 function ldap_servers_ldap_attributes_needed_alter(&$attributes, $params) {
 
   // Force this data type.
-  $attributes['dn'] = ldap_servers_set_attribute_map(@$attributes['dn'], 'ldap_dn');
+  $attributes['dn'] = ldap_servers_set_attribute_map($attributes['dn'], 'ldap_dn');
 
   // Puid attributes are server specific.
   if ($params['sid'] && $params['sid']) {

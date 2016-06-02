@@ -210,7 +210,7 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
     $results_tables['basic'][] = array(t('Binding with null DN for anonymous search.'));
   }
 
-  if (@$values['grp_test_grp_dn_writeable'] && $values['grp_test_grp_dn']) {
+  if ($values['grp_test_grp_dn_writeable'] && $values['grp_test_grp_dn']) {
     $user_test_dn = $values['grp_test_grp_dn'];
     $group_create_test_dn = $values['grp_test_grp_dn_writeable'];
     $group_create_test_attr = array(

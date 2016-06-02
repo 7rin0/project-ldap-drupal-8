@@ -85,7 +85,7 @@ function ldap_authentication_menu_alter(&$items) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
   $items['user/password']['access callback'] = 'ldap_authentication_show_reset_pwd';
   $auth_conf = ldap_authentication_get_valid_conf();
-  if (@$auth_conf->ldapUserHelpLinkUrl) {
+  if ($auth_conf->ldapUserHelpLinkUrl) {
     $items['user/ldaphelp'] = array(
       'title' => $auth_conf->ldapUserHelpLinkText,
       'page callback' => 'drupal_goto',

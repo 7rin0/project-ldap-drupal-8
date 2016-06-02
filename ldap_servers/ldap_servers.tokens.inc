@@ -107,7 +107,7 @@ function ldap_servers_token_extract_attributes(&$attribute_maps,  $text) {
     else {
       $conversion = NULL;
     }
-    $attribute_maps[$attr_name] = ldap_servers_set_attribute_map(@$attribute_maps[$attr_name], $conversion, array($ordinal => NULL));
+    $attribute_maps[$attr_name] = ldap_servers_set_attribute_map($attribute_maps[$attr_name], $conversion, array($ordinal => NULL));
   }
 }
 
