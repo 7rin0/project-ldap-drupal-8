@@ -315,10 +315,10 @@ function ldap_user_ldap_attributes_needed_alter(&$attributes, $params) {
       case 'ldap_user_update_drupal_user':
       case 'ldap_user_ldap_associate':
         // array($ldap_server->user_attr, 0, NULL);.
-        $attributes[$ldap_server->user_attr] = ldap_servers_set_attribute_map(@$attributes[$ldap_server->user_attr]);
-        $attributes[$ldap_server->mail_attr] = ldap_servers_set_attribute_map(@$attributes[$ldap_server->mail_attr]);
-        $attributes[$ldap_server->picture_attr] = ldap_servers_set_attribute_map(@$attributes[$ldap_server->picture_attr]);
-        $attributes[$ldap_server->unique_persistent_attr] = ldap_servers_set_attribute_map(@$attributes[$ldap_server->unique_persistent_attr]);
+        $attributes[$ldap_server->user_attr] = ldap_servers_set_attribute_map($attributes[$ldap_server->user_attr]);
+        $attributes[$ldap_server->mail_attr] = ldap_servers_set_attribute_map($attributes[$ldap_server->mail_attr]);
+        $attributes[$ldap_server->picture_attr] = ldap_servers_set_attribute_map($attributes[$ldap_server->picture_attr]);
+        $attributes[$ldap_server->unique_persistent_attr] = ldap_servers_set_attribute_map($attributes[$ldap_server->unique_persistent_attr]);
         if ($ldap_server->mail_template) {
           ldap_servers_token_extract_attributes($attributes, $ldap_server->mail_template);
         }
@@ -704,7 +704,7 @@ function ldap_user_form_register_form_validate($form, FormStateInterface $form_s
   }
 
   // If corresponding ldap account doesn't exist and provision not selected and make ldap associated is selected, throw error.
-  if (!@$values['ldap_user_create_ldap_acct'] && $values['ldap_user_association'] == LDAP_USER_MANUAL_ACCT_CONFLICT_LDAP_ASSOCIATE) {
+  if (!$values['ldap_user_create_ldap_acct'] && $values['ldap_user_association'] == LDAP_USER_MANUAL_ACCT_CONFLICT_LDAP_ASSOCIATE) {
     $ldap_user_conf = ldap_user_conf();
     $ldap_user = ldap_servers_get_user_ldap_data($drupal_username, $ldap_user_conf->ldapEntryProvisionServer, 'ldap_user_prov_to_drupal');
     if (!$ldap_user) {
@@ -715,7 +715,7 @@ function ldap_user_form_register_form_validate($form, FormStateInterface $form_s
   }
 
   // If trying to provision an LDAP account and one already exists, throw error.
-  if (@$values['ldap_user_create_ldap_acct']) {
+  if ($values['ldap_user_create_ldap_acct']) {
     $ldap_user_conf = ldap_user_conf();
     $ldap_user = ldap_servers_get_user_ldap_data($drupal_username, $ldap_user_conf->ldapEntryProvisionServer, 'ldap_user_prov_to_ldap');
     if ($ldap_user) {
@@ -735,7 +735,7 @@ function ldap_user_form_register_form_submit2(&$form, FormStateInterface $form_s
   $ldap_user_association_set = FALSE;
 
   // Create LDAP account?
-  if (@$values['ldap_user_create_ldap_acct']) {
+  if ($values['ldap_user_create_ldap_acct']) {
     if ($account = user_load_by_name($values['name'])) {
       $ldap_user_conf = ldap_user_conf();
       $ldap_provision_entry = $ldap_user_conf->getProvisionRelatedLdapEntry($account);
@@ -787,7 +787,7 @@ function ldap_user_ldap_exclude(UserInterface $account = NULL, $edit = NULL, $di
   }
 
   // Exclude new users who have the value set to 1 in their $edit array.
-  if (isset($edit['ldap_user_ldap_exclude']['und'][0]['value'])
+  if ($account->get('ldap_user_ldap_exclude')->getValue()isset($edit['ldap_user_ldap_exclude']['und'][0]['value'])
     && $edit['ldap_user_ldap_exclude'][0]['value'] == 1) {
     return TRUE;
   }
