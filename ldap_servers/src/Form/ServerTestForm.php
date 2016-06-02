@@ -178,14 +178,14 @@ class ServerTestForm extends EntityForm {
 
       foreach ($test_data['results_tables'] as $table_name => $table_data) {
         // @FIXME
-        // theme() has been renamed to _theme() and should NEVER be called directly.
+        // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
         // Calling _theme() directly can alter the expected output and potentially
         // introduce security issues (see https://www.drupal.org/node/2195739). You
         // should use renderable arrays instead.
         //
         //
         // @see https://www.drupal.org/node/2195739
-        // $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . theme('table', array('header' => array('Test', 'Result'), 'rows' => $table_data));
+        // $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . \Drupal::theme()->render('table', array('header' => array('Test', 'Result'), 'rows' => $table_data));
         $settings = array(
           '#type' => 'table',
           '#header' => array('Test', 'Result'),
@@ -422,7 +422,7 @@ class ServerTestForm extends EntityForm {
           // This is the parent function that will call FromUserAttr or FromEntry.
           $memberships = $ldap_server->groupMembershipsFromUser($user, 'group_dns', $nested);
           // @FIXME
-          // theme() has been renamed to _theme() and should NEVER be called directly.
+          // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
           // Calling _theme() directly can alter the expected output and potentially
           // introduce security issues (see https://www.drupal.org/node/2195739). You
           // should use renderable arrays instead.
@@ -452,7 +452,7 @@ class ServerTestForm extends EntityForm {
             $groupusermembershipsfromuserattr = $ldap_server->groupUserMembershipsFromUserAttr($user, $nested);
             $count = count($groupusermembershipsfromuserattr);
             // @FIXME
-            // theme() has been renamed to _theme() and should NEVER be called directly.
+            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
             // Calling _theme() directly can alter the expected output and potentially
             // introduce security issues (see https://www.drupal.org/node/2195739). You
             // should use renderable arrays instead.
@@ -479,7 +479,7 @@ class ServerTestForm extends EntityForm {
           if ($ldap_server->groupGroupEntryMembershipsConfigured) {
             $groupusermembershipsfromentry = $ldap_server->groupUserMembershipsFromEntry($user, $nested);
             // @FIXME
-            // theme() has been renamed to _theme() and should NEVER be called directly.
+            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
             // Calling _theme() directly can alter the expected output and potentially
             // introduce security issues (see https://www.drupal.org/node/2195739). You
             // should use renderable arrays instead.
@@ -508,7 +508,7 @@ class ServerTestForm extends EntityForm {
             $diff1 = array_diff($groupusermembershipsfromuserattr, $groupusermembershipsfromentry);
             $diff2 = array_diff($groupusermembershipsfromentry, $groupusermembershipsfromuserattr);
             // @FIXME
-            // theme() has been renamed to _theme() and should NEVER be called directly.
+            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
             // Calling _theme() directly can alter the expected output and potentially
             // introduce security issues (see https://www.drupal.org/node/2195739). You
             // should use renderable arrays instead.
@@ -524,7 +524,7 @@ class ServerTestForm extends EntityForm {
             $result1 = drupal_render($settings);
 
             // @FIXME
-            // theme() has been renamed to _theme() and should NEVER be called directly.
+            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
             // Calling _theme() directly can alter the expected output and potentially
             // introduce security issues (see https://www.drupal.org/node/2195739). You
             // should use renderable arrays instead.
@@ -553,14 +553,14 @@ class ServerTestForm extends EntityForm {
 
       if ($groups_from_dn = $ldap_server->groupUserMembershipsFromDn($user)) {
         // @FIXME
-        // theme() has been renamed to _theme() and should NEVER be called directly.
+        // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
         // Calling _theme() directly can alter the expected output and potentially
         // introduce security issues (see https://www.drupal.org/node/2195739). You
         // should use renderable arrays instead.
         //
         //
         // @see https://www.drupal.org/node/2195739
-        // $results_tables['groupfromDN'][] = array("Groups from DN", theme('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
+        // $results_tables['groupfromDN'][] = array("Groups from DN", \Drupal::theme()->render('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
         $settings = array(
           '#theme' => 'item_list',
           '#items' => $groups_from_dn,

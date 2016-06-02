@@ -53,14 +53,14 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
         'type' => 'detail',
       ];
       // @FIXME
-      // theme() has been renamed to _theme() and should NEVER be called directly.
+      // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
       // Calling _theme() directly can alter the expected output and potentially
       // introduce security issues (see https://www.drupal.org/node/2195739). You
       // should use renderable arrays instead.
       //
       //
       // @see https://www.drupal.org/node/2195739
-      // $form['#prefix'] = "<div>" . theme('ldap_servers_server', $variables) . "</div>";
+      // $form['#prefix'] = "<div>" . \Drupal::theme()->render('ldap_servers_server', $variables) . "</div>";
       $form['sid'] = [
         '#type' => 'hidden',
         '#value' => $sid,

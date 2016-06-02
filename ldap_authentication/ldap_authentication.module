@@ -322,12 +322,11 @@ function ldap_authentication_show_reset_pwd($user = NULL) {
 function ldap_authentication_form_user_pass_alter(&$form, FormStateInterface $form_state) {
   // The following could be in a theme preproces function.
   $auth_conf = ldap_authentication_get_valid_conf();
-  // @FIXME
-  // $form['ldap_warning'] = array(
-  //   '#type' => 'item',
-  //   '#markup' => theme('ldap_authentication_user_pass_message', array('auth_conf' => $auth_conf)),
-  //   '#weight' => 10,
-  // );
+  $form['ldap_warning'] = array(
+    '#type' => 'item',
+    '#markup' => \Drupal::theme()->render('ldap_authentication_user_pass_message', array('auth_conf' => $auth_conf)),
+    '#weight' => 10,
+  );
 
   // Need to insert before user_pass_validate.
   array_unshift($form['#validate'], 'ldap_authentication_user_pass_validate');
@@ -373,7 +372,7 @@ function ldap_authentication_user_pass_validate($form, FormStateInterface $form_
       }
     }
     if (!empty($error)) {
-      $form_state->setErrorByName('name', theme('ldap_authentication_user_pass_validate_ldap_authenticated', $vars));
+      $form_state->setErrorByName('name', \Drupal::theme()->render('ldap_authentication_user_pass_validate_ldap_authenticated', $vars));
     }
   }
 }
@@ -408,9 +407,9 @@ function ldap_authentication_form_user_login_block_alter(&$form, FormStateInterf
 /**
  * Validate function for user logon forms.
  */
-function ldap_authentication_user_login_authenticate_validate($form, FormStateInterface $form_state, $return_user = FALSE) {
+function ldap_authentication_user_login_authenticate_validate($form, FormStateInterface $form_state, $return_user = FALSE, $sso_login = FALSE) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
-  return _ldap_authentication_user_login_authenticate_validate($form, $form_state, $return_user);
+  return _ldap_authentication_user_login_authenticate_validate($form_state, $return_user, $sso_login);
 }
 
 /**

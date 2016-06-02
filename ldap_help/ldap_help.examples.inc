@@ -68,7 +68,7 @@ function ldap_help_examples() {
         '#collapsed' => TRUE,
       );
       $form[$sample_ldap_id][$ou][$dn][] = array(
-        '#markup' => theme('item_list', array('items' => $li, 'type' => 'ul', 'title' => '')),
+        '#markup' => \Drupal::theme()->render('item_list', array('items' => $li, 'type' => 'ul', 'title' => '')),
       );
 
     }

@@ -130,7 +130,7 @@ function ldap_query_admin_delete($form, FormStateInterface $form_state, $op = NU
       'actions' => FALSE,
       'type' => 'detail',
     );
-    $form['#prefix'] = '<div>' . theme('ldap_query', $variables) . '</div>';
+    $form['#prefix'] = '<div>' . \Drupal::theme()->render('ldap_query', $variables) . '</div>';
     $form['qid'] = array(
       '#type' => 'hidden',
       '#value' => $qid,
@@ -196,7 +196,7 @@ function ldap_query_admin_enable_disable($form, FormStateInterface $form_state, 
       'actions' => FALSE,
       'type' => 'detail',
     );
-    $form['#prefix'] = "<div>" . theme('ldap_query', $variables) . "</div>";
+    $form['#prefix'] = "<div>" . \Drupal::theme()->render('ldap_query', $variables) . "</div>";
 
     $form['qid'] = array(
       '#type' => 'hidden',

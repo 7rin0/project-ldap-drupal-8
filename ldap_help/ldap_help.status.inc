@@ -20,29 +20,29 @@ function ldap_help_status($return = 'html') {
   $status['server'] = ldap_help_get_server($phpinfo, $info);
   $reporting_text = _ldap_help_parse_status_to_text($status['server'], $heading);
   // . ldap_help_phpinfo();
-  $content = "<h3>$heading</h3>" . theme('status_report', array('requirements' => $status['server']));
+  $content = "<h3>$heading</h3>" . \Drupal::theme()->render('status_report', array('requirements' => $status['server']));
 
   $status['user_settings'] = ldap_help_get_user_settings();
-  $content .= "<h3>User Settings</h3>" . theme('status_report', array('requirements' => $status['user_settings']));
+  $content .= "<h3>User Settings</h3>" . \Drupal::theme()->render('status_report', array('requirements' => $status['user_settings']));
 
   if (module_exists('ldap_servers')) {
     list($status['ldap_servers'], $servers) = ldap_help_get_ldap_servers();
-    $content .= "<h3>General Settings</h3>" . theme('status_report', array('requirements' => $status['ldap_servers']));
+    $content .= "<h3>General Settings</h3>" . \Drupal::theme()->render('status_report', array('requirements' => $status['ldap_servers']));
 
     foreach ($servers as $sid => $server) {
-      $content .= "<h3>Server: " . $server[1]['value'] . "</h3>" . theme('status_report', array('requirements' => $server));
+      $content .= "<h3>Server: " . $server[1]['value'] . "</h3>" . \Drupal::theme()->render('status_report', array('requirements' => $server));
     }
   }
 
   if (module_exists('ldap_authentication')) {
     $status['ldap_authentication'] = ldap_help_get_ldap_authentication();
-    $content .= "<h3>LDAP Authentication Settings</h3>" . theme('status_report', array('requirements' => $status['ldap_authentication']));
+    $content .= "<h3>LDAP Authentication Settings</h3>" . \Drupal::theme()->render('status_report', array('requirements' => $status['ldap_authentication']));
   }
   if (module_exists('ldap_authorization')) {
     $status['ldap_authorizations'] = ldap_help_get_ldap_authorization();
     if (count($status['ldap_authorizations'])) {
       foreach ($status['ldap_authorizations'] as $sid => $mapping) {
-        $content .= "<h3>LDAP Authorization Mapping</h3>" . theme('status_report', array('requirements' => $mapping));
+        $content .= "<h3>LDAP Authorization Mapping</h3>" . \Drupal::theme()->render('status_report', array('requirements' => $mapping));
       }
     }
   }

@@ -43,7 +43,7 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
 
   // @FIXME
   $form['server_variables'] = array(
-    // '#markup' => theme('ldap_servers_server', $variables),.
+    // '#markup' => \Drupal::theme()->render('ldap_servers_server', $variables),.
     '#markup' => _theme('ldap_servers_server', $variables),
   );
 
@@ -150,7 +150,7 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
     $table = drupal_render($table_theme);
 
     foreach ($test_data['results_tables'] as $table_name => $table_data) {
-      // $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . theme('table', array('header' => array('Test', 'Result'), 'rows' => $table_data));.
+      // $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . \Drupal::theme()->render('table', array('header' => array('Test', 'Result'), 'rows' => $table_data));.
       $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . $table;
     }
 
@@ -369,7 +369,7 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
 
     if ($groups_from_dn = $ldap_server->groupUserMembershipsFromDn($user)) {
       // @FIXME
-      // $results_tables['groupfromDN'][] = array("Groups from DN", theme('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
+      // $results_tables['groupfromDN'][] = array("Groups from DN", \Drupal::theme()->render('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
       $results_tables['groupfromDN'][] = array("Groups from DN", _theme('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
     }
 
