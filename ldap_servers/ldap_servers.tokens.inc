@@ -197,7 +197,7 @@ function ldap_servers_token_tokenize_entry($ldap_entry, $token_keys = 'all', $pr
     }
     return $tokens; // empty array
   }
-      
+
   // add lowercase keyed entries to ldap array
   foreach ($ldap_entry as $key => $values) {
     $ldap_entry[\Drupal\Component\Utility\Unicode::strtolower($key)] = $values;
@@ -473,8 +473,6 @@ function ldap_servers_token_show_sample_user_tokens($sid) {
   }
 
   if ($ldap_user = $ldap_server->userUserNameToExistingLdapEntry($test_username)) {
-    // @FIXME
-    // $table = \Drupal::theme()->render('ldap_server_ldap_entry_table', array(
     $table = \Drupal::theme()->render('ldap_server_ldap_entry_table', array(
       'entry' => $ldap_user['attr'],
       'username' => $test_username,

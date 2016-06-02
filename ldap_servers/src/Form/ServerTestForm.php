@@ -52,7 +52,7 @@ class ServerTestForm extends EntityForm {
       '#type' => 'ul',
     );
     $form['server_variables'] = array(
-      '#markup' => drupal_render($settings),
+      '#markup' => \Drupal::service('renderer')->render($settings),
     );
 
     $form['id'] = [
@@ -165,7 +165,7 @@ class ServerTestForm extends EntityForm {
           '#rows' => $rows,
         );
 
-        $form['#prefix']  = '<div class="content"><h2>' . t('LDAP Entry for %username (dn: %dn)', array('%dn' => $test_data['ldap_user']['dn'], '%username' => $test_data['username'])) . '</h2>' . drupal_render($settings) . '</div>';
+        $form['#prefix']  = '<div class="content"><h2>' . t('LDAP Entry for %username (dn: %dn)', array('%dn' => $test_data['ldap_user']['dn'], '%username' => $test_data['username'])) . '</h2>' . \Drupal::service('renderer')->render($settings) . '</div>';
       }
 
       $titles = [
@@ -177,13 +177,6 @@ class ServerTestForm extends EntityForm {
       ];
 
       foreach ($test_data['results_tables'] as $table_name => $table_data) {
-        // @FIXME
-        // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
-        // Calling _theme() directly can alter the expected output and potentially
-        // introduce security issues (see https://www.drupal.org/node/2195739). You
-        // should use renderable arrays instead.
-        //
-        //
         // @see https://www.drupal.org/node/2195739
         // $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . \Drupal::theme()->render('table', array('header' => array('Test', 'Result'), 'rows' => $table_data));
         $settings = array(
@@ -191,7 +184,7 @@ class ServerTestForm extends EntityForm {
           '#header' => array('Test', 'Result'),
           '#rows' => $table_data,
         );
-        $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . drupal_render($settings);
+        $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . \Drupal::service('renderer')->render($settings);
       }
 
       if (function_exists('dpm') && !empty($test_data['username'])) {
@@ -421,13 +414,6 @@ class ServerTestForm extends EntityForm {
         if ($user) {
           // This is the parent function that will call FromUserAttr or FromEntry.
           $memberships = $ldap_server->groupMembershipsFromUser($user, 'group_dns', $nested);
-          // @FIXME
-          // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
-          // Calling _theme() directly can alter the expected output and potentially
-          // introduce security issues (see https://www.drupal.org/node/2195739). You
-          // should use renderable arrays instead.
-          //
-          //
           // @see https://www.drupal.org/node/2195739
           // $result = \Drupal::theme()->render('item_list', array('items' => $memberships, 'type' => 'ul'));
           $settings = array(
@@ -435,7 +421,7 @@ class ServerTestForm extends EntityForm {
             '#items' => $memberships,
             '#type' => 'ul',
           );
-          $result = drupal_render($settings);
+          $result = \Drupal::service('renderer')->render($settings);
 
           $results_tables['group2'][] = [
             "ldap_server->groupMembershipsFromUser($user, 'group_dns', nested=$nested_display)<br>count=" . count($memberships),
@@ -451,13 +437,6 @@ class ServerTestForm extends EntityForm {
           if ($ldap_server->groupUserMembershipsConfigured) {
             $groupusermembershipsfromuserattr = $ldap_server->groupUserMembershipsFromUserAttr($user, $nested);
             $count = count($groupusermembershipsfromuserattr);
-            // @FIXME
-            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
-            // Calling _theme() directly can alter the expected output and potentially
-            // introduce security issues (see https://www.drupal.org/node/2195739). You
-            // should use renderable arrays instead.
-            //
-            //
             // @see https://www.drupal.org/node/2195739
             // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
             $settings = array(
@@ -465,7 +444,7 @@ class ServerTestForm extends EntityForm {
               '#items' => $groupusermembershipsfromuserattr,
               '#type' => 'ul',
             );
-            $result = drupal_render($settings);
+            $result = \Drupal::service('renderer')->render($settings);
           }
           else {
             $groupusermembershipsfromuserattr = [];
@@ -478,13 +457,6 @@ class ServerTestForm extends EntityForm {
 
           if ($ldap_server->groupGroupEntryMembershipsConfigured) {
             $groupusermembershipsfromentry = $ldap_server->groupUserMembershipsFromEntry($user, $nested);
-            // @FIXME
-            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
-            // Calling _theme() directly can alter the expected output and potentially
-            // introduce security issues (see https://www.drupal.org/node/2195739). You
-            // should use renderable arrays instead.
-            //
-            //
             // @see https://www.drupal.org/node/2195739
             // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
             $settings = array(
@@ -492,7 +464,7 @@ class ServerTestForm extends EntityForm {
               '#items' => $groupusermembershipsfromentry,
               '#type' => 'ul',
             );
-            $result = drupal_render($settings);
+            $result = \Drupal::service('renderer')->render($settings);
 
           }
           else {
@@ -507,13 +479,6 @@ class ServerTestForm extends EntityForm {
           if (count($groupusermembershipsfromentry) && count($groupusermembershipsfromuserattr)) {
             $diff1 = array_diff($groupusermembershipsfromuserattr, $groupusermembershipsfromentry);
             $diff2 = array_diff($groupusermembershipsfromentry, $groupusermembershipsfromuserattr);
-            // @FIXME
-            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
-            // Calling _theme() directly can alter the expected output and potentially
-            // introduce security issues (see https://www.drupal.org/node/2195739). You
-            // should use renderable arrays instead.
-            //
-            //
             // @see https://www.drupal.org/node/2195739
             // $result1 = \Drupal::theme()->render('item_list', array('items' => $diff1, 'type' => 'ul'));
             $settings = array(
@@ -521,15 +486,7 @@ class ServerTestForm extends EntityForm {
               '#items' => $diff1,
               '#type' => 'ul',
             );
-            $result1 = drupal_render($settings);
-
-            // @FIXME
-            // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
-            // Calling _theme() directly can alter the expected output and potentially
-            // introduce security issues (see https://www.drupal.org/node/2195739). You
-            // should use renderable arrays instead.
-            //
-            //
+            $result1 = \Drupal::service('renderer')->render($settings);
             // @see https://www.drupal.org/node/2195739
             // $result2 = \Drupal::theme()->render('item_list', array('items' => $diff2, 'type' => 'ul'));
             $settings = array(
@@ -537,7 +494,7 @@ class ServerTestForm extends EntityForm {
               '#items' => $diff2,
               '#type' => 'ul',
             );
-            $result2 = drupal_render($settings);
+            $result2 = \Drupal::service('renderer')->render($settings);
 
             $results_tables['group2'][] = [
               "groupUserMembershipsFromEntry and FromUserAttr Diff)",
@@ -552,13 +509,6 @@ class ServerTestForm extends EntityForm {
       }
 
       if ($groups_from_dn = $ldap_server->groupUserMembershipsFromDn($user)) {
-        // @FIXME
-        // \Drupal::theme()->render() has been renamed to _theme() and should NEVER be called directly.
-        // Calling _theme() directly can alter the expected output and potentially
-        // introduce security issues (see https://www.drupal.org/node/2195739). You
-        // should use renderable arrays instead.
-        //
-        //
         // @see https://www.drupal.org/node/2195739
         // $results_tables['groupfromDN'][] = array("Groups from DN", \Drupal::theme()->render('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
         $settings = array(
@@ -566,7 +516,7 @@ class ServerTestForm extends EntityForm {
           '#items' => $groups_from_dn,
           '#type' => 'ul',
         );
-        $result = drupal_render($settings);
+        $result = \Drupal::service('renderer')->render($settings);
         $results_tables['groupfromDN'][] = array("Groups from DN", $result);
 
       }

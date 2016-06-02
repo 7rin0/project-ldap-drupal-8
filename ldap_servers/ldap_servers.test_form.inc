@@ -4,7 +4,7 @@
  * @file
  */
 
- use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 module_load_include('inc', 'ldap_servers', 'ldap_servers.functions');
 
@@ -41,10 +41,8 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
     'type' => 'detail',
   );
 
-  // @FIXME
   $form['server_variables'] = array(
-    // '#markup' => \Drupal::theme()->render('ldap_servers_server', $variables),.
-    '#markup' => _theme('ldap_servers_server', $variables),
+    '#markup' => \Drupal::theme()->render('ldap_servers_server', $variables),
   );
 
   $form['sid'] = array(
@@ -115,15 +113,6 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
   if (!empty($form_state->get('ldap_server_test_data'))) {
     $test_data = $form_state->get('ldap_server_test_data');
 
-    // @FIXME
-    // if (isset($test_data['username']) && isset($test_data['ldap_user'])) {
-    //   $form['#prefix'] = \Drupal::theme()->render('ldap_server_ldap_entry_table',
-    //     array(
-    //       'entry' => $test_data['ldap_user']['attr'],
-    //       'username' => $test_data['username'],
-    //       'dn' => $test_data['ldap_user']['dn'],
-    //     ));
-    // }
     if (isset($test_data['username']) && isset($test_data['ldap_user'])) {
       $form['#prefix'] = \Drupal::theme()->render('ldap_server_ldap_entry_table',
         array(
@@ -147,11 +136,11 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
       '#header' => array('Test', 'Result'),
       '#rows' => $table_data,
     );
-    $table = drupal_render($table_theme);
+    $table = \Drupal::service('renderer')->render($table_theme);
 
     foreach ($test_data['results_tables'] as $table_name => $table_data) {
-      // $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . \Drupal::theme()->render('table', array('header' => array('Test', 'Result'), 'rows' => $table_data));.
-      $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . $table;
+      $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . \Drupal::theme()->render('table', array('header' => array('Test', 'Result'), 'rows' => $table_data));
+      // $form['#prefix'] .= '<h2>' . $titles[$table_name] . '</h2>' . $table;
     }
 
     if (function_exists('dpm') && !empty($test_data['username'])) {
@@ -316,8 +305,6 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
       if ($user) {
         // This is the parent function that will call FromUserAttr or FromEntry.
         $memberships = $ldap_server->groupMembershipsFromUser($user, 'group_dns', $nested);
-        // @FIXME
-        // $result = \Drupal::theme()->render('item_list', array('items' => $memberships, 'type' => 'ul'));
         $result = \Drupal::theme()->render('item_list', array('items' => $memberships, 'type' => 'ul'));
         $results_tables['group2'][] = array("ldap_server->groupMembershipsFromUser($user, 'group_dns', nested=$nested_display)<br/>count=" . count($memberships), $result);
 
@@ -327,8 +314,6 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
         if ($ldap_server->groupUserMembershipsConfigured) {
           $groupusermembershipsfromuserattr = $ldap_server->groupUserMembershipsFromUserAttr($user, $nested);
           $count = count($groupusermembershipsfromuserattr);
-          // @FIXME
-          // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
           $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromuserattr, 'type' => 'ul'));
         }
         else {
@@ -341,8 +326,6 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
 
         if ($ldap_server->groupGroupEntryMembershipsConfigured) {
           $groupusermembershipsfromentry = $ldap_server->groupUserMembershipsFromEntry($user, $nested);
-          // @FIXME
-          // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
           $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));
         }
         else {
@@ -356,10 +339,7 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
         if (count($groupusermembershipsfromentry) && count($groupusermembershipsfromuserattr)) {
           $diff1 = array_diff($groupusermembershipsfromuserattr, $groupusermembershipsfromentry);
           $diff2 = array_diff($groupusermembershipsfromentry, $groupusermembershipsfromuserattr);
-          // @FIXME
-          // $result1 = \Drupal::theme()->render('item_list', array('items' => $diff1, 'type' => 'ul'));
           $result1 = \Drupal::theme()->render('item_list', array('items' => $diff1, 'type' => 'ul'));
-          // $result2 = \Drupal::theme()->render('item_list', array('items' => $diff2, 'type' => 'ul'));.
           $result2 = \Drupal::theme()->render('item_list', array('items' => $diff2, 'type' => 'ul'));
           $results_tables['group2'][] = array("groupUserMembershipsFromEntry and FromUserAttr Diff)", $result1);
           $results_tables['group2'][] = array("FromUserAttr and groupUserMembershipsFromEntry Diff)", $result2);
@@ -368,9 +348,7 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
     }
 
     if ($groups_from_dn = $ldap_server->groupUserMembershipsFromDn($user)) {
-      // @FIXME
-      // $results_tables['groupfromDN'][] = array("Groups from DN", \Drupal::theme()->render('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
-      $results_tables['groupfromDN'][] = array("Groups from DN", _theme('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
+      $results_tables['groupfromDN'][] = array("Groups from DN", \Drupal::theme()->render('item_list', array('items' => $groups_from_dn, 'type' => 'ul')));
     }
 
     list($has_errors, $more_results, $ldap_user) = ldap_servers_test_user_mapping($values['testing_drupal_username'], $ldap_server);

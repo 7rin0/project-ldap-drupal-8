@@ -200,7 +200,7 @@ function template_preprocess_ldap_user_conf_mapping_table(&$variables) {
     '#rows' => $variables['rows'],
     '#header' => $header,
   ];
-  $variables['table'] = drupal_render($settings);
+  $variables['table'] = \Drupal::service('renderer')->render($settings);
 }
 
 /**

@@ -74,5 +74,5 @@ function ldap_help_examples() {
     }
   }
 
-  return drupal_render($form);
+  return \Drupal::service('renderer')->render($form);
 }

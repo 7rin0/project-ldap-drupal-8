@@ -69,7 +69,7 @@ class LdapServersSettings extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => t('If checked, modules using LDAP will not allow credentials to
           be entered on or submitted to HTTP pages, only HTTPS. This option should be used with an
-          approach to get all logon forms to be https, such as:') . drupal_render($settings),
+          approach to get all logon forms to be https, such as:') . \Drupal::service('renderer')->render($settings),
       '#default_value' => \Drupal::config('ldap_servers.settings')->get('require_ssl_for_credentials'),
     );
 
