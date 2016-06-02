@@ -596,8 +596,7 @@ function ldap_servers_binary($value) {
  *   is a server id
  * @param scalar $ldap_context
  */
-function ldap_servers_get_user_ldap_data($drupal_user, $id = NULL, $ldap_context = NULL) {
-  $drupal_username = $authname;
+function ldap_servers_get_user_ldap_data($drupal_username, $id = NULL, $ldap_context = NULL) {
   $drupal_user_object = user_load_by_name($drupal_username);
   // If no explicit $id, find most appropriate one.
   if (\Drupal::moduleHandler()->moduleExists('ldap_user')) {
