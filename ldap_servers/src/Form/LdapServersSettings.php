@@ -111,7 +111,7 @@ class LdapServersSettings extends ConfigFormBase {
       $form['encryption']['encryption']['#description'] .= ' <strong>' . t('Encryption is not supported on this web server.') . '</strong>';
     }
 
-    $form = parent::buildForm(array $form, $form_state);
+    $form = parent::buildForm($form, $form_state);
     return $form;
   }
 
