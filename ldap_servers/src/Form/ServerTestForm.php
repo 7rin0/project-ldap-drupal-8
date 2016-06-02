@@ -125,7 +125,7 @@ class ServerTestForm extends EntityForm {
     if ($form_state->get(['ldap_server_test_data'])) {
       $test_data = $form_state->get(['ldap_server_test_data']);
 
-      if (isset($test_data['username']) && isset($test_data['ldap_user'])) {
+      if (isset($test_data['username']) && isset($test_data['ldap_user']) && is_array($test_data['ldap_user'])) {
         // This used to be done by theme_ldap_server_ldap_entry_table.
         $header = array('Attribute Name', 'Instance', 'Value', 'Token');
         $rows = array();
@@ -434,7 +434,7 @@ class ServerTestForm extends EntityForm {
             $result,
           ];
 
-          if ($ldap_server->groupUserMembershipsConfigured) {
+          if ($ldap_server->get('groupUserMembershipsConfigured')) {
             $groupusermembershipsfromuserattr = $ldap_server->groupUserMembershipsFromUserAttr($user, $nested);
             $count = count($groupusermembershipsfromuserattr);
             // @see https://www.drupal.org/node/2195739
@@ -455,7 +455,7 @@ class ServerTestForm extends EntityForm {
             $result,
           ];
 
-          if ($ldap_server->groupGroupEntryMembershipsConfigured) {
+          if ($ldap_server->get('groupGroupEntryMembershipsConfigured')) {
             $groupusermembershipsfromentry = $ldap_server->groupUserMembershipsFromEntry($user, $nested);
             // @see https://www.drupal.org/node/2195739
             // $result = \Drupal::theme()->render('item_list', array('items' => $groupusermembershipsfromentry, 'type' => 'ul'));

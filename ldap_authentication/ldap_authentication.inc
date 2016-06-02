@@ -12,7 +12,7 @@
  *
  * @todo if form is being generated on non https and is set in preferences, set warning and end form development
  */
-function _ldap_authentication_login_form_alter($form, FormStateInterface $form_state, $form_id) {
+function _ldap_authentication_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   if (!$auth_conf = ldap_authentication_get_valid_conf()) {
     return;
@@ -75,7 +75,7 @@ function _ldap_authentication_login_form_alter($form, FormStateInterface $form_s
  *
  * @return NULL (alters $form by reference)
  */
-function _ldap_authentication_form_user_profile_form_alter($form, FormStateInterface $form_state) {
+function _ldap_authentication_form_user_profile_form_alter(&$form, FormStateInterface $form_state) {
   // Keep in mind admin may be editing another users profile form.  don't assume current global $user.
   $auth_conf = ldap_authentication_get_valid_conf();
   if ($auth_conf && ldap_authentication_ldap_authenticated($form['#user'])) {

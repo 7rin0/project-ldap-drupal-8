@@ -20,7 +20,7 @@
  *
  * @return boolean &$hook_result passed by reference
  */
-function hook_ldap_authentication_allowuser_results_alter($ldap_user, $name, &$hook_result) {
+function hook_ldap_authentication_allowuser_results_alter(&$ldap_user, $name, &$hook_result) {
 
   // Other module has denied user, should not override.
   if ($hook_result === FALSE) {

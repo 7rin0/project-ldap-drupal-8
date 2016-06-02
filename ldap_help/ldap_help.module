@@ -73,7 +73,7 @@ function ldap_help_menu() {
 /**
  *
  */
-function ldap_help_form_ldap_servers_settings_alter($form, FormStateInterface $form_state) {
+function ldap_help_form_ldap_servers_settings_alter(&$form, FormStateInterface $form_state) {
   $form['watchdog_detail'] = array('#type' => 'fieldset', '#title' => t('Development'));
   $form['watchdog_detail']['watchdog_detail'] = array(
     '#type' => 'checkbox',

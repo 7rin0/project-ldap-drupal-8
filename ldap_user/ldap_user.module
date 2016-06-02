@@ -541,7 +541,7 @@ function ldap_user_help($path, $arg) {
 /**
  * Implements hook_form_FORM_ID_alter(). for user_login_block.
  */
-function ldap_user_form_user_login_block_alter($form, FormStateInterface $form_state) {
+function ldap_user_form_user_login_block_alter(&$form, FormStateInterface $form_state) {
   array_unshift($form['#validate'], '
   ');
 }
@@ -549,21 +549,21 @@ function ldap_user_form_user_login_block_alter($form, FormStateInterface $form_s
 /**
  * Implements hook_form_FORM_ID_alter(). for user_login_form.
  */
-function ldap_user_form_user_login_form_alter($form, FormStateInterface $form_state, $form_id) {
+function ldap_user_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   array_unshift($form['#validate'], 'ldap_user_grab_password_validate');
 }
 
 /**
  * Implements hook_form_FORM_ID_alter(). for user_register_form.
  */
-function ldap_user_form_user_profile_form_alter($form, FormStateInterface $form_state) {
+function ldap_user_form_user_profile_form_alter(&$form, FormStateInterface $form_state) {
   array_unshift($form['#submit'], 'ldap_user_grab_password_validate');
 }
 
 /**
  * Implements hook_form_FORM_ID_alter(). for password_policy_password_tab.
  */
-function ldap_user_form_password_policy_password_tab_alter($form, FormStateInterface $form_state) {
+function ldap_user_form_password_policy_password_tab_alter(&$form, FormStateInterface $form_state) {
   array_unshift($form['#validate'], 'ldap_user_grab_password_validate');
 }
 
@@ -626,7 +626,7 @@ function ldap_user_identities_delete($uid) {
 /**
  * Implements hook_form_FORM_ID_alter(). for user_register_form.
  */
-function ldap_user_form_user_register_form_alter($form, FormStateInterface $form_state) {
+function ldap_user_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
 
   array_unshift($form['#submit'], 'ldap_user_grab_password_validate');
 
