@@ -194,8 +194,7 @@ class LdapUserConfAdmin extends LdapUserConf {
       '#title' => t('Action to perform on Drupal account that no longer have a
         corresponding LDAP entry'),
       '#required' => 0,
-      // @FIX ME
-      // '#default_value' => $this->orphanedDrupalAcctBehavior,
+      '#default_value' => $this->orphanedDrupalAcctBehavior,
       '#options' => $account_options,
       '#description' => t($this->orphanedDrupalAcctBehaviorDescription),
     );
@@ -507,7 +506,7 @@ EOT;
     $warnings = array();
     $tokens = array();
 
-    $has_drupal_acct_prov_servers  = (boolean) ($this->drupalAcctProvisionServer);
+    $has_drupal_acct_prov_servers  = $this->drupalAcctProvisionServer === 'none' ? false : true;
     $has_drupal_acct_prov_settings_options  = (count(array_filter($this->drupalAcctProvisionTriggers)) > 0);
 
     if (!$has_drupal_acct_prov_servers && $has_drupal_acct_prov_settings_options) {
@@ -517,7 +516,7 @@ EOT;
       $warnings['drupalAcctProvisionTriggers'] = t('Servers are enabled to provide provisioning to Drupal, but no Drupal Account Provisioning Options are selected.  This will result in no synching happening.', $tokens);
     }
 
-    $has_ldap_prov_servers = (boolean) ($this->ldapEntryProvisionServer);
+    $has_ldap_prov_servers = $this->ldapEntryProvisionServer === 'none' ? false : true;
     $has_ldap_prov_settings_options = (count(array_filter($this->ldapEntryProvisionTriggers)) > 0);
     if (!$has_ldap_prov_servers && $has_ldap_prov_settings_options) {
       $warnings['ldapEntryProvisionServer'] = t('No Servers are enabled to provide provisioning to ldap, but LDAP Entry Options are selected.', $tokens);
@@ -530,7 +529,7 @@ EOT;
       $to_ldap_entries_mappings_exist = FALSE;
       foreach ($this->ldapUserSynchMappings as $synch_direction => $mappings) {
         $map_index = array();
-        $tokens['%sid'] = $this->drupalAcctProvisionServer;
+        $tokens['%sid'] = $this->drupalAcctProvisionServer === 'none' ? 0 : $this->drupalAcctProvisionServer;
         $to_drupal_user_mappings_exist = FALSE;
         $to_ldap_entries_mappings_exist = FALSE;
 
@@ -614,8 +613,8 @@ EOT;
    *   as $form_state['storage'] from drupal form api
    */
   protected function populateFromDrupalForm($values, $storage) {
-    $this->drupalAcctProvisionServer = ($values['drupalAcctProvisionServer'] == 'none') ? 0 : $values['drupalAcctProvisionServer'];
-    $this->ldapEntryProvisionServer = ($values['ldapEntryProvisionServer'] == 'none') ? 0 : $values['ldapEntryProvisionServer'];
+    $this->drupalAcctProvisionServer = $values['drupalAcctProvisionServer'];
+    $this->ldapEntryProvisionServer = $values['ldapEntryProvisionServer'];
 
     $this->drupalAcctProvisionTriggers = $values['drupalAcctProvisionTriggers'];
     $this->ldapEntryProvisionTriggers = $values['ldapEntryProvisionTriggers'];
