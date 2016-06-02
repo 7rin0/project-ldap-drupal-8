@@ -456,7 +456,7 @@ EOT;
         continue;
       }
       list($direction, $discard, $column_name, $i) = $parts;
-      $action = $storage['synch_mapping_fields'][$direction][$i]['action'];
+      // $action = $storage['synch_mapping_fields'][$direction][$i]['action'];
       $tokens = array();
       $row_mappings = array();
       foreach (array('remove', 'configurable_to_drupal', 'configurable_to_ldap', 'convert', 'direction', 'ldap_attr', 'user_attr', 'user_tokens') as $column_name) {
@@ -683,7 +683,7 @@ EOT;
           continue;
         }
 
-        $action = $storage['synch_mapping_fields'][$direction][$row_descriptor]['action'];
+        // $action = $storage['synch_mapping_fields'][$direction][$row_descriptor]['action'];
 
         $key = ($direction == LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) ? _ldap_user_sanitise($columns['user_attr']) : _ldap_user_sanitise($columns['ldap_attr']);
         // Only save if its configurable and has an ldap and drupal attributes. The others are optional.
