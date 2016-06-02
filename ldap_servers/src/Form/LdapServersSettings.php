@@ -30,7 +30,7 @@ class LdapServersSettings extends ConfigFormBase {
       ->save();
 
     if (method_exists($this, '_submitForm')) {
-      $this->_submitForm(array &$form, $form_state);
+      $this->_submitForm($form, $form_state);
     }
   }
 
