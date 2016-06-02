@@ -1126,7 +1126,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < LDAP_TEST_USER_ORPHAN_CLONE_COUNT; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = @$cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->uid;
 
             // debug($account);
           }
@@ -1172,7 +1172,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = @$cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->uid;
           }
           $success = TRUE;
           $accounts = user_load_multiple($test_uids);
@@ -1196,7 +1196,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = @$cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->uid;
 
             // debug($account);
           }

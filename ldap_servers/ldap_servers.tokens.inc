@@ -362,7 +362,7 @@ function ldap_servers_token_tokenize_user_account($user_account, $token_keys = '
           $token_keys[] = 'property.' . \Drupal\Component\Utility\Unicode::strtolower($property_name);
         }
       }
-      elseif (isset($user_account->{$attr_name}['und'][0]['value']) && is_scalar($user_account->{$attr_name}['und'][0]['value'])) {
+      elseif ($user_account->get($attr_name)->getValue() && is_scalar($user_account->get($attr_name)->getValue())) {
         $token_keys[] = 'field.' . $property_name;
         if (\Drupal\Component\Utility\Unicode::strtolower($property_name) != $property_name) {
           $token_keys[] = 'field.' . \Drupal\Component\Utility\Unicode::strtolower($property_name);
@@ -389,11 +389,11 @@ function ldap_servers_token_tokenize_user_account($user_account, $token_keys = '
 
     switch ($attr_type) {
       case 'field':
-        $value = @is_scalar($user_account->{$attr_name}['und'][0]['value']) ? $user_account->{$attr_name}['und'][0]['value'] : '';
+        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue() : '';
       break;
 
       case 'property':
-        $value = @is_scalar($user_account->{$attr_name}) ? $user_account->{$attr_name} : '';
+        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue() : '';
       break;
 
       case 'password':
@@ -456,7 +456,7 @@ function ldap_servers_token_tokens_needed_for_template($template, $pre = LDAP_SE
     \]             # ] - pattern end
     /x', $template, $matches);
 
-  return @$matches[1];
+  return $matches[1];
 
 }
 

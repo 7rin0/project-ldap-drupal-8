@@ -605,10 +605,8 @@ function ldap_servers_get_user_ldap_data($drupal_user, $id = NULL, $ldap_context
   }
   // If no explicit $id, find most appropriate one.
   if (\Drupal::moduleHandler()->moduleExists('ldap_user')) {
-    if (property_exists($drupal_user, 'ldap_user_puid_sid') &&
-        !empty($drupal_user->ldap_user_puid_sid['und'][0]['value'])
-      ) {
-      $id = $drupal_user->ldap_user_puid_sid['und'][0]['value'];
+    if ($account->get('ldap_user_puid_sid')->getValue()) {
+      $id = $account->get('ldap_user_puid_sid')->getValue();
     }
     else {
       $ldap_user_conf = ldap_user_conf();
@@ -746,7 +744,7 @@ function ldap_servers_convert_attribute($value, $conversion = NULL) {
  */
 function ldap_servers_disable_http_check(&$form) {
 
-  if (\Drupal::config('ldap_servers.settings')->get('ldap_servers_require_ssl_for_credentials') == 1 && @$_SERVER['HTTPS'] != 'on') {
+  if (\Drupal::config('ldap_servers.settings')->get('ldap_servers_require_ssl_for_credentials') == 1 && $_SERVER['HTTPS'] != 'on') {
 
     $tokens = array(
       'site_name' => \Drupal::config('system.site')->get('name'),

@@ -179,7 +179,7 @@ function ldap_authentication_info($field = 0) {
 function ldap_authentication_ldap_authenticated($user) {
 
   if (is_numeric($user)) {
-    $user = @\Drupal::entityManager()->getStorage('user')->load((int) $user);
+    $user = \Drupal::entityManager()->getStorage('user')->load((int) $user);
   }
   if (!is_object($user) || $user->id() == 0) {
     return FALSE;

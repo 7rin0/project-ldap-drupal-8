@@ -506,7 +506,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < LDAP_TEST_USER_ORPHAN_CLONE_COUNT; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = @$cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->uid;
 
             // debug($account);
           }
@@ -552,7 +552,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = @$cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->uid;
           }
           $success = TRUE;
           $accounts = \Drupal::entityManager()->getStorage('user')->loadMultiple($test_uids);
@@ -579,7 +579,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = @$cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->uid;
 
             // debug($account);
           }
@@ -601,7 +601,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       // Remove all drupal users except 1 for next test.
       foreach ($cn_to_account as $cn => $account) {
-        @$account->uid->delete();
+        $account->uid->delete();
       }
 
     }

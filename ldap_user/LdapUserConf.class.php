@@ -651,9 +651,9 @@ class LdapUserConf {
     $tokens = array(
       '%dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
       '%sid' => (isset($result['ldap_server']) && $result['ldap_server']) ? $result['ldap_server']->sid : 0,
-      '%username' => @$account->name,
-      '%uid' => @$account->uid,
-      '%description' => @$result['description'],
+      '%username' => $account->name,
+      '%uid' => $account->uid,
+      '%description' => $result['description'],
     );
     if (!$test_query && isset($result['status'])) {
       if ($result['status'] == 'success') {

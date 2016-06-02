@@ -294,7 +294,7 @@ function ldap_help_get_ldap_servers() {
   $options = ldap_servers_encrypt_types('encrypt');
   $status[] = array(
     'title' => 'encryption',
-    'value' => @$options[$selected],
+    'value' => $options[$selected],
   );
 
   $servers_objects = ldap_servers_get_servers(NULL, 'all');
@@ -450,7 +450,7 @@ function ldap_help_parse_form($form, $items) {
       if (isset($items[$fieldset_name][$field_name])) {
         $value = "";
         if (!@is_array($field_data['#default_value'])) {
-          $default_value = @$field_data['#default_value'];
+          $default_value = $field_data['#default_value'];
         }
         else {
           $default_value = join(', ', array_values($field_data['#default_value']));

@@ -70,7 +70,7 @@ class LdapQuery {
       $query_record = $query_records[$qid];
       foreach ($this->fields() as $field_id => $field) {
         if (isset($query_record->$field_id)) {
-          $this->{$field['property_name']} = @$query_record->$field_id;
+          $this->{$field['property_name']} = $query_record->$field_id;
         }
       }
     }

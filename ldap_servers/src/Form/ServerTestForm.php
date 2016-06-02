@@ -263,8 +263,8 @@ class ServerTestForm extends EntityForm {
       ];
     }
 
-    if (@$values['grp_test_grp_dn_writeable'] && @$values['grp_test_grp_dn']) {
-      $user_test_dn = @$values['grp_test_grp_dn'];
+    if (@$values['grp_test_grp_dn_writeable'] && $values['grp_test_grp_dn']) {
+      $user_test_dn = $values['grp_test_grp_dn'];
       $group_create_test_dn = $values['grp_test_grp_dn_writeable'];
       $group_create_test_attr = [
         'objectClass' => [
@@ -404,7 +404,7 @@ class ServerTestForm extends EntityForm {
     if (!$has_errors && isset($values['grp_test_grp_dn'])) {
       $group_dn = $values['grp_test_grp_dn'];
 
-      $result = @ldap_read($ldap_server->connection, $group_dn, 'objectClass=*');
+      $result = ldap_read($ldap_server->connection, $group_dn, 'objectClass=*');
       $group_entry = ldap_get_entries($ldap_server->connection, $result);
       $user = isset($values['testing_drupal_username']) ? $values['testing_drupal_username'] : NULL;
 

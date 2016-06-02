@@ -21,7 +21,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function ldap_user_test_form($form, FormStateInterface $form_state, $op = NULL) {
 
-  $username = @$_SESSION['ldap_user_test_form']['testing_drupal_username'];
+  $username = $_SESSION['ldap_user_test_form']['testing_drupal_username'];
 
   $form['#prefix'] = t('<h1>Test LDAP User Configuration</h1>');
 

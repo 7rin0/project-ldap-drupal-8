@@ -89,9 +89,9 @@ function _ldap_user_orphans($ldap_user_conf) {
     $accounts = \Drupal::entityManager()->getStorage('user');
 
     foreach ($accounts as $uid => $user) {
-      $sid = @$user->ldap_user_puid_sid['und'][0]['value'];
-      $puid = @$user->ldap_user_puid['und'][0]['value'];
-      $puid_attr = @$user->ldap_user_puid_property['und'][0]['value'];
+      $sid = $user->get('ldap_user_puid_sid')->getValue();
+      $puid = $user->get('ldap_user_puid')->getValue();
+      $puid_attr = $user->get('ldap_user_puid_property')->getValue();
       if ($sid && $puid && $puid_attr) {
         if ($ldap_servers[$sid]->unique_persistent_attr_binary) {
           $filters[$sid][$puid_attr][] = "($puid_attr=" . ldap_servers_binary_filter($puid) . ")";

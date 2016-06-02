@@ -210,7 +210,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
 
     $result = $this->ldapQuery(LDAP_SCOPE_BASE, $params);
     if ($result !== FALSE) {
-      $entries = @ldap_get_entries($this->connection, $result);
+      $entries = ldap_get_entries($this->connection, $result);
       if ($entries !== FALSE && $entries['count'] > 0) {
         return ($return == 'boolean') ? TRUE : $entries[0];
       }
@@ -256,7 +256,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
       return FALSE;
     }
 
-    $result = @ldap_add($this->connection, $dn, $attributes);
+    $result = ldap_add($this->connection, $dn, $attributes);
     if (!$result) {
       $error = "LDAP Server ldap_add(%dn) Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
       $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
@@ -325,7 +325,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     $this->connectAndBindIfNotAlready();
 
     if (!$old_attributes) {
-      $result = @ldap_read($this->connection, $dn, 'objectClass=*');
+      $result = ldap_read($this->connection, $dn, 'objectClass=*');
       if (!$result) {
         $error = "LDAP Server ldap_read(%dn) in LdapServer::modifyLdapEntry() Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
         $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
@@ -356,7 +356,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
       // Remove enpty attributes.
       if ($cur_val == '' && $old_value != '') {
         unset($attributes[$key]);
-        $result = @ldap_mod_del($this->connection, $dn, array($key_lcase => $old_value));
+        $result = ldap_mod_del($this->connection, $dn, array($key_lcase => $old_value));
         if (!$result) {
           $error = "LDAP Server ldap_mod_del(%dn) in LdapServer::modifyLdapEntry() Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
           $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
@@ -378,7 +378,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     }
 
     if (count($attributes) > 0) {
-      $result = @ldap_modify($this->connection, $dn, $attributes);
+      $result = ldap_modify($this->connection, $dn, $attributes);
       if (!$result) {
         $error = "LDAP Server ldap_modify(%dn) in LdapServer::modifyLdapEntry() Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
         $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
@@ -653,7 +653,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
 
     switch ($scope) {
       case LDAP_SCOPE_SUBTREE:
-        $result = @ldap_search($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
+        $result = ldap_search($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
           $params['sizelimit'], $params['timelimit'], $params['deref']);
         if ($params['sizelimit'] && $this->ldapErrorNumber() == LDAP_SIZELIMIT_EXCEEDED) {
           // False positive error thrown.  do not return result limit error when $sizelimit specified.
@@ -664,18 +664,18 @@ class Server extends ConfigEntityBase implements ServerInterface {
         break;
 
       case LDAP_SCOPE_BASE:
-        $result = @ldap_read($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
+        $result = ldap_read($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
           $params['sizelimit'], $params['timelimit'], $params['deref']);
         if ($params['sizelimit'] && $this->ldapErrorNumber() == LDAP_SIZELIMIT_EXCEEDED) {
           // False positive error thrown.  do not result limit error when $sizelimit specified.
         }
         elseif ($this->hasError()) {
-          \Drupal::logger('ldap_server')->error('ldap_read() function error.  LDAP Error: %message, ldap_read() parameters: %query', array('%message' => $this->errorMsg('ldap'), '%query' => @$params['query_display']));
+          \Drupal::logger('ldap_server')->error('ldap_read() function error.  LDAP Error: %message, ldap_read() parameters: %query', array('%message' => $this->errorMsg('ldap'), '%query' => $params['query_display']));
         }
         break;
 
       case LDAP_SCOPE_ONELEVEL:
-        $result = @ldap_list($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
+        $result = ldap_list($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
           $params['sizelimit'], $params['timelimit'], $params['deref']);
         if ($params['sizelimit'] && $this->ldapErrorNumber() == LDAP_SIZELIMIT_EXCEEDED) {
           // False positive error thrown.  do not result limit error when $sizelimit specified.
@@ -807,7 +807,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
    */
   public function userUsernameFromDn($dn) {
 
-    $ldap_entry = @$this->dnExists($dn, 'ldap_entry', array());
+    $ldap_entry = $this->dnExists($dn, 'ldap_entry', array());
     if (!$ldap_entry || !is_array($ldap_entry)) {
       return FALSE;
     }
@@ -1197,7 +1197,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
       $add = array();
       $add[$this->groupMembershipsAttr] = $user_ldap_entry['dn'];
       $this->connectAndBindIfNotAlready();
-      $result = @ldap_mod_add($this->connection, $group_dn, $add);
+      $result = ldap_mod_add($this->connection, $group_dn, $add);
     }
 
     return $result;
@@ -1223,7 +1223,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
       $del = array();
       $del[$this->groupMembershipsAttr] = $user_ldap_entry['dn'];
       $this->connectAndBindIfNotAlready();
-      $result = @ldap_mod_del($this->connection, $group_dn, $del);
+      $result = ldap_mod_del($this->connection, $group_dn, $del);
     }
     return $result;
   }
@@ -1377,7 +1377,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
   public function groupMembershipsFromUser($user, $return = 'group_dns', $nested = NULL) {
 
     $group_dns = FALSE;
-    $user_ldap_entry = @$this->userUserToExistingLdapEntry($user);
+    $user_ldap_entry = $this->userUserToExistingLdapEntry($user);
     if (!$user_ldap_entry || $this->groupFunctionalityUnused()) {
       return FALSE;
     }

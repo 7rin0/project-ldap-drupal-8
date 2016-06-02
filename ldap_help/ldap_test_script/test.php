@@ -65,7 +65,7 @@ foreach ($config['servers'] as $sid => $server) {
     }
   }
   else {
-    $bind_result = @ldap_bind($con, $server['server_bind_dn'], $server['server_bind_pw']);
+    $bind_result = ldap_bind($con, $server['server_bind_dn'], $server['server_bind_pw']);
     if (!$bind_result) {
       $results = array(ldap_errno($con), "LDAP bind failure for user " . $server['server_bind_dn'] . "." . ldap_help_show_error($con));
     }
@@ -93,7 +93,7 @@ foreach ($config['servers'] as $sid => $server) {
     ldap_help_display('server_port', $server['server_port']);
     ldap_help_display('tls', $tls);
 
-    $query_result = @ldap_search($con, $server['server_base_dn'], $filter);
+    $query_result = ldap_search($con, $server['server_base_dn'], $filter);
     if (!$query_result) {
       ldap_help_display(ldap_errno($con), "LDAP search failure for user $filter." . ldap_help_show_error($con));
     }
@@ -138,11 +138,11 @@ foreach ($config['servers'] as $sid => $server) {
 
     ldap_help_display(NULL, "\nprovision, entry[$dn]:");
     if ($provision['delete_if_exists']) {
-      $query_result = @ldap_search($con, $server['server_base_dn'], $provision['find_filter']);
+      $query_result = ldap_search($con, $server['server_base_dn'], $provision['find_filter']);
       if ($query_result) {
         $entries = ldap_get_entries($con, $query_result);
         if ($entries['count'] == 1) {
-          $result = @ldap_delete($con, $dn);
+          $result = ldap_delete($con, $dn);
           if ($result) {
             ldap_help_display('deleted existing entry', $dn);
           }
@@ -158,7 +158,7 @@ foreach ($config['servers'] as $sid => $server) {
     }
 
 
-    $result = @ldap_add($con, $dn, $provision['attr']);
+    $result = ldap_add($con, $dn, $provision['attr']);
     $show_result = $result ? 'success' : 'fail';
     ldap_help_display('provision result', $show_result);
     if (!$result) {
