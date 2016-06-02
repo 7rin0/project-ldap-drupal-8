@@ -605,7 +605,7 @@ function ldap_servers_get_user_ldap_data($drupal_user, $id = NULL, $ldap_context
   }
   // If no explicit $id, find most appropriate one.
   if (\Drupal::moduleHandler()->moduleExists('ldap_user')) {
-    if ($account->get('ldap_user_puid_sid')->getValue()) {
+    if ($account && $account->get('ldap_user_puid_sid')->getValue()) {
       $id = $account->get('ldap_user_puid_sid')->getValue();
     }
     else {
