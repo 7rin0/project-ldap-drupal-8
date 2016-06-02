@@ -193,7 +193,7 @@ class LdapTestCase extends DrupalWebTestCase {
     );
     $user = user_load_by_name($name);
     if ($user) {
-      user_delete($user->uid);
+      user_delete($user->id());
     }
     $this->drupalPost('user', $edit, t('Log in'));
   }

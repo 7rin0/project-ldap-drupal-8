@@ -185,8 +185,8 @@ class LdapTestFunctions {
   public function userByNameFlushingCache($name) {
     $user = user_load_by_name($name);
     // Clear user cache.
-    $users = user_load_multiple(array($user->uid), array(), TRUE);
-    $user = $users[$user->uid];
+    $users = user_load_multiple(array($user->id()), array(), TRUE);
+    $user = $users[$user->id()];
     return $user;
   }
 

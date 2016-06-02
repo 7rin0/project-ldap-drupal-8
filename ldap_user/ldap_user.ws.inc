@@ -128,7 +128,7 @@ function ldap_user_ws($action, $direction_tag, $drupal_user_name_or_dn, $key) {
 
     case 'delete':
       if ($direction = LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) {
-        $drupal_user->uid->delete();
+        $drupal_user->id()->delete();
         return ldap_user_ws_out(array(1, 'Deleted Account ' . $drupal_user_name));
       }
       elseif ($direction = LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY) {

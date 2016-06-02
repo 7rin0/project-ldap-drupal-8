@@ -356,7 +356,7 @@ function _ldap_authentication_user_login_authenticate_validate(&$form_state, $re
   */
 
   $form_state->setValue('uid', $drupal_account->id());
-  // $fake_form_state = array('uid' => $drupal_account->uid);
+  // $fake_form_state = array('uid' => $drupal_account->id());
   // user_login_submit(array(), $fake_form_state);
   // global $user;
   // The uid is returned so that special login modules, namely ldap sso, can manually call this function.

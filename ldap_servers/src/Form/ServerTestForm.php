@@ -193,7 +193,7 @@ class ServerTestForm extends EntityForm {
           dpm("Corresponding Drupal user object for: $user_name");
           dpm($user);
           if (function_exists('entity_load_single')) {
-            $user_entity = entity_load_single('user', $user->uid);
+            $user_entity = entity_load_single('user', $user->id());
             dpm("Drupal user entity for: $user_name");
             dpm($user_entity);
           }

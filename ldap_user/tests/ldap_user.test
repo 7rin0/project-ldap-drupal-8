@@ -320,7 +320,7 @@ class LdapUserUnitTests extends LdapTestCase {
     $user = $ldap_user_conf->synchToDrupalAccount($account, $user_edit, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER, NULL, TRUE);
 
     $hpotter = user_load_by_name('hpotter');
-    $hpotter_uid = $hpotter->uid;
+    $hpotter_uid = $hpotter->id();
     $success = ($hpotter->mail == 'hpotter@owlcarriers.com');
 
     $this->assertTrue($success, t('synchToDrupalAccount worked for property (mail) for hpotter'), $this->testId());
@@ -343,7 +343,7 @@ class LdapUserUnitTests extends LdapTestCase {
     $hpottergranger = $ldap_user_conf->provisionDrupalAccount($account, $user_edit, NULL, TRUE);
 
     $this->testFunctions->setFakeServerUserAttribute('activedirectory1', 'cn=hpotter,ou=people,dc=hogwarts,dc=edu', 'samaccountname', 'hpotter', 0);
-    $pass = (is_object($hpottergranger) && is_object($hpotter) && $hpotter->uid == $hpottergranger->uid);
+    $pass = (is_object($hpottergranger) && is_object($hpotter) && $hpotter->id() == $hpottergranger->id());
     $this->assertTrue($pass, t('provisionDrupalAccount recognized PUID conflict and synched instead of creating a conflicted drupal account.'), $this->testId('provisionDrupalAccount function test with existing user with same puid'));
     if (!$pass) {
       debug('hpotter'); debug($hpotter); debug('hpottergranger'); debug($hpottergranger);
@@ -602,7 +602,7 @@ class LdapUserUnitTests extends LdapTestCase {
         $user_object = user_load_by_name($username);
         if (is_object($user_object)) {
           // Watch out for this.
-          user_delete($user_object->uid);
+          user_delete($user_object->id());
         }
 
         // 3. create new user with provisionDrupalAccount.
@@ -649,7 +649,7 @@ class LdapUserUnitTests extends LdapTestCase {
         */
 
       if ($hpotter = user_load_by_name('hpotter')) {
-        user_delete($hpotter->uid);
+        user_delete($hpotter->id());
       }
       $this->assertFalse(user_load_by_name('hpotter'), t('hpotter removed before manual account creation test'), $this->testId('manual non ldap account created'));
 
@@ -744,7 +744,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // 9.B. Create and approve new user, populating first and last name.
       $username = 'bhautdeser';
       if ($user = user_load_by_name($username)) {
-        user_delete($user->uid);
+        user_delete($user->id());
       }
       $user_edit = array(
         'name' => $username,
@@ -895,7 +895,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $username = 'sstephens';
       $this->drupalLogout();
       if ($sstephens = user_load_by_name($username)) {
-        user_delete($sstephens->uid);
+        user_delete($sstephens->id());
       }
 
       /**
@@ -998,7 +998,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       $username = 'bhautdeser';
       if ($user = user_load_by_name($username)) {
-        user_delete($user->uid);
+        user_delete($user->id());
       }
       $user_edit = array(
         'name' => $username,
@@ -1021,7 +1021,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $ldap_entry = $ldap_user_conf->getProvisionRelatedLdapEntry($drupal_account);
 
       // 2. test.
-      user_delete($drupal_account->uid);
+      user_delete($drupal_account->id());
       $ldap_server = ldap_servers_get_servers($test_sid, 'all', TRUE, TRUE);
       $ldap_entry_post_delete = $ldap_server->dnExists($desired_dn, 'ldap_entry');
 
@@ -1097,8 +1097,8 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // debug($cn_to_account['clone0']);
       //  debug($cn_to_account[$last_clone_username]);.
       // Delete 10 ldap entries.
-      $clone_first_uid = $cn_to_account[$first_clone_username]->uid;
-      $clone_last_uid = $cn_to_account[$last_clone_username]->uid;
+      $clone_first_uid = $cn_to_account[$first_clone_username]->id();
+      $clone_last_uid = $cn_to_account[$last_clone_username]->id();
       $clone_first = Drupal\Core\Entity\User::load($clone_first_uid, TRUE);
       $clone_last = Drupal\Core\Entity\User::load($clone_last_uid, TRUE);
 
@@ -1126,7 +1126,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < LDAP_TEST_USER_ORPHAN_CLONE_COUNT; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = $cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->id();
 
             // debug($account);
           }
@@ -1172,7 +1172,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = $cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->id();
           }
           $success = TRUE;
           $accounts = user_load_multiple($test_uids);
@@ -1196,7 +1196,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = $cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->id();
 
             // debug($account);
           }
@@ -1215,7 +1215,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       // Remove all drupal users except 1 for next test.
       foreach ($cn_to_account as $cn => $account) {
-        @user_delete($account->uid);
+        @user_delete($account->id());
       }
 
     }
@@ -1231,7 +1231,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
     $user_edit = array('name' => $name);
     $user = $ldap_user_conf->provisionDrupalAccount($account, $user_edit, NULL, TRUE);
 
-    return Drupal\Core\Entity\User::load($user->uid, TRUE);
+    return Drupal\Core\Entity\User::load($user->id(), TRUE);
   }
 
 }

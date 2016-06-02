@@ -100,8 +100,8 @@ function ldap_user_test_form_submit($form, FormStateInterface $form_state) {
 
     $user_object = user_load_by_name($username);
     if ($user_object) {
-      $user_entities = entity_load('user', array($user_object->uid));
-      $user_entity = $user_entities[$user_object->uid];
+      $user_entities = entity_load('user', array($user_object->id()));
+      $user_entity = $user_entities[$user_object->id()];
     }
     else {
       $user_entity = NULL;
@@ -128,7 +128,7 @@ function ldap_user_test_form_submit($form, FormStateInterface $form_state) {
     $results['ldap_user_conf'] = $ldap_user_conf;
 
     if (is_object($user_object)) {
-      $authmaps = db_query("SELECT aid, uid, module, identifier FROM {ldap_user_identities} WHERE uid = :uid", array(':uid' => $user_object->uid))->fetchAllAssoc('aid', PDO::FETCH_ASSOC);
+      $authmaps = db_query("SELECT aid, uid, module, identifier FROM {ldap_user_identities} WHERE uid = :uid", array(':uid' => $user_object->id()))->fetchAllAssoc('aid', PDO::FETCH_ASSOC);
     }
     else {
       $authmaps = 'No authmaps available.  Authmaps only shown if user account exists beforehand';

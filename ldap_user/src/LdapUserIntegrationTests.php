@@ -82,7 +82,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // 9.B. Create and approve new user, populating first and last name.
       $username = 'bhautdeser';
       if ($user = user_load_by_name($username)) {
-        $user->uid->delete();
+        $user->id()->delete();
       }
       $user_edit = array(
         'name' => $username,
@@ -251,7 +251,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $username = 'sstephens';
       $this->drupalLogout();
       if ($sstephens = user_load_by_name($username)) {
-        $sstephens->uid->delete();
+        $sstephens->id()->delete();
       }
 
       /**
@@ -354,7 +354,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       $username = 'bhautdeser';
       if ($user = user_load_by_name($username)) {
-        $user->uid->delete();
+        $user->id()->delete();
       }
       $user_edit = array(
         'name' => $username,
@@ -379,7 +379,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $ldap_entry = $ldap_user_conf->getProvisionRelatedLdapEntry($drupal_account);
 
       // 2. test.
-      $drupal_account->uid->delete();
+      $drupal_account->id()->delete();
       $ldap_server = ldap_servers_get_servers($test_sid, 'all', TRUE, TRUE);
       $ldap_entry_post_delete = $ldap_server->dnExists($desired_dn, 'ldap_entry');
 
@@ -459,8 +459,8 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // debug($cn_to_account['clone0']);
       //  debug($cn_to_account[$last_clone_username]);.
       // Delete 10 ldap entries.
-      $clone_first_uid = $cn_to_account[$first_clone_username]->uid;
-      $clone_last_uid = $cn_to_account[$last_clone_username]->uid;
+      $clone_first_uid = $cn_to_account[$first_clone_username]->id();
+      $clone_last_uid = $cn_to_account[$last_clone_username]->id();
       // @FIXME
       $clone_first =
       // To reset the user cache, use EntityStorageInterface::resetCache().
@@ -506,7 +506,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < LDAP_TEST_USER_ORPHAN_CLONE_COUNT; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = $cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->id();
 
             // debug($account);
           }
@@ -552,7 +552,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = $cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->id();
           }
           $success = TRUE;
           $accounts = \Drupal::entityManager()->getStorage('user')->loadMultiple($test_uids);
@@ -579,7 +579,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           // 70.
           for ($i = 0; $i < $delete; $i++) {
             $name = "clone" . $i;
-            $test_uids[] = $cn_to_account[$name]->uid;
+            $test_uids[] = $cn_to_account[$name]->id();
 
             // debug($account);
           }
@@ -601,7 +601,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       // Remove all drupal users except 1 for next test.
       foreach ($cn_to_account as $cn => $account) {
-        $account->uid->delete();
+        $account->id()->delete();
       }
 
     }
@@ -619,7 +619,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
     // @FIXME
     // To reset the user cache, use EntityStorageInterface::resetCache().
-    return \Drupal::entityManager()->getStorage('user')->load($user->uid);
+    return \Drupal::entityManager()->getStorage('user')->load($user->id());
   }
 
 }

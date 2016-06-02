@@ -105,9 +105,9 @@ class LdapUserTestForm extends FormBase {
       $user_object = user_load_by_name($username);
       if ($user_object) {
         $user_entities = \Drupal::entityManager()->getStorage('user', [
-          $user_object->uid,
+          $user_object->id(),
         ]);
-        $user_entity = $user_entities[$user_object->uid];
+        $user_entity = $user_entities[$user_object->id()];
       }
       else {
         $user_entity = NULL;
@@ -135,7 +135,7 @@ class LdapUserTestForm extends FormBase {
 
       if (is_object($user_object)) {
         $authmaps = db_query("SELECT aid, uid, module, identifier FROM {ldap_user_identities} WHERE uid = :uid", [
-          ':uid' => $user_object->uid,
+          ':uid' => $user_object->id(),
         ])->fetchAllAssoc('aid', PDO::FETCH_ASSOC);
       }
       else {

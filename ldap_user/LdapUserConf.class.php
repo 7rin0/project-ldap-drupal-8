@@ -535,7 +535,7 @@ class LdapUserConf {
 
     list($account, $user_entity) = ldap_user_load_user_acct_and_entity($account->name);
 
-    if (is_object($account) && property_exists($account, 'uid') && $account->uid == 1) {
+    if ($account->uid == 1) {
       $result['status'] = 'fail';
       $result['error_description'] = 'can not provision drupal user 1';
       // Do not provision or synch user 1.
@@ -616,23 +616,26 @@ class LdapUserConf {
 
         // Need to store <sid>|<dn> in ldap_user_prov_entries field, which may contain more than one.
         $ldap_user_prov_entry = $ldap_server->sid . '|' . $proposed_ldap_entry['dn'];
-        if (!isset($user_entity->ldap_user_prov_entries['und'])) {
-          $user_entity->ldap_user_prov_entries = array('und' => array());
+        if (!$user_entity->get('ldap_user_prov_entries')->getValue()) {
+          $user_entity->set('ldap_user_prov_entries', array());
         }
         $ldap_user_prov_entry_exists = FALSE;
-        foreach ($user_entity->ldap_user_prov_entries['und'] as $i => $field_value_instance) {
+        foreach ($user_entity->get('ldap_user_prov_entries')->getValue() as $i => $field_value_instance) {
           if ($field_value_instance == $ldap_user_prov_entry) {
             $ldap_user_prov_entry_exists = TRUE;
           }
         }
         if (!$ldap_user_prov_entry_exists) {
-          $user_entity->ldap_user_prov_entries['und'][] = array(
-            'value' => $ldap_user_prov_entry,
-            'format' => NULL,
-            'save_value' => $ldap_user_prov_entry,
+          $user_entity->set(
+            'ldap_user_prov_entries',
+            array(
+              'value' => $ldap_user_prov_entry,
+              'format' => NULL,
+              'save_value' => $ldap_user_prov_entry,
+            )
           );
           $edit = array(
-            'ldap_user_prov_entries' => $user_entity->ldap_user_prov_entries,
+            'ldap_user_prov_entries' => $user_entity->get('ldap_user_prov_entries')->getValue(),
           );
           $account = \Drupal::entityManager()->getStorage('user')->load($account->uid);
           $account = user_save($account, $edit);
@@ -687,7 +690,7 @@ class LdapUserConf {
    */
   public function synchToLdapEntry($account, $user_edit = NULL, $ldap_user = array(), $test_query = FALSE) {
 
-    if (is_object($account) && property_exists($account, 'uid') && $account->uid == 1) {
+    if ($account->uid == 1) {
       // Do not provision or synch user 1.
       return FALSE;
     }
@@ -958,7 +961,7 @@ class LdapUserConf {
       $ldap_user_entry = array();
     }
 
-    if (!is_object($account) || !is_object($ldap_server)) {
+    if (!$account || !is_object($ldap_server)) {
       return array(NULL, LDAP_USER_PROV_RESULT_BAD_PARAMS);
     }
     $watchdog_tokens = array(

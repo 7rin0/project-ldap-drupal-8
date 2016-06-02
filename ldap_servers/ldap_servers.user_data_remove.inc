@@ -69,7 +69,7 @@ function ldap_authorization_generate_users() {
   // For ($i=1; $i<1000; $i++) {
   //   $name = "user" . $i;
   //   if ($account = user_load_by_name($name)) {
-  //     user_delete($account->uid);
+  //     user_delete($account->id());
   //   }
   //   $account = new stdClass();
   //   $account->is_new = TRUE;
@@ -83,7 +83,7 @@ function ldap_authorization_generate_users() {
   for ($i = 1; $i < 1000; $i++) {
     $name = "user" . $i;
     if ($user_response = user_load_by_name($name)) {
-      $user_response->uid->delete();
+      $user_response->id()->delete();
     }
 
     $user_edit = array(

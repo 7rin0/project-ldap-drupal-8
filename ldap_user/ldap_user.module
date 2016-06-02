@@ -591,7 +591,7 @@ function ldap_user_get_uid_from_map($identifier) {
   $externalauth = \Drupal::service('externalauth.externalauth');
   $externalauth->load($identifier, 'ldap_user');
   if (property_exists($externalauth, 'uid')) {
-    return $externalauth->uid;
+    return $externalauth->id();
   }
 }
 
@@ -774,21 +774,20 @@ function ldap_user_form_register_form_submit2(&$form, FormStateInterface $form_s
  *
  * @return boolean TRUE if user should be excluded from ldap provision/synching
  */
-function ldap_user_ldap_exclude(UserInterface $account = NULL, $edit = NULL, $direction = LDAP_USER_PROV_DIRECTION_ALL) {
+function ldap_user_ldap_exclude(UserInterface $account, $edit = NULL, $direction = LDAP_USER_PROV_DIRECTION_ALL) {
   // Always exclude user 1.
-  if (is_object($account) && $account->id() == 1) {
+  if ($account->id() == 1) {
     return TRUE;
   }
 
   // Exclude users who have the field ldap_user_ldap_exclude set to 1.
-  if (is_object($account) && !empty($account->ldap_user_ldap_exclude->first())
+  if (!empty($account->ldap_user_ldap_exclude->first())
     && $account->ldap_user_ldap_exclude->first()->getValue() == 1) {
     return TRUE;
   }
 
   // Exclude new users who have the value set to 1 in their $edit array.
-  if ($account->get('ldap_user_ldap_exclude')->getValue()isset($edit['ldap_user_ldap_exclude']['und'][0]['value'])
-    && $edit['ldap_user_ldap_exclude'][0]['value'] == 1) {
+  if ($account->get('ldap_user_ldap_exclude')->getValue() == 1) {
     return TRUE;
   }
 
@@ -1218,8 +1217,10 @@ function ldap_user_token_tokenize_entry($account, $token_keys, $pre = LDAP_SERVE
     switch ($type) {
 
       case 'field':
-        if (isset($user_entity->{$attr}['und'][$ordinal]['value'])) {
-          $tokens[$token] = $user_entity->{$attr}['und'][$ordinal]['value'];
+        // @FIXME
+        // isset($user_entity->{$attr}['und'][$ordinal]['value'])
+        if ($user_entity->get($attr)->getValue()) {
+          $tokens[$token] = $user_entity->get($attr)->getValue();
         }
         break;
 

@@ -327,7 +327,7 @@ class LdapUserUnitTests extends LdapTestCase {
     $user = $ldap_user_conf->synchToDrupalAccount($account, $user_edit, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER, NULL, TRUE);
 
     $hpotter = user_load_by_name('hpotter');
-    $hpotter_uid = $hpotter->uid;
+    $hpotter_uid = $hpotter->id();
     $success = ($hpotter->mail == 'hpotter@owlcarriers.com');
 
     $this->assertTrue($success, t('synchToDrupalAccount worked for property (mail) for hpotter'), $this->testId());
@@ -350,7 +350,7 @@ class LdapUserUnitTests extends LdapTestCase {
     $hpottergranger = $ldap_user_conf->provisionDrupalAccount($account, $user_edit, NULL, TRUE);
 
     $this->testFunctions->setFakeServerUserAttribute('activedirectory1', 'cn=hpotter,ou=people,dc=hogwarts,dc=edu', 'samaccountname', 'hpotter', 0);
-    $pass = (is_object($hpottergranger) && is_object($hpotter) && $hpotter->uid == $hpottergranger->uid);
+    $pass = (is_object($hpottergranger) && is_object($hpotter) && $hpotter->id() == $hpottergranger->id());
     $this->assertTrue($pass, t('provisionDrupalAccount recognized PUID conflict and synched instead of creating a conflicted drupal account.'), $this->testId('provisionDrupalAccount function test with existing user with same puid'));
     if (!$pass) {
       debug('hpotter'); debug($hpotter); debug('hpottergranger'); debug($hpottergranger);
@@ -617,7 +617,7 @@ class LdapUserUnitTests extends LdapTestCase {
         $user_object = user_load_by_name($username);
         if (is_object($user_object)) {
           // Watch out for this.
-          $user_object->uid->delete();
+          $user_object->id()->delete();
         }
 
         // 3. create new user with provisionDrupalAccount.
@@ -664,7 +664,7 @@ class LdapUserUnitTests extends LdapTestCase {
         */
 
       if ($hpotter = user_load_by_name('hpotter')) {
-        $hpotter->uid->delete();
+        $hpotter->id()->delete();
       }
       $this->assertFalse(user_load_by_name('hpotter'), t('hpotter removed before manual account creation test'), $this->testId('manual non ldap account created'));
 
