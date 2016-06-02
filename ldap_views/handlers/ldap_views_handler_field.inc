@@ -46,7 +46,7 @@ class ldap_views_handler_field extends views_handler_field {
   /**
    * Add the field for the LDAP Attribute.
    */
-  function options_form(&$form, FormStateInterface $form_state) {
+  function options_form($form, FormStateInterface $form_state) {
     parent::options_form($form, $form_state);
     $form['multivalue'] = array(
     // It should be 'radios', but it makes #dependency not to work.

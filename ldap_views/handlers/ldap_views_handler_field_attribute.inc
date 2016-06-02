@@ -26,7 +26,7 @@ class ldap_views_handler_field_attribute extends ldap_views_handler_field {
   /**
    * Add the field for the LDAP Attribute.
    */
-  function options_form(&$form, FormStateInterface $form_state) {
+  function options_form($form, FormStateInterface $form_state) {
     /**
  * $current_display = $this->view->display[$this->view->current_display];
  * $qid             = isset($current_display->display_options['query']['options']['qid']) ? $current_display->display_options['query']['options']['qid']

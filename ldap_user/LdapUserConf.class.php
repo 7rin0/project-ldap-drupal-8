@@ -808,7 +808,7 @@ class LdapUserConf {
     );
 
     if (
-        (!$ldap_user  && !isset($drupal_user->getAccountName())) ||
+        (!$ldap_user  && !$drupal_user->getAccountName()) ||
         (!$drupal_user && $save) ||
         ($ldap_user && !isset($ldap_user['sid']))
     ) {

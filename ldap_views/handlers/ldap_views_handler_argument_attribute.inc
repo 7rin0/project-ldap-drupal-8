@@ -24,7 +24,7 @@ class ldap_views_handler_argument_attribute extends views_handler_argument {
   /**
    *
    */
-  function options_form(&$form, FormStateInterface $form_state) {
+  function options_form($form, FormStateInterface $form_state) {
     /**
  * $current_display = $this->view->display[$this->view->current_display];
  * $qid             = isset($current_display->display_options['query']['options']['qid']) ? $current_display->display_options['query']['options']['qid']

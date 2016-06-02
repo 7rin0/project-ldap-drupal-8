@@ -597,16 +597,12 @@ function ldap_servers_binary($value) {
  * @param scalar $ldap_context
  */
 function ldap_servers_get_user_ldap_data($drupal_user, $id = NULL, $ldap_context = NULL) {
-  if ($drupal_user && $drupal_user->id() && $authname = ldap_user_get_identifier_from_map($drupal_user->id())) {
-    $drupal_username = $authname;
-  }
-  else {
-    $drupal_username = $drupal_user ? $drupal_user->getUsername() : $drupal_user;
-  }
+  $drupal_username = $authname;
+  $drupal_user_object = user_load_by_name($drupal_username);
   // If no explicit $id, find most appropriate one.
   if (\Drupal::moduleHandler()->moduleExists('ldap_user')) {
-    if ($drupal_user && $drupal_user->get('ldap_user_puid_sid')->getValue()) {
-      $id = $drupal_user->get('ldap_user_puid_sid')->getValue();
+    if ($drupal_user_object && $drupal_user_object->get('ldap_user_puid_sid')->getValue()) {
+      $id = $drupal_user_object->get('ldap_user_puid_sid')->getValue();
     }
     else {
       $ldap_user_conf = ldap_user_conf();
@@ -742,7 +738,7 @@ function ldap_servers_convert_attribute($value, $conversion = NULL) {
  *
  * @param drupal logon form array $form
  */
-function ldap_servers_disable_http_check(&$form) {
+function ldap_servers_disable_http_check($form) {
 
   if (\Drupal::config('ldap_servers.settings')->get('ldap_servers_require_ssl_for_credentials') == 1 && $_SERVER['HTTPS'] != 'on') {
 
