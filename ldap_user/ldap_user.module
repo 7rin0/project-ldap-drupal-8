@@ -814,7 +814,7 @@ function ldap_user_is_ldap_associated($account, $direction = NULL) {
 
   if ($direction === NULL || $direction == LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) {
 
-    if ($account->get('ldap_user_current_dn')->getValue()) {
+    if ($account && $account->get('ldap_user_current_dn')->getValue()) {
       $to_drupal_user = TRUE;
     }
     elseif ($account && $account->id()) {
@@ -1009,7 +1009,8 @@ function ldap_user_user_login($account) {
  */
 function ldap_user_user_insert(Drupal\Core\Entity\EntityInterface $entity) {
   $account = $entity->original;
-  $not_associated = ldap_user_ldap_exclude($account, $entity);
+  // $not_associated = ldap_user_ldap_exclude($account, $entity);
+  $not_associated = ldap_user_ldap_exclude($entity);
   // Check for first time user.
   $new_account_request = !$account;
   $already_provisioned_to_ldap = ldap_user_ldap_provision_semaphore('provision', 'get', $entity->getAccountName());
@@ -1098,7 +1099,8 @@ function ldap_user_user_update(Drupal\Core\Entity\EntityInterface $entity) {
 function ldap_user_user_presave(Drupal\Core\Entity\EntityInterface $entity) {
   $account = $entity->original;
   // debug("ldap_user_user_presave"); debug($entity); debug($account);
-  if (ldap_user_ldap_exclude($account, $entity)) {
+  // if (ldap_user_ldap_exclude($account, $entity)) {
+  if (ldap_user_ldap_exclude($entity)) {
     return;
   }
   if ($account && $account->getAccountName()) {
