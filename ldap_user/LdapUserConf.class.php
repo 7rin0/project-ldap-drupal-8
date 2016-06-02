@@ -535,14 +535,14 @@ class LdapUserConf {
 
     list($account, $user_entity) = ldap_user_load_user_acct_and_entity($account->name);
 
-    if ($account->uid == 1) {
+    if ($account->id() == 1) {
       $result['status'] = 'fail';
       $result['error_description'] = 'can not provision drupal user 1';
       // Do not provision or synch user 1.
       return $result;
     }
 
-    if ($account == FALSE || $account->uid == 0) {
+    if ($account == FALSE || $account->id() == 0) {
       $result['status'] = 'fail';
       $result['error_description'] = 'can not provision ldap user unless corresponding drupal account exists first.';
       return $result;
@@ -637,7 +637,7 @@ class LdapUserConf {
           $edit = array(
             'ldap_user_prov_entries' => $user_entity->get('ldap_user_prov_entries')->getValue(),
           );
-          $account = \Drupal::entityManager()->getStorage('user')->load($account->uid);
+          $account = \Drupal::entityManager()->getStorage('user')->load($account->id());
           $account = user_save($account, $edit);
         }
 
@@ -655,7 +655,7 @@ class LdapUserConf {
       '%dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
       '%sid' => (isset($result['ldap_server']) && $result['ldap_server']) ? $result['ldap_server']->sid : 0,
       '%username' => $account->name,
-      '%uid' => $account->uid,
+      '%uid' => $account->id(),
       '%description' => $result['description'],
     );
     if (!$test_query && isset($result['status'])) {
@@ -690,7 +690,7 @@ class LdapUserConf {
    */
   public function synchToLdapEntry($account, $user_edit = NULL, $ldap_user = array(), $test_query = FALSE) {
 
-    if ($account->uid == 1) {
+    if ($account->id() == 1) {
       // Do not provision or synch user 1.
       return FALSE;
     }
@@ -769,7 +769,7 @@ class LdapUserConf {
       '%dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
       '%sid' => $this->ldapEntryProvisionServer,
       '%username' => $account->name,
-      '%uid' => ($test_query || !property_exists($account, 'uid')) ? '' : $account->uid,
+      '%uid' => ($test_query || !property_exists($account, 'uid')) ? '' : $account->id(),
     );
 
     if ($result) {
@@ -831,7 +831,7 @@ class LdapUserConf {
     }
 
     if ($save) {
-      $account = \Drupal::entityManager()->getStorage('user')->load($drupal_user->uid);
+      $account = \Drupal::entityManager()->getStorage('user')->load($drupal_user->id());
       $result = user_save($account, $user_edit, 'ldap_user');
       return $result;
     }
@@ -851,7 +851,7 @@ class LdapUserConf {
   public function deleteDrupalAccount($username) {
     $user = user_load_by_name($username);
     if (is_object($user)) {
-      $user->uid->delete();
+      $user->delete();
       return TRUE;
     }
     else {
@@ -916,7 +916,7 @@ class LdapUserConf {
           $ldap_server = ldap_servers_get_servers($sid, NULL, TRUE);
           if (is_object($ldap_server) && $dn) {
             $boolean_result = $ldap_server->delete($dn);
-            $tokens = array('%sid' => $sid, '%dn' => $dn, '%username' => $account->name, '%uid' => $account->uid);
+            $tokens = array('%sid' => $sid, '%dn' => $dn, '%username' => $account->name, '%uid' => $account->id());
             if ($boolean_result) {
               \Drupal::logger('ldap_user')->info('LDAP entry on server %sid deleted dn=%dn. username=%username, uid=%uid', []);
             }
