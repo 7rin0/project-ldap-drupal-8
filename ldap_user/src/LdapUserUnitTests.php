@@ -617,7 +617,7 @@ class LdapUserUnitTests extends LdapTestCase {
         $user_object = user_load_by_name($username);
         if (is_object($user_object)) {
           // Watch out for this.
-          $user_object->id()->delete();
+          $user_object->delete();
         }
 
         // 3. create new user with provisionDrupalAccount.
@@ -664,7 +664,7 @@ class LdapUserUnitTests extends LdapTestCase {
         */
 
       if ($hpotter = user_load_by_name('hpotter')) {
-        $hpotter->id()->delete();
+        $hpotter->delete();
       }
       $this->assertFalse(user_load_by_name('hpotter'), t('hpotter removed before manual account creation test'), $this->testId('manual non ldap account created'));
 

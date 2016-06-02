@@ -82,7 +82,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // 9.B. Create and approve new user, populating first and last name.
       $username = 'bhautdeser';
       if ($user = user_load_by_name($username)) {
-        $user->id()->delete();
+        $user->delete();
       }
       $user_edit = array(
         'name' => $username,
@@ -251,7 +251,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $username = 'sstephens';
       $this->drupalLogout();
       if ($sstephens = user_load_by_name($username)) {
-        $sstephens->id()->delete();
+        $sstephens->delete();
       }
 
       /**
@@ -354,7 +354,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       $username = 'bhautdeser';
       if ($user = user_load_by_name($username)) {
-        $user->id()->delete();
+        $user->delete();
       }
       $user_edit = array(
         'name' => $username,
@@ -379,7 +379,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       $ldap_entry = $ldap_user_conf->getProvisionRelatedLdapEntry($drupal_account);
 
       // 2. test.
-      $drupal_account->id()->delete();
+      $drupal_account->delete();
       $ldap_server = ldap_servers_get_servers($test_sid, 'all', TRUE, TRUE);
       $ldap_entry_post_delete = $ldap_server->dnExists($desired_dn, 'ldap_entry');
 
@@ -601,7 +601,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       // Remove all drupal users except 1 for next test.
       foreach ($cn_to_account as $cn => $account) {
-        $account->id()->delete();
+        $account->delete();
       }
 
     }

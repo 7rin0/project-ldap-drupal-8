@@ -83,7 +83,7 @@ function ldap_authorization_generate_users() {
   for ($i = 1; $i < 1000; $i++) {
     $name = "user" . $i;
     if ($user_response = user_load_by_name($name)) {
-      $user_response->id()->delete();
+      $user_response->delete();
     }
 
     $user_edit = array(
