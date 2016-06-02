@@ -42,9 +42,9 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
   }
 
   /**
-   *
+   * , $action = NULL, $sid = NULL
    */
-  public function buildForm($form, FormStateInterface $form_state, $action = NULL, $sid = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
 
     if ($ldap_server = ldap_servers_get_servers($sid, 'all', TRUE)) {
       $variables = [
@@ -67,7 +67,7 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
         '#value' => $action,
       ];
       // Return $form;.
-      return parent::buildForm($form, $form_state);
+      return parent::buildForm(array $form, $form_state);
 
       // Return confirm_form($form, t('Are you sure you want to') . t($action) . ' ' . t('the LDAP server named <em><strong>%name</strong></em>?', [
       //   '%name' => $ldap_server->name

@@ -139,7 +139,7 @@ function ldap_user_test_form_submit($form, FormStateInterface $form_state) {
     $results['User Authmap'] = $authmaps;
     $results['LDAP User Configuration Object'] = $ldap_user_conf;
 
-    $save = ($form_state->getValue('test_mode') == 'execute');
+    $save = $form_state->getValue('test_mode') == 'execute';
     $test_query = ($form_state->getValue('test_mode') != 'execute');
     $user_edit = array('name' => $username);
 

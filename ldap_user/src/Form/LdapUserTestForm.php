@@ -18,9 +18,9 @@ class LdapUserTestForm extends FormBase {
   }
 
   /**
-   *
+   * , $op = NULL
    */
-  public function buildForm($form, FormStateInterface $form_state, $op = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
 
     $username = $_SESSION['ldap_user_test_form']['testing_drupal_username'];
 
@@ -93,7 +93,7 @@ class LdapUserTestForm extends FormBase {
   /**
    *
    */
-  public function submitForm($form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
 
     $username = $form_state->getValue('testing_drupal_username');
     $selected_actions = $form_state->getValue(['action']);
@@ -147,7 +147,7 @@ class LdapUserTestForm extends FormBase {
       $results['User Authmap'] = $authmaps;
       $results['LDAP User Configuration Object'] = $ldap_user_conf;
 
-      $save = ($form_state->getValue(['test_mode']) == 'execute');
+      $save = $form_state->getValue(['test_mode']) == 'execute';
       $test_query = ($form_state->getValue(['test_mode']) != 'execute');
       $user_edit = ['name' => $username];
 

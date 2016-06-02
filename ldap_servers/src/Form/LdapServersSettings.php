@@ -30,7 +30,7 @@ class LdapServersSettings extends ConfigFormBase {
       ->save();
 
     if (method_exists($this, '_submitForm')) {
-      $this->_submitForm($form, $form_state);
+      $this->_submitForm(array &$form, $form_state);
     }
   }
 
@@ -44,7 +44,7 @@ class LdapServersSettings extends ConfigFormBase {
   /**
    *
    */
-  public function buildForm($form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     if (!ldap_servers_ldap_extension_loaded()) {
       drupal_set_message(t('PHP LDAP Extension is not loaded.'), "warning");
     }
@@ -111,7 +111,7 @@ class LdapServersSettings extends ConfigFormBase {
       $form['encryption']['encryption']['#description'] .= ' <strong>' . t('Encryption is not supported on this web server.') . '</strong>';
     }
 
-    $form = parent::buildForm($form, $form_state);
+    $form = parent::buildForm(array $form, $form_state);
     return $form;
   }
 

@@ -102,7 +102,7 @@ function ldap_help_form_ldap_servers_settings_alter($form, FormStateInterface $f
 /**
  *
  */
-function ldap_help_watchdog_detail_submit(array &$form, FormStateInterface $form_state) {
+function ldap_help_watchdog_detail_submit($form, FormStateInterface $form_state) {
   if ($form_state->isSubmitted()) {
     $config = \Drupal::configFactory()->getEditable('ldap_help.settings');
     $watchdog_detail = $form_state->getValue('watchdog_detail');

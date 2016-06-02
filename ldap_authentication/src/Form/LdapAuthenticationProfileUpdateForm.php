@@ -20,7 +20,7 @@ class LdapAuthenticationProfileUpdateForm extends FormBase {
   /**
    *
    */
-  public function buildForm($form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form['mail'] = [
       '#type' => 'textfield',
       '#required' => TRUE,

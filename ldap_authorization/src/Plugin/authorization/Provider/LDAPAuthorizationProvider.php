@@ -130,7 +130,7 @@ Representations of groups derived from LDAP might initially look like:
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function validateConfigurationForm($form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $mappings = $values['filter_and_mappings']['mappings'];
     $mappings = $this->normalizeMappings($this->pipeListToArray($mappings, TRUE));
@@ -141,7 +141,7 @@ Representations of groups derived from LDAP might initially look like:
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function submitConfigurationForm($form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
     // @TODO what does this do?
 
