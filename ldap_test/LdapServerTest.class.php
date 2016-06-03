@@ -120,7 +120,7 @@ class LdapServerTest extends LdapServer {
     }
 
     $watchdog_tokens = array('%user' => $userdn, '%errno' => $ldap_errno, '%error' => $ldap_error);
-    watchdog('ldap', "LDAP bind failure for user %user. Error %errno: %error", $watchdog_tokens);
+    \Drupal::logger('ldap_authentication')->debug("LDAP bind failure for user %user. Error %errno: %error", $watchdog_tokens);
     return $ldap_errno;
 
   }

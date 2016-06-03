@@ -993,6 +993,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
 
     $watchdog_tokens = array('%drupal_user_name' => $drupal_user_name);
     $ldap_username = $this->userUsernameToLdapNameTransform($drupal_user_name, $watchdog_tokens);
+
     if (!$ldap_username) {
       return FALSE;
     }
@@ -1019,7 +1020,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
       // Must find exactly one user for authentication to work.
       if ($result['count'] != 1) {
         $count = $result['count'];
-        watchdog('ldap_servers', "Error: !count users found with $filter under $basedn.", array('!count' => $count), WATCHDOG_ERROR);
+        \Drupal::logger('ldap_authentication')->debug("Error: !count users found with $filter under $basedn.", array('!count' => $count));
         continue;
       }
       $match = $result[0];

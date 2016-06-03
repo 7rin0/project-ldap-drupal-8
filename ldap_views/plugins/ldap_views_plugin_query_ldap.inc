@@ -236,7 +236,7 @@ class ldap_views_plugin_query_ldap extends views_plugin_query {
     $num_entries = 0;
 
     if (empty($this->options['qid'])) {
-      watchdog('ldap_views', 'Query definition is empty');
+      \Drupal::logger('ldap_views')->debug('Query definition is empty');
       return;
     }
     foreach ($this->fields as $field) {

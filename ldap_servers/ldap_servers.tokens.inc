@@ -91,6 +91,8 @@ function ldap_servers_token_replace($resource, $text, $resource_type = 'ldap_ent
  * by reference return add ldap attribute triplet $attribute_maps[<attr_name>] = (<attr_name>, <ordinal>, <data_type>) to $attributes
  */
 function ldap_servers_token_extract_attributes(&$attribute_maps,  $text) {
+  var_dump($attribute_maps);
+  die();
   $tokens = ldap_servers_token_tokens_needed_for_template($text);
   foreach ($tokens as $token) {
     $token = str_replace(array(LDAP_SERVERS_TOKEN_PRE, LDAP_SERVERS_TOKEN_POST), array('', ''), $token);
