@@ -589,9 +589,9 @@ function ldap_user_grab_password_validate($form, FormStateInterface $form_state)
  */
 function ldap_user_get_uid_from_map($identifier) {
   $externalauth = \Drupal::service('externalauth.externalauth');
-  $externalauth->load($identifier, 'ldap_user');
-  if (property_exists($externalauth, 'uid')) {
-    return $externalauth->id();
+  $user = $externalauth->load($identifier, 'ldap_user');
+  if ($user && $user->id()) {
+    return $user->id();
   }
 }
 
@@ -600,9 +600,9 @@ function ldap_user_get_uid_from_map($identifier) {
  */
 function ldap_user_get_identifier_from_map($uid) {
   $authmap = \Drupal::service('externalauth.authmap');
-  $authmap->getAuthdata($uid, 'ldap_user');
-  if (property_exists($authmap, 'authname')) {
-    return $authmap->authname;
+  $getAuthdata = $authmap->getAuthdata($uid, 'ldap_user');
+  if ($getAuthdata["authname"]) {
+    return $getAuthdata["authname"];
   }
 }
 
@@ -708,7 +708,6 @@ function ldap_user_form_register_form_validate($form, FormStateInterface $form_s
     $ldap_user_conf = ldap_user_conf();
     $ldap_user = ldap_servers_get_user_ldap_data($drupal_username, $ldap_user_conf->ldapEntryProvisionServer, 'ldap_user_prov_to_drupal');
     if (!$ldap_user) {
-
       $form_state->setErrorByName('ldap_user_association', t('User %name does not have a corresponding LDAP Entry (dn).
         Under LDAP options, you may NOT select "Make this an LDAP Associated Account"', array('%name' => $drupal_username)));
     }

@@ -36,7 +36,7 @@ function _ldap_authentication_login_form_alter(&$form, FormStateInterface $form_
    *    array('user_login_name_validate', 'user_login_authenticate_validate', 'user_login_final_validate')
    */
 
-  if (@in_array('::validateAuthentication', $form['#validate']) && $auth_conf->authenticationMode) {
+  if (in_array('::validateAuthentication', $form['#validate']) && $auth_conf->authenticationMode) {
     $key = array_search('::validateAuthentication', $form['#validate']);
     $form['#validate'][$key] = 'ldap_authentication_core_override_user_login_authenticate_validate';
     array_splice($form['#validate'], $key + 1, 0, 'ldap_authentication_user_login_authenticate_validate');
@@ -236,6 +236,7 @@ function _ldap_authentication_user_login_authenticate_validate($form_state, $ret
     }
   }
 
+
   /**
    * VI.B: existing Drupal account but not authmapped to ldap modules,
    *   ldap authmap or disallow
@@ -255,6 +256,8 @@ function _ldap_authentication_user_login_authenticate_validate($form_state, $ret
     // LDAP_authen.AC.disallow.ldap.drupal.
     else {
       // Add ldap_authentication authmap to user. account name is fine here, though cn could be used.
+      \Drupal::logger('ldap_authentication')->debug($drupal_account);
+      \Drupal::logger('ldap_authentication')->debug($authname);
       ldap_user_set_identifier($drupal_account, $authname);
       $drupal_account_is_authmapped = TRUE;
       if ($detailed_watchdog_log) {
@@ -267,12 +270,12 @@ function _ldap_authentication_user_login_authenticate_validate($form_state, $ret
    * VI.C: existing Drupal account with incorrect email.  fix email if appropriate
    *
    */
-  if ($drupal_account_exists && $drupal_account->mail->value != $ldap_user['mail'] && (
+  if ($drupal_account_exists && $drupal_account->getEmail() != $ldap_user['mail'] && (
           $auth_conf->emailUpdate == LDAP_AUTHENTICATION_EMAIL_UPDATE_ON_LDAP_CHANGE_ENABLE_NOTIFY ||
           $auth_conf->emailUpdate == LDAP_AUTHENTICATION_EMAIL_UPDATE_ON_LDAP_CHANGE_ENABLE
           )) {
     $drupal_account->set('mail', $ldap_user['mail']);
-    $watchdog_tokens['%username'] = $drupal_account->name->value;
+    $watchdog_tokens['%username'] = $drupal_account->getAccountName();
     if (!$updated_account = $drupal_account->save()) {
       \Drupal::logger('ldap_authentication')->error('Failed to make changes to user %username updated %changed.', $watchdog_tokens);
     }
@@ -300,7 +303,7 @@ function _ldap_authentication_user_login_authenticate_validate($form_state, $ret
        * username does not exist but email does.  Since user_external_login_register does not deal with
        * mail attribute and the email conflict error needs to be caught beforehand, need to throw error here
        */
-      $watchdog_tokens['%duplicate_name'] = $account_with_same_email->name;
+      $watchdog_tokens['%duplicate_name'] = $account_with_same_email->getAccountName();
       \Drupal::logger('ldap_authentication')->error('LDAP user with DN %dn has email address (%mail) conflict with a drupal user %duplicate_name', $watchdog_tokens);
 
       drupal_set_message(t('Another user already exists in the system with the same email address. You should contact the system administrator in order to solve this conflict.'), 'error');
@@ -360,7 +363,7 @@ function _ldap_authentication_user_login_authenticate_validate($form_state, $ret
   // user_login_submit(array(), $fake_form_state);
   // global $user;
   // The uid is returned so that special login modules, namely ldap sso, can manually call this function.
-  return ($return_user) ? $drupal_account : NULL;
+  return $return_user || $drupal_account_exists ? $drupal_account : NULL;
 }
 
 /**
@@ -373,7 +376,7 @@ function ldap_authentication_corresponding_drupal_user($authname, $auth_conf, &$
     $drupal_account = $uid ? Drupal\Core\Entity\User::load($uid) : FALSE;
   }
 
-  if (is_object($drupal_account)) {
+  if ($drupal_account) {
     $drupal_account_is_authmapped = ldap_user_get_identifier_from_map($drupal_account->id());
     if ($drupal_account->id() == 1 && $detailed_watchdog_log) {
       \Drupal::logger('ldap_authentication')->debug('%username : Drupal username maps to user 1, so do not authenticate with ldap', $watchdog_tokens);
@@ -485,13 +488,13 @@ function ldap_authentication_test_credentials($auth_conf, $sso_login, $authname,
         \Drupal::logger('ldap_authentication')->debug('%username : Trying server %id where bind_method = %bind_method.  Error: %err_text', $watchdog_tokens);
         $watchdog_tokens['%err_text'] = NULL;
       }
-      $authentication_result = ($ldap_server->bind_method == LDAP_SERVERS_BIND_METHOD_USER) ? LDAP_AUTHENTICATION_RESULT_FAIL_CREDENTIALS : LDAP_AUTHENTICATION_RESULT_FAIL_BIND;
+      $authentication_result = $ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_USER ? LDAP_AUTHENTICATION_RESULT_FAIL_CREDENTIALS : LDAP_AUTHENTICATION_RESULT_FAIL_BIND;
       // If bind fails, onto next server.
       continue;
     }
 
     // #3 DOES USER EXIST IN SERVER'S LDAP.
-    if ($ldap_server->bind_method == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
+    if ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
       $ldap_user = $ldap_server->userUserNameToExistingLdapEntry($authname);
     }
     elseif ($sso_login) {
@@ -528,7 +531,6 @@ function ldap_authentication_test_credentials($auth_conf, $sso_login, $authname,
     /**
     * #4 CHECK ALLOWED AND EXCLUDED LIST AND PHP FOR ALLOWED USERS
     */
-
     if (!$auth_conf->allowUser($authname, $ldap_user)) {
       $authentication_result = LDAP_AUTHENTICATION_RESULT_FAIL_DISALLOWED;
       // Regardless of how many servers, disallowed user fails.
@@ -567,13 +569,13 @@ function ldap_authentication_test_credentials($auth_conf, $sso_login, $authname,
     }
     else {
       $authentication_result = LDAP_AUTHENTICATION_RESULT_SUCCESS;
-      if ($ldap_server->bind_method == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
+      if ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
         // After successful bind, lookup user again to get private attributes.
         $ldap_user = $ldap_server->userUserNameToExistingLdapEntry($authname);
         $watchdog_tokens['%mail'] = $ldap_user['mail'];
       }
-      if ($ldap_server->bind_method == LDAP_SERVERS_BIND_METHOD_SERVICE_ACCT ||
-          $ldap_server->bind_method == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
+      if ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_SERVICE_ACCT ||
+          $ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
         $ldap_server->disconnect();
       }
       // Success.

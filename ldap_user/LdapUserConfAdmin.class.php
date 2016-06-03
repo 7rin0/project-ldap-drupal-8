@@ -909,7 +909,10 @@ EOT;
     if (!empty($this->ldapUserSynchMappings[$direction])) {
       // Key could be ldap attribute name or user attribute name.
       foreach ($this->ldapUserSynchMappings[$direction] as $target_attr_token => $mapping) {
-        if (isset($mapping['enabled']) && $mapping['enabled'] && $this->isMappingConfigurable($this->synchMapping[$direction][$target_attr_token], 'ldap_user')) {
+        if (
+        isset($mapping['enabled']) && $mapping['enabled'] &&
+        $this->isMappingConfigurable($this->synchMapping[$direction][$target_attr_token], 'ldap_user')
+        ) {
           $row_id = 'row-' . $row;
           $rows[$row_id] = $this->getSyncFormRow('update', $direction, $mapping, $user_attr_options, $row_id);
           $row++;

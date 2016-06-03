@@ -89,7 +89,7 @@ class LdapServerTest extends LdapServer {
   function bind($userdn = NULL, $pass = NULL, $anon_bind = FALSE) {
     $userdn = ($userdn != NULL) ? $userdn : $this->binddn;
     $pass = ($pass != NULL) ? $pass : $this->bindpw;
-
+    
     if (!isset($this->entries[$userdn])) {
       // 0x20 or 32.
       $ldap_errno = LDAP_NO_SUCH_OBJECT;
