@@ -254,7 +254,7 @@ function ldap_servers_ldap_user_attrs_list_alter(&$available_user_attrs, &$param
   $url = Url::fromRoute('entity.ldap_server.collection');
   $tokens = array(
     '!edit_link' => \Drupal::l($url->toString(), $url),
-    '!sid' => $ldap_server->id(),
+    '!sid' => (string)$ldap_server->id(),
   );
 
   $server_edit_path = 'admin/config/people/ldap/servers/edit/' . $ldap_server->id();
@@ -624,9 +624,9 @@ function ldap_servers_get_user_ldap_data($drupal_username, $id = NULL, $ldap_con
     return $cache->data;
   }
 
-  $ldap_server = ($id) ? ldap_servers_get_servers($id, 'enabled', TRUE) : FALSE;
+  $ldap_server = ($id) ? _ldap_servers_get_servers($id[0]['value'], 'enabled', TRUE) : FALSE;
 
-  if ($ldap_server === FALSE) {
+  if (!$ldap_server) {
     \Drupal::logger('ldap_servers')->error('Failed to load server object %sid in _ldap_servers_get_user_ldap_data', array('%sid' => $sid));
     return FALSE;
   }

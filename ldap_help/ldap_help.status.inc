@@ -449,7 +449,7 @@ function ldap_help_parse_form($form, $items) {
     foreach ($field as $field_name => $field_data) {
       if (isset($items[$fieldset_name][$field_name])) {
         $value = "";
-        if (!@is_array($field_data['#default_value'])) {
+        if (!is_array($field_data['#default_value'])) {
           $default_value = $field_data['#default_value'];
         }
         else {

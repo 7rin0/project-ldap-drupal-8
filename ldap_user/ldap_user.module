@@ -139,7 +139,10 @@ function ldap_user_theme($existing, $type, $theme, $path) {
  * Implements MODULE_preprocess_HOOK .
  */
 function ldap_user_preprocess_table(&$variables) {
-  if (!$variables['rows'] || !in_array('mappings-table', $variables['attributes']['class'])) {
+  if (!$variables['rows'] ||
+      (isset($variables['attributes']['class']) &&
+        !in_array('mappings-table', $variables['attributes']['class']))
+      ) {
     return;
   }
 

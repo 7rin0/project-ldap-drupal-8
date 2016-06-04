@@ -115,6 +115,9 @@ class Server extends ConfigEntityBase implements ServerInterface {
    *   Result of bind; TRUE if successful, FALSE otherwise.
    */
   public function bind($userdn = NULL, $pass = NULL, $anon_bind = NULL) {
+    // Ensure connection after validation
+    $this->connect();
+
     // Ensure that we have an active server connection.
     if (!$this->connection) {
       \Drupal::logger('ldap')->notice("LDAP bind failure for user %user. Not connected to LDAP server.", array('%user' => $userdn));
@@ -125,7 +128,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
       $anon_bind = TRUE;
     }
     if ($anon_bind === TRUE) {
-      if (@!ldap_bind($this->connection)) {
+      if (!ldap_bind($this->connection)) {
         if ($this->detailedWatchdogLog) {
           \Drupal::logger('ldap')->notice("LDAP anonymous bind error. Error %errno: %error", array('%errno' => ldap_errno($this->connection), '%error' => ldap_error($this->connection)));
         }
@@ -140,7 +143,8 @@ class Server extends ConfigEntityBase implements ServerInterface {
         \Drupal::logger('ldap')->notice("LDAP bind failure for user userdn=%userdn, pass=%pass.", array('%userdn' => $userdn, '%pass' => $pass));
         return LDAP_LOCAL_ERROR;
       }
-      if (@!ldap_bind($this->connection, $userdn, $pass)) {
+      
+      if (!ldap_bind($this->connection, $userdn, $pass)) {
         if ($this->detailedWatchdogLog) {
           \Drupal::logger('ldap')->notice("LDAP bind failure for user %user. Error %errno: %error", array('%user' => $userdn, '%errno' => ldap_errno($this->connection), '%error' => ldap_error($this->connection)));
         }
@@ -989,7 +993,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
    *   'attr' => single ldap entry array in form returned from ldap_search() extension, e.g.
    *   'dn' => dn of entry
    */
-  function userUserNameToExistingLdapEntry($drupal_user_name, $ldap_context = NULL) {
+  public function userUserNameToExistingLdapEntry($drupal_user_name, $ldap_context = NULL) {
 
     $watchdog_tokens = array('%drupal_user_name' => $drupal_user_name);
     $ldap_username = $this->userUsernameToLdapNameTransform($drupal_user_name, $watchdog_tokens);

@@ -318,7 +318,7 @@ class LdapQueryAdmin extends LdapQuery {
     if (is_array($array)) {
       $lines = join("\n", $array);
     }
-    elseif (is_array(@unserialize($array))) {
+    elseif (is_array(unserialize($array))) {
       $lines = join("\n", unserialize($array));
     }
     return $lines;

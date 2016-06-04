@@ -68,7 +68,7 @@ class FeedsLdapQueryFetcher extends FeedsFetcher {
   /**
    * Override parent::configForm().
    */
-  public function configForm($form_state) {
+  public function configForm(FormStateInterface $form_state) {
     $queries = ldap_query_get_queries(NULL, 'enabled');
     $query_options = array(0 => '--- select one or more queries ---');
     foreach ($queries as $qid => $query) {

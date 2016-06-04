@@ -114,7 +114,7 @@ function _ldap_authentication_form_user_profile_form_alter(&$form, FormStateInte
  * -- $form_state->setErrorByName() to invalidate authentication process
  * -- setting $form_state->getValue('uid') to indicate successful authentication
  */
-function _ldap_authentication_user_login_authenticate_validate($form_state, $return_user, $sso_login) {
+function _ldap_authentication_user_login_authenticate_validate(FormStateInterface $form_state, $return_user, $sso_login) {
 
   $detailed_watchdog_log = \Drupal::config('ldap_help.settings')->get('watchdog_detail');
   // $authname is the name the user is authenticated with from the logon form // patch 1599632.
@@ -185,6 +185,7 @@ function _ldap_authentication_user_login_authenticate_validate($form_state, $ret
    * IV. test credentials and if available get corresponding ldap user and ldap server
    */
   list($authentication_result, $ldap_user, $ldap_server_authenticated_on) = ldap_authentication_test_credentials($auth_conf, $sso_login, $authname, $form_state->getValue('pass'), $watchdog_tokens);
+
   if ($authentication_result != LDAP_AUTHENTICATION_RESULT_SUCCESS) {
     ldap_authentication_fail_response($authentication_result, $auth_conf, $detailed_watchdog_log, $watchdog_tokens);
     return;
@@ -456,7 +457,7 @@ function ldap_authentication_test_credentials($auth_conf, $sso_login, $authname,
 
     $bind_success = FALSE;
     if ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_SERVICE_ACCT) {
-      $bind_success = ($ldap_server->bind(NULL, NULL, FALSE) == LDAP_SUCCESS);
+      $bind_success = $ldap_server->bind(NULL, NULL, FALSE);
     }
     elseif ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON ||
       $ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON_USER) {

@@ -107,7 +107,7 @@ class FeedsDrupalUserLdapEntryFetcher extends FeedsFetcher {
   /**
    * Override parent::configForm().
    */
-  public function configForm($form_state) {
+  public function configForm(FormStateInterface $form_state) {
 
     $form = array();
     $form['filterLdapAuthenticated'] = array(
