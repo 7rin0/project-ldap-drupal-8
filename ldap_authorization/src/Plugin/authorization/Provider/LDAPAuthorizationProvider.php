@@ -135,7 +135,7 @@ Representations of groups derived from LDAP might initially look like:
     $mappings = $values['filter_and_mappings']['mappings'];
     $mappings = $this->normalizeMappings($this->pipeListToArray($mappings, TRUE));
     $values['filter_and_mappings']['mappings'] = $mappings;
-    $form_state->setValues($values);
+    $form_state->sets($values);
   }
 
   /**
@@ -162,7 +162,7 @@ Representations of groups derived from LDAP might initially look like:
     //   $values['http_pass'] = $this->configuration['http_pass'];
     // }.
     foreach ($values as $key => $value) {
-      $form_state->setValue($key, $value);
+      $form_state->set($key, $value);
     }
 
     parent::submitConfigurationForm($form, $form_state);

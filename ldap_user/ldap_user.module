@@ -703,7 +703,7 @@ function ldap_user_form_register_form_validate($form, FormStateInterface $form_s
   $drupal_username = $values['name'];
 
   if ($values['ldap_user_association'] == LDAP_USER_MANUAL_ACCT_CONFLICT_NO_LDAP_ASSOCIATE) {
-    $form_state->setValue('ldap_user_ldap_exclude', 1);
+    $form_state->set('ldap_user_ldap_exclude', 1);
   }
 
   // If corresponding ldap account doesn't exist and provision not selected and make ldap associated is selected, throw error.
