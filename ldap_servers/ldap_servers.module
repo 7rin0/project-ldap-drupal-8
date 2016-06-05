@@ -248,13 +248,13 @@ function ldap_servers_ldap_user_attrs_list_alter(&$available_user_attrs, &$param
 
   // @TO REMOVE
   // $tokens = array(
-  //   '!edit_link' => l($ldap_server->editPath, $ldap_server->editPath),
-  //   '!sid' => $ldap_server->sid,
+  //   '@edit_link' => l($ldap_server->editPath, $ldap_server->editPath),
+  //   '@sid' => $ldap_server->sid,
   // );
   $url = Url::fromRoute('entity.ldap_server.collection');
   $tokens = array(
-    '!edit_link' => \Drupal::l($url->toString(), $url),
-    '!sid' => (string)$ldap_server->id(),
+    '@edit_link' => \Drupal::l($url->toString(), $url),
+    '@sid' => $ldap_server->id(),
   );
 
   $server_edit_path = 'admin/config/people/ldap/servers/edit/' . $ldap_server->id();
@@ -282,7 +282,7 @@ function ldap_servers_ldap_user_attrs_list_alter(&$available_user_attrs, &$param
         'name' => t('Field: sid providing PUID'),
         'configurable_to_drupal' => 0,
         'configurable_to_ldap' => 1,
-        'source' => t('!sid', $tokens),
+        'source' => t('@sid', $tokens),
         'notes' => 'not configurable',
         'direction' => LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER,
         'enabled' => TRUE,

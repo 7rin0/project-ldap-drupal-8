@@ -94,11 +94,11 @@ class LdapServersAdminEnableDisable extends ContentEntityConfirmFormBase {
       $ldap_server->save('edit');
       $tokens = [
         '%name' => $values['name'],
-        '!sid' => (string)$sid,
+        '@sid' => (string)$sid,
         '!action' => t($values['action']) . 'd',
       ];
-      drupal_set_message(t('LDAP Server Configuration %name (server id = !sid) has been !action.', $tokens));
-      $message = t('LDAP Server !action: %name (sid = !sid) ', $tokens);
+      drupal_set_message(t('LDAP Server Configuration %name (server id = @sid) has been !action.', $tokens));
+      $message = t('LDAP Server !action: %name (sid = @sid) ', $tokens);
       \Drupal::logger('ldap')->notice($message, []);
 
     }
