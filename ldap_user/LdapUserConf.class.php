@@ -616,11 +616,11 @@ class LdapUserConf {
 
         // Need to store <sid>|<dn> in ldap_user_prov_entries field, which may contain more than one.
         $ldap_user_prov_entry = $ldap_server->sid . '|' . $proposed_ldap_entry['dn'];
-        if (!$user_entity->get('ldap_user_prov_entries')->getValue()) {
+        if (!$user_entity->get('ldap_user_prov_entries')->getValue()[0]['value']) {
           $user_entity->set('ldap_user_prov_entries', array());
         }
         $ldap_user_prov_entry_exists = FALSE;
-        foreach ($user_entity->get('ldap_user_prov_entries')->getValue() as $i => $field_value_instance) {
+        foreach ($user_entity->get('ldap_user_prov_entries')->getValue()[0]['value'] as $i => $field_value_instance) {
           if ($field_value_instance == $ldap_user_prov_entry) {
             $ldap_user_prov_entry_exists = TRUE;
           }
@@ -635,7 +635,7 @@ class LdapUserConf {
             )
           );
           $edit = array(
-            'ldap_user_prov_entries' => $user_entity->get('ldap_user_prov_entries')->getValue(),
+            'ldap_user_prov_entries' => $user_entity->get('ldap_user_prov_entries')->getValue()[0]['value'],
           );
           $account = \Drupal::entityManager()->getStorage('user')->load($account->id());
           $account = user_save($account, $edit);

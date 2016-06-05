@@ -359,7 +359,10 @@ function _ldap_authentication_user_login_authenticate_validate(FormStateInterfac
   * [#1009990],[#1865938]
   */
 
+// temp solution
+  user_login_finalize($drupal_account);
   $form_state->setValue('uid', $drupal_account->id());
+
   // $fake_form_state = array('uid' => $drupal_account->id());
   // user_login_submit(array(), $fake_form_state);
   // global $user;
@@ -457,7 +460,7 @@ function ldap_authentication_test_credentials($auth_conf, $sso_login, $authname,
 
     $bind_success = FALSE;
     if ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_SERVICE_ACCT) {
-      $bind_success = $ldap_server->bind(NULL, NULL, FALSE);
+      $bind_success = $ldap_server->bind(NULL, NULL, FALSE) == LDAP_SUCCESS;
     }
     elseif ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON ||
       $ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
@@ -558,6 +561,7 @@ function ldap_authentication_test_credentials($auth_conf, $sso_login, $authname,
     else {
       $credentials_pass = ($ldap_server->bind($ldap_user['dn'], $password, FALSE) == LDAP_SUCCESS);
     }
+
     if (!$credentials_pass) {
       if ($detailed_watchdog_log) {
         $watchdog_tokens['%err_text'] = $ldap_server->errorMsg('ldap');
@@ -577,7 +581,8 @@ function ldap_authentication_test_credentials($auth_conf, $sso_login, $authname,
       }
       if ($ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_SERVICE_ACCT ||
           $ldap_server->get('bind_method') == LDAP_SERVERS_BIND_METHOD_ANON_USER) {
-        $ldap_server->disconnect();
+        // $ldap_server->disconnect();
+        // user_login_finalize(user_load_by_mail($authname));
       }
       // Success.
       break;

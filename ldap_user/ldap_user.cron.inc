@@ -89,9 +89,9 @@ function _ldap_user_orphans($ldap_user_conf) {
     $accounts = \Drupal::entityManager()->getStorage('user');
 
     foreach ($accounts as $uid => $user) {
-      $sid = $user->get('ldap_user_puid_sid')->getValue();
-      $puid = $user->get('ldap_user_puid')->getValue();
-      $puid_attr = $user->get('ldap_user_puid_property')->getValue();
+      $sid = $user->get('ldap_user_puid_sid')->getValue()[0]['value'];
+      $puid = $user->get('ldap_user_puid')->getValue()[0]['value'];
+      $puid_attr = $user->get('ldap_user_puid_property')->getValue()[0]['value'];
       if ($sid && $puid && $puid_attr) {
         if ($ldap_servers[$sid]->unique_persistent_attr_binary) {
           $filters[$sid][$puid_attr][] = "($puid_attr=" . ldap_servers_binary_filter($puid) . ")";
@@ -160,7 +160,7 @@ function _ldap_user_orphans($ldap_user_conf) {
            *     user_cancel_reassign, user_cancel_delete
            */
           if ($ldap_user_conf->orphanedDrupalAcctBehavior == 'ldap_user_orphan_email') {
-            $email_list[] = $account->name . "," . $account->mail . "," . $base_url . "/user/$uid/edit";
+            $email_list[] = $account->getAccountName() . "," . $account->getEmail() . "," . $base_url . "/user/$uid/edit";
           }
           else {
             _user_cancel(array(), $account, $ldap_user_conf->orphanedDrupalAcctBehavior);

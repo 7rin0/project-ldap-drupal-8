@@ -346,9 +346,6 @@ function ldap_authentication_core_override_user_login_authenticate_validate($for
 
   $original_form = $form_state->getFormObject();
   $original_form->validateAuthentication($form, $form_state);
-    // 
-    // var_dump($original_form->validateAuthentication($form, $form_state));
-    // die();
 }
 
 /**
@@ -404,7 +401,6 @@ function ldap_authentication_form_user_login_form_alter(&$form, FormStateInterfa
 function ldap_authentication_form_user_login_block_alter(&$form, FormStateInterface $form_state) {
   ldap_servers_module_load_include('inc', 'ldap_authentication', 'ldap_authentication');
   _ldap_authentication_login_form_alter($form, $form_state, 'user_login_block');
-
 }
 
 /**

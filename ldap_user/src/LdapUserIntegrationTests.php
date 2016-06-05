@@ -475,7 +475,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       for ($i = 0; $i < $delete; $i++) {
         $name = "clone" . $i;
         $account = $cn_to_account[$name];
-        $ldap_server->delete($account->get('ldap_user_current_dn')->getValue());
+        $ldap_server->delete($account->get('ldap_user_current_dn')->getValue()[0]['value']);
       }
 
       // @FIXME

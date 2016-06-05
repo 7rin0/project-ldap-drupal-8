@@ -783,8 +783,8 @@ function ldap_user_ldap_exclude(UserInterface $account, $edit = NULL, $direction
   }
 
   // Exclude users who have the field ldap_user_ldap_exclude set to 1.
-  if (!empty($account->ldap_user_ldap_exclude->first())
-    && $account->ldap_user_ldap_exclude->first()->getValue() == 1) {
+  if (!empty($account->get("ldap_user_ldap_exclude")->getValue())
+    && $account->get("ldap_user_ldap_exclude")->getValue() == 1) {
     return TRUE;
   }
 
@@ -994,7 +994,6 @@ function ldap_user_user_login($account) {
   }
 
   $prov_enabled = $ldap_user_conf->provisionEnabled(LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, LDAP_USER_LDAP_ENTRY_PROV_ON_AUTHENTICATE);
-
   if ($ldap_user_conf->provisionsDrupalAccountsFromLdap && in_array(LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER, array_keys($ldap_user_conf->provisionsDrupalEvents))) {
     $ldap_user = ldap_servers_get_user_ldap_data($account->getAccountName(), $ldap_user_conf->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
     if ($ldap_user) {
@@ -1224,7 +1223,7 @@ function ldap_user_token_tokenize_entry($account, $token_keys, $pre = LDAP_SERVE
         // @FIXME
         // isset($user_entity->{$attr}['und'][$ordinal]['value'])
         if ($user_entity->get($attr)->getValue()) {
-          $tokens[$token] = $user_entity->get($attr)->getValue();
+          $tokens[$token] = $user_entity->get($attr)->getValue()[0]['value'];
         }
         break;
 

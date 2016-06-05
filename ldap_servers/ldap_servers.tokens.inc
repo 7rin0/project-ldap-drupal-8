@@ -107,7 +107,11 @@ function ldap_servers_token_extract_attributes(&$attribute_maps,  $text) {
     else {
       $conversion = NULL;
     }
-    $attribute_maps[$attr_name] = ldap_servers_set_attribute_map($attribute_maps[$attr_name], $conversion, array($ordinal => NULL));
+    $attribute_maps[$attr_name] = [];
+    $attribute_maps[$attr_name] =
+     ldap_servers_set_attribute_map(
+     $attribute_maps[$attr_name],
+      $conversion, array($ordinal => NULL));
   }
 }
 
@@ -389,11 +393,11 @@ function ldap_servers_token_tokenize_user_account($user_account, $token_keys = '
 
     switch ($attr_type) {
       case 'field':
-        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue() : '';
+        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue()[0]['value'] : '';
       break;
 
       case 'property':
-        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue() : '';
+        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue()[0]['value'] : '';
       break;
 
       case 'password':
