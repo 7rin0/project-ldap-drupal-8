@@ -468,22 +468,22 @@ EOT;
       if ($has_values) {
         $tokens['%ldap_attr'] = $row_mappings['ldap_attr'];
         $row_descriptor = t("server %sid row mapping to ldap attribute %ldap_attr", $tokens);
-        $tokens['!row_descriptor'] = $row_descriptor;
+        $tokens['@row_descriptor'] = $row_descriptor;
         if (!$row_mappings['direction']) {
           $input_name = join('__', array('sm', 'direction', $i));
-          $errors[$input_name] = t('No mapping direction given in !row_descriptor', $tokens);
+          $errors[$input_name] = t('No mapping direction given in @row_descriptor', $tokens);
         }
         if ($direction == LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER && $row_mappings['user_attr'] == 'user_tokens') {
           $input_name = join('__', array('sm', 'user_attr', $i));
-          $errors[$input_name] = t('User tokens not allowed when mapping to Drupal user.  Location: !row_descriptor', $tokens);
+          $errors[$input_name] = t('User tokens not allowed when mapping to Drupal user.  Location: @row_descriptor', $tokens);
         }
         if (!$row_mappings['ldap_attr']) {
           $input_name = join('__', array('sm', 'ldap_attr', $i));
-          $errors[$input_name] = t('No ldap attribute given in !row_descriptor', $tokens);
+          $errors[$input_name] = t('No ldap attribute given in @row_descriptor', $tokens);
         }
         if (!$row_mappings['user_attr']) {
           $input_name = join('__', array('sm', 'user_attr', $i));
-          $errors[$input_name] = t('No user attribute given in !row_descriptor', $tokens);
+          $errors[$input_name] = t('No user attribute given in @row_descriptor', $tokens);
         }
       }
 
@@ -557,7 +557,7 @@ EOT;
             }
           }
           $row_descriptor = t("server %sid row mapping to ldap attribute %ldap_attr", $tokens);
-          $tokens['!row_descriptor'] = $row_descriptor;
+          $tokens['@row_descriptor'] = $row_descriptor;
           $ldap_attribute_maps_in_token = array();
           // debug('calling ldap_servers_token_extract_attributes from validate, mapping='); debug($mapping['ldap_attr']);.
           ldap_servers_token_extract_attributes($ldap_attribute_maps_in_token, $mapping['ldap_attr']);
@@ -573,7 +573,7 @@ EOT;
             if (count(array_keys($ldap_attribute_maps_in_token)) != 1) {
               $token_field_id = join('__', array('sm', 'user_tokens', $row_id));
               $errors[$token_field_id] = t('When provisioning to ldap, ldap attribute column must be singular token such as [cn]. %ldap_attr is not.
-                Do not use compound tokens such as "[displayName] [sn]" or literals such as "physics". Location: !row_descriptor', $tokens);
+                Do not use compound tokens such as "[displayName] [sn]" or literals such as "physics". Location: @row_descriptor', $tokens);
             }
 
           }
@@ -584,14 +584,14 @@ EOT;
           $user_tokens_field_id = join('__', array('sm', 'user_tokens', $row_id));
 
           if (!$mapping['ldap_attr']) {
-            $errors[$ldap_attr_field_id] = t('No LDAP Attribute given in !row_descriptor', $tokens);
+            $errors[$ldap_attr_field_id] = t('No LDAP Attribute given in @row_descriptor', $tokens);
           }
           if ($mapping['user_attr'] == 'user_tokens' && !$mapping['user_tokens']) {
-            $errors[$user_tokens_field_id] = t('User tokens selected in !row_descriptor, but user tokens column empty.', $tokens);
+            $errors[$user_tokens_field_id] = t('User tokens selected in @row_descriptor, but user tokens column empty.', $tokens);
           }
 
           if (isset($mapping['prov_events']) && count($mapping['prov_events']) == 0) {
-            $warnings[$first_context_field_id] = t('No synchronization events checked in !row_descriptor.
+            $warnings[$first_context_field_id] = t('No synchronization events checked in @row_descriptor.
               This field will not be synchronized until some are checked.', $tokens);
           }
         }
