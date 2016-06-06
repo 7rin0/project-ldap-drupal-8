@@ -1206,9 +1206,6 @@ function ldap_user_token_tokenize_entry($account, $token_keys, $pre = LDAP_SERVE
 
   $detailed_watchdog_log = \Drupal::config()->get('ldap_help_watchdog_detail', 0);
   $tokens = array();
-  if (!$user_entity) {
-    list($discard, $user_entity) = ldap_user_load_user_acct_and_entity($account->id(), 'uid');
-  }
 
   foreach ($token_keys as $token_key) {
     // Target id is of form field.lname, property.mail, field.dept:0, etc.
@@ -1220,55 +1217,23 @@ function ldap_user_token_tokenize_entry($account, $token_keys, $pre = LDAP_SERVE
     switch ($type) {
 
       case 'field':
-        // @FIXME
-        // isset($user_entity->{$attr}['und'][$ordinal]['value'])
-        if ($user_entity->get($attr)->getValue()) {
-          $tokens[$token] = $user_entity->get($attr)->getValue()[0]['value'];
+        if ($account->get($attr)->getValue()) {
+          $tokens[$token] = $account->get($attr)->getValue()[0]['value'];
         }
         break;
 
       case 'property':
         if (property_exists($account, $attr)) {
           $tokens[$token] = $account->{$attr};
+        } else if ($account->get($attr)->getValue()) {
+          $tokens[$token] = $account->get($attr)->getValue()[0]['value'];
         }
         break;
-
-      // @todo: 3. tokenize profile 2
     }
 
   }
 
   return $tokens;
-}
-
-/**
- * Load user $account and $entity, given uid or $username.
- *
- * @param string $user_id
- *   is username or uid
- * @param enum $user_id_type
- *   is 'username' or 'uid'
- *
- *   return array $account and $user_entity
- */
-function ldap_user_load_user_acct_and_entity($user_id, $user_id_type = 'username') {
-
-  if ($user_id_type == 'username') {
-    $account = user_load_by_name($user_id);
-  }
-  else {
-    $account = \Drupal::entityManager()->getStorage('user')->load($user_id);
-  }
-  if ($account) {
-    $user_entities = \Drupal::entityManager()->getStorage('user', array($account->id()));
-    $user_entity = $user_entities[$account->id()];
-  }
-  else {
-    $user_entity = NULL;
-  }
-
-  return array($account, $user_entity);
-
 }
 
 /**

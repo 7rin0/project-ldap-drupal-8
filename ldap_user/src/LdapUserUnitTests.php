@@ -625,7 +625,6 @@ class LdapUserUnitTests extends LdapTestCase {
         $user_edit = array('name' => $username);
         // $this->ldapTestId = $this->module_name . ': provisionDrupalAccount function test';.
         $result = $ldap_user_conf->provisionDrupalAccount($account, $user_edit, NULL, TRUE);
-        list($user_object, $user_entity) = ldap_user_load_user_acct_and_entity($username);
         if ($property_name) {
           // If intended to synch.
           if (in_array($prov_event, $ldap_user_conf->ldapUserSynchMappings[$direction][$property_token]['prov_events'])) {

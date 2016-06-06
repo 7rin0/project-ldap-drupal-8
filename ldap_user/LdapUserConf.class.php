@@ -531,9 +531,9 @@ class LdapUserConf {
       $username = $account;
       $account = new stdClass();
       $account->name = $username;
+      var_dump(__FUNCTION__);
+      die();
     }
-
-    list($account, $user_entity) = ldap_user_load_user_acct_and_entity($account->name);
 
     if ($account->id() == 1) {
       $result['status'] = 'fail';
