@@ -155,7 +155,8 @@ require_once 'ldap_servers.functions.inc';
 require_once 'ldap_servers.tokens.inc';
 
 use Drupal\Component\Utility\Unicode;
-use \Drupal\ldap_servers\Entity\Server;
+use Drupal\ldap_servers\Entity\Server;
+use Drupal\user\UserInterface;
 use Drupal\Core\Url;
 
 /**
@@ -651,9 +652,9 @@ function ldap_servers_get_user_ldap_data($drupal_username, $id = NULL, $ldap_con
 /**
  * Implements hook_user_logout().
  */
-function ldap_servers_user_logout($account) {
+function ldap_servers_user_logout(Drupal\Core\Session\AccountInterface  $drupal_account) {
   // When the user logs out clear the LDAP cached data.
-  $cache_key = 'ldap_servers:user_data:' . $account->getUsername();
+  $cache_key = 'ldap_servers:user_data:' . $drupal_account->getUsername();
   if ($cache = \Drupal::cache()->get($cache_key)) {
     \Drupal::cache()->delete($cache_key);
   }

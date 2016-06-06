@@ -355,7 +355,6 @@ function ldap_servers_token_tokenize_user_account($user_account, $token_keys = '
   $tokens = array();
 
   $user_entered_password_available = (boolean)ldap_user_ldap_provision_pwd('get');
-  // ldapUserPwd((property_exists($user_account, 'ldapUserPwd') && $user_account->ldapUserPwd));
 
   if ($token_keys == 'all') {
     // add lowercase keyed entries to ldap array

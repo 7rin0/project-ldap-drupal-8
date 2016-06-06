@@ -167,15 +167,15 @@ function ldap_feeds_drupal_user_legend($form, $importer) {
 
   foreach ($servers as $sid => $ldap_server) {
     if ($ldap_server->testingDrupalUsername) {
-      $account = user_load_by_name($ldap_server->testingDrupalUsername);
+      $drupal_account = user_load_by_name($ldap_server->testingDrupalUsername);
 
       foreach ($drupal_user_attributes as $attr_name => $attr_conf) {
         if ($attr_name == 'count') {
           continue;
         }
         $id = $attr_conf['token'];
-        if ($account) {
-          $sources[$id] = array('name' => array('#markup' => $id), 'description' => array('#markup' => $account->{$attr_name}));
+        if ($drupal_account) {
+          $sources[$id] = array('name' => array('#markup' => $id), 'description' => array('#markup' => $drupal_account->{$attr_name}));
         }
       }
 

@@ -100,9 +100,9 @@ class LdapUserUnitTests extends LdapTestCase {
     $entity->house['und'][0]['value'] = 'Gryffindor';
     $entity->house['und'][1]['value'] = 'Privet Drive';
     $account = new stdClass();
-    $account->mail = 'hpotter@hogwarts.edu';
+    $drupal_account->mail = 'hpotter@hogwarts.edu';
     $mail = ldap_user_token_replace('[property.mail]', $account, $entity);
-    $this->assertTrue($mail == $account->mail, t('[property.mail] token worked on ldap_user_token_replace().'), $this->testId('tokens.property'));
+    $this->assertTrue($mail == $drupal_account->mail, t('[property.mail] token worked on ldap_user_token_replace().'), $this->testId('tokens.property'));
     $lname = ldap_user_token_replace('[field.lname]', $account, $entity);
     $this->assertTrue($lname == $entity->lname['und'][0]['value'], t('[field.lname] token worked on ldap_user_token_replace().'), $this->testId('tokens.property.field'));
     $house1 = ldap_user_token_replace('[field.house:1]', $account, $entity);
@@ -254,7 +254,7 @@ class LdapUserUnitTests extends LdapTestCase {
     $this->assertFalse($provision_enabled_false, t('provisionEnabled works'), $this->testId('provisionEnabled.2'));
 
     $account = new stdClass();
-    $account->name = 'hpotter';
+    $drupal_account->name = 'hpotter';
     $params = array('ldap_context' => 'ldap_user_prov_to_drupal', 'direction' => LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER);
     list($ldap_entry, $error) = $ldap_user_conf->drupalUserToLdapEntry($account, 'activedirectory1', $params);
     // debug('ldap_entry'); debug($ldap_entry);

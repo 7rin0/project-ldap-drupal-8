@@ -248,10 +248,6 @@ class LdapServersTestCase extends LdapTestCase {
 
     /**
      * @todo test tokens for 'user_account'
-     *
-     * $account = new stdClass();
-     * $account->
-     * ldap_servers_token_replace($account, '[property.name]', 'user_account');
      */
 
     module_enable($modules, TRUE);

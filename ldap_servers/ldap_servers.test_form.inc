@@ -295,7 +295,7 @@ function ldap_servers_test_form_submit($form, FormStateInterface $form_state) {
   if (!$has_errors && isset($values['grp_test_grp_dn'])) {
     $group_dn = $values['grp_test_grp_dn'];
 
-    $result = ldap_read($ldap_server->connection, $group_dn, 'objectClass=*');
+    $result = @ldap_read($ldap_server->connection, $group_dn, 'objectClass=*');
     $group_entry = ldap_get_entries($ldap_server->connection, $result);
     $user = isset($values['testing_drupal_username']) ? $values['testing_drupal_username'] : NULL;
 

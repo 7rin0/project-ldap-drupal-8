@@ -86,12 +86,12 @@ function _ldap_user_orphans($ldap_user_conf) {
     $end_plus_1 = min(($batch) * LDAP_SERVERS_MAXFILTER_ORS, $user_count);
     // e.g. 50, 50; 100, 50.
     $batch_uids = array_slice($uids, $start, ($end_plus_1 - $start));
-    $accounts = \Drupal::entityManager()->getStorage('user');
+    $drupal_accounts = \Drupal::entityManager()->getStorage('user');
 
-    foreach ($accounts as $uid => $user) {
-      $sid = $user->get('ldap_user_puid_sid')->getValue()[0]['value'];
-      $puid = $user->get('ldap_user_puid')->getValue()[0]['value'];
-      $puid_attr = $user->get('ldap_user_puid_property')->getValue()[0]['value'];
+    foreach ($drupal_accounts as $uid => $drupal_account) {
+      $sid = $drupal_account->get('ldap_user_puid_sid')->getValue()[0]['value'];
+      $puid = $drupal_account->get('ldap_user_puid')->getValue()[0]['value'];
+      $puid_attr = $drupal_account->get('ldap_user_puid_property')->getValue()[0]['value'];
       if ($sid && $puid && $puid_attr) {
         if ($ldap_servers[$sid]->unique_persistent_attr_binary) {
           $filters[$sid][$puid_attr][] = "($puid_attr=" . ldap_servers_binary_filter($puid) . ")";
@@ -149,9 +149,9 @@ function _ldap_user_orphans($ldap_user_conf) {
   foreach ($drupal_users as $sid => $puid_x_puid_attrs) {
     foreach ($puid_x_puid_attrs as $puid_attr => $puids) {
       foreach ($puids as $puid => $user_data) {
-        $account = $accounts[$user_data['uid']];
+        $drupal_account = $drupal_accounts[$user_data['uid']];
         $user_edit['ldap_user_last_checked'][Language::LANGCODE_NOT_SPECIFIED][0]['value'] = $check_time;
-        $account = user_save($account, $user_edit, 'ldap_user');
+        $drupal_account = user_save($drupal_account, $user_edit, 'ldap_user');
         if (!$user_data['exists']) {
           /**
            * $ldap_user_conf->orphanedDrupalAcctBehavior will either be
@@ -160,10 +160,10 @@ function _ldap_user_orphans($ldap_user_conf) {
            *     user_cancel_reassign, user_cancel_delete
            */
           if ($ldap_user_conf->orphanedDrupalAcctBehavior == 'ldap_user_orphan_email') {
-            $email_list[] = $account->getAccountName() . "," . $account->getEmail() . "," . $base_url . "/user/$uid/edit";
+            $email_list[] = $drupal_account->getAccountName() . "," . $drupal_account->getEmail() . "," . $base_url . "/user/$uid/edit";
           }
           else {
-            _user_cancel(array(), $account, $ldap_user_conf->orphanedDrupalAcctBehavior);
+            _user_cancel(array(), $drupal_account, $ldap_user_conf->orphanedDrupalAcctBehavior);
           }
         }
       }

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\UserInterface;
 use Drupal\Core\Url;
 
 /**
@@ -172,49 +173,49 @@ function ldap_authentication_info($field = 0) {
 
 /**
  *
- * @param object $user
+ * @param object $drupal_account
  * @return boolean
  *    true if user is recorded as ldap authenticated and identified (ldap_authentified)
  */
-function ldap_authentication_ldap_authenticated($user) {
+function ldap_authentication_ldap_authenticated(UserInterface $drupal_account) {
 
-  if (is_numeric($user)) {
-    $user = \Drupal::entityManager()->getStorage('user')->load((int) $user);
+  if (is_numeric($drupal_account)) {
+    $drupal_account = \Drupal::entityManager()->getStorage('user')->load((int) $drupal_account);
   }
-  if (!is_object($user) || $user->id() == 0) {
+  if (!is_object($drupal_account) || $drupal_account->id() == 0) {
     return FALSE;
   }
 
   // @FIXME ?!
-  // $authname = ldap_user_get_authname($user);
+  // $authname = ldap_user_get_authname($drupal_account);
 
   return !empty($authname);
 
 }
 
-function ldap_user_get_authname($user) {
+function ldap_user_get_authname($drupal_account) {
   $cache = &drupal_static(__FUNCTION__, array());
 
   $authname = NULL;
   $uid = NULL;
 
-  if (is_object($user)) {
+  if (is_object($drupal_account)) {
     // Object - set id() if object has id() and id() > 0
-    if (!empty($user->id())) {
-      $uid = $user->id();
+    if (!empty($drupal_account->id())) {
+      $uid = $drupal_account->id();
     }
   }
-  elseif (is_numeric($user) && intval($user) == $user) {
+  elseif (is_numeric($drupal_account) && intval($drupal_account) == $drupal_account) {
     // Integer - set id() number is an integer > 0
-    if ($user > 0) {
-      $uid = $user;
+    if ($drupal_account > 0) {
+      $uid = $drupal_account;
     }
   }
-  elseif (is_string($user)) {
+  elseif (is_string($drupal_account)) {
     // String - load account and set id() if id() > 0
-    $account = user_load_by_name($user);
-    if (!empty($account->id())) {
-      $uid = $account->id();
+    $drupal_account = user_load_by_name($drupal_account);
+    if (!empty($drupal_account->id())) {
+      $uid = $drupal_account->id();
     }
   }
 
@@ -280,18 +281,18 @@ function ldap_authentication_ldap_server_in_use($sid, $server_name) {
 /**
  *
  */
-function ldap_authentication_show_reset_pwd($user = NULL) {
+function ldap_authentication_show_reset_pwd(UserInterface $drupal_account = NULL) {
 
-  if (!$user) {
-    $user = \Drupal::currentUser();
+  if (!$drupal_account) {
+    $drupal_account = \Drupal::currentUser();
   }
   $auth_conf = ldap_authentication_get_valid_conf();
-  if (Url::fromRoute("<current>")->toString() == 'user/password' || $user->id() == 1 || !$auth_conf) {
+  if (Url::fromRoute("<current>")->toString() == 'user/password' || $drupal_account->id() == 1 || !$auth_conf) {
     return TRUE;
     // Always show at user/passwordurl. otherwise user 1 will not be able to reset password.
   }
 
-  if ($user->id() == 0) {
+  if ($drupal_account->id() == 0) {
     // Hide reset password for anonymous users if ldap only authentication and password updates are disabled, otherwise show.
     if ($auth_conf->authenticationMode != LDAP_AUTHENTICATION_EXCLUSIVE) {
       if ($auth_conf->passwordOption == LDAP_AUTHENTICATION_PASSWORD_FIELD_ALLOW) {
@@ -304,7 +305,7 @@ function ldap_authentication_show_reset_pwd($user = NULL) {
   else {
     // Authenticated user.  hide if ldap authenticated and updating password is
     // not allowed, otherwise show.
-    if (ldap_authentication_ldap_authenticated($user)) {
+    if (ldap_authentication_ldap_authenticated($drupal_account)) {
       if ($auth_conf->passwordOption == LDAP_AUTHENTICATION_PASSWORD_FIELD_ALLOW) {
         return TRUE;
       }
@@ -353,16 +354,16 @@ function ldap_authentication_core_override_user_login_authenticate_validate($for
  */
 function ldap_authentication_user_pass_validate($form, FormStateInterface $form_state) {
   $name_or_mail = trim($form_state->getValue('name'));
-  if ($account = user_load_by_mail($name_or_mail)) {
+  if ($drupal_account = user_load_by_mail($name_or_mail)) {
 
   }
   else {
-    $account = user_load_by_name($name_or_mail);
+    $drupal_account = user_load_by_name($name_or_mail);
   }
 
-  if (ldap_authentication_ldap_authenticated($account)) {
+  if (ldap_authentication_ldap_authenticated($drupal_account)) {
     $vars = array(
-      'account' => $account,
+      'account' => $drupal_account,
       'auth_conf' => ldap_authentication_get_valid_conf(),
     );
     $error = TRUE;
@@ -414,17 +415,17 @@ function ldap_authentication_user_login_authenticate_validate($form, FormStateIn
 /**
  *
  */
-function ldap_authentication_show_ldap_help_link($user = NULL) {
-  $user = \Drupal::currentUser();
+function ldap_authentication_show_ldap_help_link(UserInterface $drupal_account = NULL) {
+  $drupal_account = \Drupal::currentUser();
 
   if (!$auth_conf = ldap_authentication_get_valid_conf()) {
     return FALSE;
   }
   elseif ($auth_conf->authenticationMode == LDAP_AUTHENTICATION_MIXED) {
-    return (ldap_authentication_ldap_authenticated($user));
+    return (ldap_authentication_ldap_authenticated($drupal_account));
   }
   elseif ($auth_conf->authenticationMode == LDAP_AUTHENTICATION_EXCLUSIVE) {
-    if ($user->id() == 0 || ldap_authentication_ldap_authenticated($user)) {
+    if ($drupal_account->id() == 0 || ldap_authentication_ldap_authenticated($drupal_account)) {
       return TRUE;
     }
     else {

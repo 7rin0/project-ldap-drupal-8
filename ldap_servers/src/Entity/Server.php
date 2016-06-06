@@ -260,9 +260,15 @@ class Server extends ConfigEntityBase implements ServerInterface {
       return FALSE;
     }
 
+    // var_dump(debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+    // var_dump($this->connection);
+    // var_dump($dn);
+    // var_dump($attributes);
+    // die();
+
     $result = @ldap_add($this->connection, $dn, $attributes);
     if (!$result) {
-      $error = "LDAP Server ldap_add(%dn) Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
+      $error = "LDAP Server @ldap_add(%dn) Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
       $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
       // debug(t($error, $tokens));
       \Drupal::logger('ldap_server')->error($error, []);
@@ -331,7 +337,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     if (!$old_attributes) {
       $result = @ldap_read($this->connection, $dn, 'objectClass=*');
       if (!$result) {
-        $error = "LDAP Server ldap_read(%dn) in LdapServer::modifyLdapEntry() Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
+        $error = "LDAP Server @ldap_read(%dn) in LdapServer::modifyLdapEntry() Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
         $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
         \Drupal::logger('ldap_server')->error($error, []);
         return FALSE;
@@ -674,7 +680,9 @@ class Server extends ConfigEntityBase implements ServerInterface {
           // False positive error thrown.  do not result limit error when $sizelimit specified.
         }
         elseif ($this->hasError()) {
-          \Drupal::logger('ldap_server')->error('ldap_read() function error.  LDAP Error: %message, ldap_read() parameters: %query', array('%message' => $this->errorMsg('ldap'), '%query' => $params['query_display']));
+          // TODO: Check why is undefined
+          $params['query_display'] = isset($params['query_display']) ? $params['query_display'] : '';
+          \Drupal::logger('ldap_server')->error('@ldap_read() function error.  LDAP Error: %message, @ldap_read() parameters: %query', array('%message' => $this->errorMsg('ldap'), '%query' => $params['query_display']));
         }
         break;
 
@@ -863,28 +871,28 @@ class Server extends ConfigEntityBase implements ServerInterface {
        * If existing account already has picture check if it has changed if so remove old file and create the new one
        * If picture is not set but account has md5 something is wrong exit.
        */
-      if ($drupal_username && $account = user_load_by_name($drupal_username)) {
-        if ($account->id() == 0 || $account->id() == 1) {
+      if ($drupal_username && $drupal_account = user_load_by_name($drupal_username)) {
+        if ($drupal_account->id() == 0 || $drupal_account->id() == 1) {
           return FALSE;
         }
-        if (isset($account->picture)) {
+        if (isset($drupal_account->picture)) {
           // Check if image has changed.
-          if (isset($account->data['ldap_user']['init']['thumb5md']) && $md5thumb === $account->data['ldap_user']['init']['thumb5md']) {
+          if (isset($drupal_account->data['ldap_user']['init']['thumb5md']) && $md5thumb === $drupal_account->data['ldap_user']['init']['thumb5md']) {
             // No change return same image.
-            return $account->picture;
+            return $drupal_account->picture;
           }
           else {
             // Image is different check wether is obj/str and remove fileobject.
-            if (is_object($account->picture)) {
-              file_delete($account->picture, TRUE);
+            if (is_object($drupal_account->picture)) {
+              file_delete($drupal_account->picture, TRUE);
             }
-            elseif (is_string($account->picture)) {
-              $file = file_load(intval($account->picture));
+            elseif (is_string($drupal_account->picture)) {
+              $file = file_load(intval($drupal_account->picture));
               file_delete($file, TRUE);
             }
           }
         }
-        elseif (isset($account->data['ldap_user']['init']['thumb5md'])) {
+        elseif (isset($drupal_account->data['ldap_user']['init']['thumb5md'])) {
           \Drupal::logger('ldap_server')->notice("Some error happened during thumbnailPhoto sync", []);
           return FALSE;
         }
@@ -957,21 +965,21 @@ class Server extends ConfigEntityBase implements ServerInterface {
   /**
    *
    */
-  public function userUserToExistingLdapEntry($user) {
+  public function userUserToExistingLdapEntry(UserInterface $drupal_account) {
 
-    if (is_object($user)) {
-      $user_ldap_entry = $this->userUserNameToExistingLdapEntry($user->getAccountName());
+    if ($drupal_account) {
+      $user_ldap_entry = $this->userUserNameToExistingLdapEntry($drupal_account->getAccountName());
     }
-    elseif (is_array($user)) {
-      $user_ldap_entry = $user;
+    elseif (is_array($drupal_account)) {
+      $user_ldap_entry = $drupal_account;
     }
-    elseif (is_scalar($user)) {
+    elseif (is_scalar($drupal_account)) {
       // Username.
-      if (strpos($user, '=') === FALSE) {
-        $user_ldap_entry = $this->userUserNameToExistingLdapEntry($user);
+      if (strpos($drupal_account, '=') === FALSE) {
+        $user_ldap_entry = $this->userUserNameToExistingLdapEntry($drupal_account);
       }
       else {
-        $user_ldap_entry = $this->dnExists($user, 'ldap_entry');
+        $user_ldap_entry = $this->dnExists($drupal_account, 'ldap_entry');
       }
     }
     return $user_ldap_entry;

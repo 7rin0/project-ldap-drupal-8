@@ -475,7 +475,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
       for ($i = 0; $i < $delete; $i++) {
         $name = "clone" . $i;
         $account = $cn_to_account[$name];
-        $ldap_server->delete($account->get('ldap_user_current_dn')->getValue()[0]['value']);
+        $ldap_server->delete($drupal_account->get('ldap_user_current_dn')->getValue()[0]['value']);
       }
 
       // @FIXME
@@ -512,7 +512,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           $accounts = \Drupal::entityManager()->getStorage('user')->loadMultiple($test_uids);
           // debug("accounts for $test_id"); debug($accounts);
           foreach ($accounts as $uid => $account) {
-            if ($account->status != 1) {
+            if ($drupal_account->status != 1) {
               $success = FALSE;
               break;
             }
@@ -555,7 +555,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           $success = TRUE;
           $accounts = \Drupal::entityManager()->getStorage('user')->loadMultiple($test_uids);
           foreach ($accounts as $uid => $account) {
-            if ($account->status != 0) {
+            if ($drupal_account->status != 0) {
               $success = FALSE;
               break;
             }
@@ -599,7 +599,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       // Remove all drupal users except 1 for next test.
       foreach ($cn_to_account as $cn => $account) {
-        $account->delete();
+        $drupal_account->delete();
       }
 
     }

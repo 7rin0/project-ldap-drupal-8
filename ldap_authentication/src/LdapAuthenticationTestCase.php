@@ -99,12 +99,12 @@ class LdapAuthenticationTestCase extends LdapTestCase {
     $user1 = \Drupal::entityManager()->getStorage('user')->load(1);
     $password = $this->randomString(20);
     require_once \Drupal::root() . '/includes/password.inc';
-    $account = array(
+    $account_test = array(
       'name' => $user1->name,
       'pass' => user_hash_password(trim($password)),
     );
     db_update('users')
-      ->fields($account)
+      ->fields($account_test)
       ->condition('uid', 1)
       ->execute();
 
@@ -215,12 +215,12 @@ class LdapAuthenticationTestCase extends LdapTestCase {
     $user1 = \Drupal::entityManager()->getStorage('user')->load(1);
     $password = $this->randomString(20);
     require_once \Drupal::root() . '/includes/password.inc';
-    $account = array(
+    $account_test = array(
       'name' => $user1->name,
       'pass' => user_hash_password(trim($password)),
     );
     db_update('users')
-      ->fields($account)
+      ->fields($account_test)
       ->condition('uid', 1)
       ->execute();
 
@@ -448,12 +448,12 @@ class LdapAuthenticationTestCase extends LdapTestCase {
     $user1 = \Drupal::entityManager()->getStorage('user')->load(1);
     $password = $this->randomString(20);
     require_once \Drupal::root() . '/includes/password.inc';
-    $account = array(
+    $account_test = array(
       'name' => $user1->name,
       'pass' => user_hash_password(trim($password)),
     );
     db_update('users')
-      ->fields($account)
+      ->fields($account_test)
       ->condition('uid', 1)
       ->execute();
 

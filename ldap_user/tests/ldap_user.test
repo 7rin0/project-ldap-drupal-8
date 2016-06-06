@@ -93,9 +93,9 @@ class LdapUserUnitTests extends LdapTestCase {
     $entity->house['und'][0]['value'] = 'Gryffindor';
     $entity->house['und'][1]['value'] = 'Privet Drive';
     $account = new stdClass();
-    $account->mail = 'hpotter@hogwarts.edu';
+    $drupal_account->mail = 'hpotter@hogwarts.edu';
     $mail = ldap_user_token_replace('[property.mail]', $account, $entity);
-    $this->assertTrue($mail == $account->mail, t('[property.mail] token worked on ldap_user_token_replace().'), $this->testId('tokens.property'));
+    $this->assertTrue($mail == $drupal_account->mail, t('[property.mail] token worked on ldap_user_token_replace().'), $this->testId('tokens.property'));
     $lname = ldap_user_token_replace('[field.lname]', $account, $entity);
     $this->assertTrue($lname == $entity->lname['und'][0]['value'], t('[field.lname] token worked on ldap_user_token_replace().'), $this->testId('tokens.property.field'));
     $house1 = ldap_user_token_replace('[field.house:1]', $account, $entity);
@@ -247,7 +247,7 @@ class LdapUserUnitTests extends LdapTestCase {
     $this->assertFalse($provision_enabled_false, t('provisionEnabled works'), $this->testId('provisionEnabled.2'));
 
     $account = new stdClass();
-    $account->name = 'hpotter';
+    $drupal_account->name = 'hpotter';
     $params = array('ldap_context' => 'ldap_user_prov_to_drupal', 'direction' => LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER);
     list($ldap_entry, $error) = $ldap_user_conf->drupalUserToLdapEntry($account, 'activedirectory1', $params);
     // debug('ldap_entry'); debug($ldap_entry);
@@ -1105,9 +1105,9 @@ class LdapUserIntegrationTests extends LdapTestCase {
       for ($i = 0; $i < $delete; $i++) {
         $name = "clone" . $i;
         $account = $cn_to_account[$name];
-        // debug("delete ldap entry: ". $account->ldap_user_current_dn['und'][0]['value']);
+        // debug("delete ldap entry: ". $drupal_account->ldap_user_current_dn['und'][0]['value']);
         //  ?? is it possible the ldap delete hook is causing the drupal user to get populated with empty values?
-        $ldap_server->delete($account->ldap_user_current_dn['und'][0]['value']);
+        $ldap_server->delete($drupal_account->ldap_user_current_dn['und'][0]['value']);
       }
 
       $clone_first = Drupal\Core\Entity\User::load($clone_first_uid, TRUE);
@@ -1132,7 +1132,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           $accounts = user_load_multiple($test_uids);
           // debug("accounts for $test_id"); debug($accounts);
           foreach ($accounts as $uid => $account) {
-            if ($account->status != 1) {
+            if ($drupal_account->status != 1) {
               $success = FALSE;
               break;
             }
@@ -1175,7 +1175,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
           $success = TRUE;
           $accounts = user_load_multiple($test_uids);
           foreach ($accounts as $uid => $account) {
-            if ($account->status != 0) {
+            if ($drupal_account->status != 0) {
               $success = FALSE;
               break;
             }
@@ -1213,7 +1213,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
       // Remove all drupal users except 1 for next test.
       foreach ($cn_to_account as $cn => $account) {
-        @user_delete($account->id());
+        @user_delete($drupal_account->id());
       }
 
     }

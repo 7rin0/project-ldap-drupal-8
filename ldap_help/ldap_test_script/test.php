@@ -158,7 +158,7 @@ foreach ($config['servers'] as $sid => $server) {
     }
 
 
-    $result = ldap_add($con, $dn, $provision['attr']);
+    $result = @ldap_add($con, $dn, $provision['attr']);
     $show_result = $result ? 'success' : 'fail';
     ldap_help_display('provision result', $show_result);
     if (!$result) {
