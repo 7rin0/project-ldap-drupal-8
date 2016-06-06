@@ -927,14 +927,6 @@ EOT;
         '#maxlength' => 255,
         '#attributes' => array('class' => array('ldap-attr')),
       );
-      // Change the visibility rules for LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY.
-      if ($direction == LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY) {
-        $ldap_attr['#states'] = array(
-          'visible' => array(
-            'select[name="' . $user_attr_input_id . '"]' => array('value' => 'user_tokens'),
-          ),
-        );
-      }
     }
 
     $convert = array(
@@ -974,6 +966,12 @@ EOT;
         '#maxlength' => 255,
         '#disabled' => ($action == 'nonconfigurable'),
         '#attributes' => array('class' => array('tokens')),
+      );
+      // Change the visibility rules for LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY.
+      $result['user_tokens']['#states'] = array(
+        'visible' => array(
+          'select[name="' . $user_attr_input_id . '"]' => array('value' => 'user_tokens'),
+        ),
       );
       $result['convert'] = $convert;
       $result['ldap_attr'] = $ldap_attr;
