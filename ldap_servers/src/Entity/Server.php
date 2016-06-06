@@ -143,8 +143,8 @@ class Server extends ConfigEntityBase implements ServerInterface {
         \Drupal::logger('ldap')->notice("LDAP bind failure for user userdn=%userdn, pass=%pass.", array('%userdn' => $userdn, '%pass' => $pass));
         return LDAP_LOCAL_ERROR;
       }
-      
-      if (!ldap_bind($this->connection, $userdn, $pass)) {
+      $ldapBind = ldap_bind($this->connection, $userdn, $pass);
+      if (!$ldapBind) {
         if ($this->detailedWatchdogLog) {
           \Drupal::logger('ldap')->notice("LDAP bind failure for user %user. Error %errno: %error", array('%user' => $userdn, '%errno' => ldap_errno($this->connection), '%error' => ldap_error($this->connection)));
         }
@@ -260,11 +260,11 @@ class Server extends ConfigEntityBase implements ServerInterface {
       return FALSE;
     }
 
-    $result = ldap_add($this->connection, $dn, $attributes);
+    $result = @ldap_add($this->connection, $dn, $attributes);
     if (!$result) {
       $error = "LDAP Server ldap_add(%dn) Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
       $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
-      debug(t($error, $tokens));
+      // debug(t($error, $tokens));
       \Drupal::logger('ldap_server')->error($error, []);
     }
 
@@ -329,7 +329,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     $this->connectAndBindIfNotAlready();
 
     if (!$old_attributes) {
-      $result = ldap_read($this->connection, $dn, 'objectClass=*');
+      $result = @ldap_read($this->connection, $dn, 'objectClass=*');
       if (!$result) {
         $error = "LDAP Server ldap_read(%dn) in LdapServer::modifyLdapEntry() Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";
         $tokens = array('%dn' => $dn, '%id' => $this->id(), '%ldap_errno' => ldap_errno($this->connection), '%ldap_err2str' => ldap_err2str(ldap_errno($this->connection)));
@@ -668,7 +668,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
         break;
 
       case LDAP_SCOPE_BASE:
-        $result = ldap_read($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
+        $result = @ldap_read($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
           $params['sizelimit'], $params['timelimit'], $params['deref']);
         if ($params['sizelimit'] && $this->ldapErrorNumber() == LDAP_SIZELIMIT_EXCEEDED) {
           // False positive error thrown.  do not result limit error when $sizelimit specified.
