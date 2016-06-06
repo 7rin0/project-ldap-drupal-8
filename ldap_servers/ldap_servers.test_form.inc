@@ -149,7 +149,7 @@ function ldap_servers_test_form($form, FormStateInterface $form_state, $op = NUL
         dpm("Corresponding Drupal user object for: $user_name");
         dpm($user);
         if (function_exists('entity_load_single')) {
-          $user_entity = entity_load_single('user', $user->id()());
+          $user_entity = entity_load_single('user', $user->id());
           dpm("Drupal user entity for: $user_name");
           dpm($user_entity);
         }
