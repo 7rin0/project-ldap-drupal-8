@@ -233,59 +233,6 @@ class LdapUserConfAdmin extends LdapUserConf {
       '#description' => $this->ldapEntryProvisionTriggersDescription,
     );
 
-    /**
- *  $form['ws'] = array(
- *    '#type' => 'fieldset',
- *    '#title' => t('[Untested and Unfinished Code] REST Webservice for Provisioning and Synching.'),
- *    '#collapsible' => TRUE,
- *    '#collapsed' => !$this->wsEnabled,
- *    '#description' => t('Once configured, this webservice can be used to trigger creation, synching, deletion, etc of an LDAP associated Drupal account.'),
- *  ); *
- *  $form['ws']['wsEnabled'] = array(
- *    '#type' => 'checkbox',
- *    '#title' => t('Enable REST Webservice'),
- *    '#required' => FALSE,
- *    '#default_value' => $this->wsEnabled,
- *  ); *
- *  $form['ws']['wsUserIps'] = array(
- *    '#type' => 'textarea',
- *    '#title' => t('Allowed IP Addresses to request webservice.'),
- *    '#required' => FALSE,
- *    '#default_value' => join("\n", $this->wsUserIps),
- *    '#description' => t('One Per Line. The current server address is LOCAL_ADDR and the client ip requesting this page is REMOTE_ADDR .', $_SERVER),
- *    '#cols' => 20,
- *    '#rows' => 2,
- *    '#states' => array(
- *      'visible' => array(   // action to take.
- *        ':input[name="wsEnabled"]' => array('checked' => TRUE),
- *      ),
- *    ),
- *  ); *
- *  if (!$this->wsKey) {
- *    $urls = t('URLs are not available until a key is create a key and urls will be generated');
- *  }
- *  else {
- *    $urls = \Drupal::theme()->render('item_list',
- *      array(
- *        'items' => ldap_user_ws_urls_item_list(),
- *        'title' => 'REST urls',
- *        'type' => 'ul',
- *      ));
- *  } *
- *  $form['ws']['wsKey'] = array(
- *    '#type' => 'textfield',
- *    '#title' => t('Key for webservice'),
- *    '#required' => FALSE,
- *    '#default_value' => $this->wsKey,
- *    '#description' => t('Any random string of characters.') . $urls,
- *    '#states' => array(
- *      'visible' => array(   // action to take.
- *        ':input[name="wsEnabled"]' => array('checked' => TRUE),
- *      ),
- *    ),
- *  );
- */
-
     $form['server_mapping_preamble'] = array(
       '#type' => 'markup',
       '#markup' => t('
@@ -577,6 +524,7 @@ EOT;
             }
 
           }
+
           // FIXME none of these id's should be working.
           $ldap_attr_field_id = join('__', array('sm', 'ldap_attr', $row_id));
           $user_attr_field_id = join('__', array('sm', 'user_attr', $row_id));
@@ -596,7 +544,7 @@ EOT;
           }
         }
       }
-      if ($to_ldap_entries_mappings_exist && !isset($mappings['[dn]'])) {
+      if ($to_ldap_entries_mappings_exist && !isset($mappings['dn'])) {
         $errors['mappings__' . $synch_direction] = t('Mapping rows exist for provisioning to ldap, but no ldap attribute is targetted for [dn].
           One row must map to [dn].  This row will have a user token like cn=[property.name],ou=users,dc=ldap,dc=mycompany,dc=com');
       }
@@ -1017,16 +965,6 @@ EOT;
     // Get the order of the columns correctly.
     if ($direction == LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY) {
       $result['user_attr'] = $user_attr;
-      $result['ldap_attr'] = $ldap_attr;
-      $result['convert'] = $convert;
-    }
-    else {
-      $result['ldap_attr'] = $ldap_attr;
-      $result['convert'] = $convert;
-      $result['user_attr'] = $user_attr;
-    }
-
-    if ($direction == LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY) {
       $result['user_tokens'] = array(
         '#type' => 'textfield',
         '#title' => 'User tokens',
@@ -1037,6 +975,13 @@ EOT;
         '#disabled' => ($action == 'nonconfigurable'),
         '#attributes' => array('class' => array('tokens')),
       );
+      $result['convert'] = $convert;
+      $result['ldap_attr'] = $ldap_attr;
+    }
+    else {
+      $result['ldap_attr'] = $ldap_attr;
+      $result['convert'] = $convert;
+      $result['user_attr'] = $user_attr;
     }
 
     $result['#storage']['synch_mapping_fields'][$direction] = array(
