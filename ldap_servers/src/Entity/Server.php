@@ -247,7 +247,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
    * @return boolean result
    */
   public function createLdapEntry($attributes, $dn = NULL) {
-
+// 
+// debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+// var_dump($dn);
+// die();
     if (!$this->connection) {
       $this->connect();
       $this->bind();

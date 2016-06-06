@@ -557,6 +557,10 @@ class LdapUserConf {
     );
 
     list($proposed_ldap_entry, $error) = $this->drupalUserToLdapEntry($drupal_account, $ldap_server, $params, $ldap_user);
+    //
+    // var_dump($proposed_ldap_entry);
+    // die();
+
     $proposed_dn = (is_array($proposed_ldap_entry) && isset($proposed_ldap_entry['dn']) && $proposed_ldap_entry['dn']) ? $proposed_ldap_entry['dn'] : NULL;
     $proposed_dn_lcase = Unicode::strtolower($proposed_dn);
     $existing_ldap_entry = ($proposed_dn) ? $ldap_server->dnExists($proposed_dn, 'ldap_entry') : NULL;
@@ -591,7 +595,7 @@ class LdapUserConf {
       $ldap_entries = array($proposed_dn_lcase => $proposed_ldap_entry);
       $context = array(
         'action' => 'add',
-        'corresponding_drupal_data' => array($proposed_dn_lcase => $account),
+        'corresponding_drupal_data' => array($proposed_dn_lcase => $drupal_account),
         'corresponding_drupal_data_type' => 'user',
       );
       \Drupal::moduleHandler()->alter('ldap_entry_pre_provision', $ldap_entries, $ldap_server, $context);
@@ -615,17 +619,17 @@ class LdapUserConf {
 
         // Need to store <sid>|<dn> in ldap_user_prov_entries field, which may contain more than one.
         $ldap_user_prov_entry = $ldap_server->sid . '|' . $proposed_ldap_entry['dn'];
-        if (!$user_entity->get('ldap_user_prov_entries')->getValue()[0]['value']) {
-          $user_entity->set('ldap_user_prov_entries', array());
+        if (!$drupal_account->get('ldap_user_prov_entries')->getValue()[0]['value']) {
+          $drupal_account->set('ldap_user_prov_entries', array());
         }
         $ldap_user_prov_entry_exists = FALSE;
-        foreach ($user_entity->get('ldap_user_prov_entries')->getValue()[0]['value'] as $i => $field_value_instance) {
+        foreach ($drupal_account->get('ldap_user_prov_entries')->getValue()[0]['value'] as $i => $field_value_instance) {
           if ($field_value_instance == $ldap_user_prov_entry) {
             $ldap_user_prov_entry_exists = TRUE;
           }
         }
         if (!$ldap_user_prov_entry_exists) {
-          $user_entity->set(
+          $drupal_account->set(
             'ldap_user_prov_entries',
             array(
               'value' => $ldap_user_prov_entry,
@@ -634,7 +638,7 @@ class LdapUserConf {
             )
           );
           $edit = array(
-            'ldap_user_prov_entries' => $user_entity->get('ldap_user_prov_entries')->getValue()[0]['value'],
+            'ldap_user_prov_entries' => $drupal_account->get('ldap_user_prov_entries')->getValue()[0]['value'],
           );
           $drupal_account = \Drupal::entityManager()->getStorage('user')->load($drupal_account->id());
           $drupal_account = user_save($drupal_account, $edit);
@@ -649,10 +653,10 @@ class LdapUserConf {
         $result['existing'] = NULL;
       }
     }
-
+    
     $tokens = array(
       '%dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
-      '%sid' => (isset($result['ldap_server']) && $result['ldap_server']) ? $result['ldap_server']->sid : 0,
+      '%sid' => (isset($result['ldap_server']) && $result['ldap_server']) ? $result['ldap_server']->id() : 0,
       '%username' => $drupal_account->getAccountName(),
       '%uid' => $drupal_account->id(),
       '%description' => $result['description'],
@@ -874,7 +878,7 @@ class LdapUserConf {
     if (!$sid) {
       return FALSE;
     }
-    // $user_entity->ldap_user_prov_entries,.
+    // $drupal_account->ldap_user_prov_entries,.
     $ldap_server = ldap_servers_get_servers($sid, NULL, TRUE);
     $params = array(
       'direction' => LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY,
@@ -970,6 +974,9 @@ class LdapUserConf {
 
     $direction = isset($params['direction']) ? $params['direction'] : LDAP_USER_PROV_DIRECTION_ALL;
     $prov_events = empty($params['prov_events']) ? ldap_user_all_events() : $params['prov_events'];
+    //
+    // var_dump($params);
+    // die();
 
     $mappings = $this->getSynchMappings($direction, $prov_events);
     // debug('prov_events'); //debug(join(",",$prov_events));

@@ -987,7 +987,7 @@ function ldap_user_user_login(UserInterface $drupal_account) {
     && $ldap_user_conf->provisionEnabled(LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY, LDAP_USER_LDAP_ENTRY_PROV_ON_AUTHENTICATE)
     ) {
     // @FIXME $user_edit is deprecated.
-    $bool_result = $ldap_user_conf->synchToLdapEntry($drupal_account, $user_edit);
+    $bool_result = $ldap_user_conf->synchToLdapEntry($drupal_account);
     if ($bool_result) {
       ldap_user_ldap_provision_semaphore('synch', 'set', $drupal_account->getAccountName());
     }
@@ -1175,9 +1175,9 @@ function ldap_user_all_events() {
  * @param string $text
  * @return string text with tokens replaced
  */
-function ldap_user_token_replace($token, UserInterface $drupal_account, $entity = NULL) {
+function ldap_user_token_replace($token, UserInterface $drupal_account) {
   $desired_tokens = ldap_servers_token_tokens_needed_for_template($token);
-  $tokens = ldap_user_token_tokenize_entry($drupal_account, $desired_tokens, LDAP_SERVERS_TOKEN_PRE, LDAP_SERVERS_TOKEN_POST, $entity);
+  $tokens = ldap_user_token_tokenize_entry($drupal_account, $desired_tokens, LDAP_SERVERS_TOKEN_PRE, LDAP_SERVERS_TOKEN_POST);
   $result = str_replace(array_keys($tokens), array_values($tokens), $token);
   return $result;
 }
@@ -1193,7 +1193,7 @@ function ldap_user_token_replace($token, UserInterface $drupal_account, $entity 
  *
  * @return token array suitable for t() functions of with lowercase keys as exemplified below
  */
-function ldap_user_token_tokenize_entry(UserInterface $drupal_account, $token_keys, $pre = LDAP_SERVERS_TOKEN_PRE, $post = LDAP_SERVERS_TOKEN_POST, $user_entity = NULL) {
+function ldap_user_token_tokenize_entry(UserInterface $drupal_account, $token_keys, $pre = LDAP_SERVERS_TOKEN_PRE, $post = LDAP_SERVERS_TOKEN_POST) {
 
   $detailed_watchdog_log = \Drupal::config()->get('ldap_help_watchdog_detail', 0);
   $tokens = array();
@@ -1205,26 +1205,12 @@ function ldap_user_token_tokenize_entry(UserInterface $drupal_account, $token_ke
     $attr = $parts[0];
     $ordinal = (count($parts) > 1) ? $parts[1] : 0;
     $token = $pre . $token_key . $post;
-    switch ($type) {
-
-      case 'field':
-        if ($drupal_account->get($attr)->getValue()) {
-          $tokens[$token] = $drupal_account->get($attr)->getValue()[0]['value'];
-        }
-        break;
-
-      case 'property':
-        if (property_exists($drupal_account, $attr)) {
-          $tokens[$token] = $drupal_account->{$attr};
-          var_dump(__FUNCTION__);
-          die();
-        } else if ($drupal_account->get($attr)->getValue()) {
-          $tokens[$token] = $drupal_account->get($attr)->getValue()[0]['value'];
-        }
-        break;
-    }
-
+    $tokens[$token] = $drupal_account->get($attr)->getValue()[0]['value'];
   }
+  //
+  // var_dump("tokenize");
+  // var_dump($tokens);
+  // die();
 
   return $tokens;
 }
