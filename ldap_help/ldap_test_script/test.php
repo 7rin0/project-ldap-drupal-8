@@ -60,12 +60,12 @@ foreach ($config['servers'] as $sid => $server) {
   ldap_help_display(NULL, "------------------------------------------\n$test_name bind\n------------------------------------------");
 
   if ($anon_bind) {
-    if (!ldap_bind($con)) {
+    if (!@ldap_bind($con)) {
       $results = array(ldap_errno($con), "LDAP anonymous bind error." . ldap_help_show_error($con));
     }
   }
   else {
-    $bind_result = ldap_bind($con, $server['server_bind_dn'], $server['server_bind_pw']);
+    $bind_result = @ldap_bind($con, $server['server_bind_dn'], $server['server_bind_pw']);
     if (!$bind_result) {
       $results = array(ldap_errno($con), "LDAP bind failure for user " . $server['server_bind_dn'] . "." . ldap_help_show_error($con));
     }

@@ -27,7 +27,7 @@ class LdapServersRebindHandler {
     ldap_set_rebind_proc($ldap, array($this, 'rebind_callback'));
 
     // Bind to new host, assumes initial bind dn has access to the referred servers.
-    if (!ldap_bind($ldap, $this->bind_dn, $this->bind_passwd)) {
+    if (!@ldap_bind($ldap, $this->bind_dn, $this->bind_passwd)) {
       echo "Could not bind to referral server: $referral";
       return 1;
     }
