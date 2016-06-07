@@ -631,8 +631,7 @@ class LdapUserConf {
           $edit = array(
             'ldap_user_prov_entries' => $drupal_account->get('ldap_user_prov_entries')->getValue()[0]['value'],
           );
-          $drupal_account = \Drupal::entityManager()->getStorage('user')->load($drupal_account->id());
-          $drupal_account = user_save($drupal_account, $edit);
+          $drupal_account->save();
         }
 
       }
@@ -646,25 +645,25 @@ class LdapUserConf {
     }
 
     $tokens = array(
-      '%dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
-      '%sid' => (isset($result['ldap_server']) && $result['ldap_server']) ? $result['ldap_server']->id() : 0,
-      '%username' => $drupal_account->getAccountName(),
-      '%uid' => $drupal_account->id(),
-      '%description' => $result['description'],
+      '@dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
+      '@sid' => (isset($result['ldap_server']) && $result['ldap_server']) ? $result['ldap_server']->id() : 0,
+      '@username' => $drupal_account->getAccountName(),
+      '@uid' => $drupal_account->id(),
+      '@description' => $result['description'],
     );
     if (!$test_query && isset($result['status'])) {
       if ($result['status'] == 'success') {
         if ($this->detailedWatchdog) {
-          \Drupal::logger('ldap_user')->info('LDAP entry on server %sid created dn=%dn.  %description. username=%username, uid=%uid', []);
+          \Drupal::logger('ldap_user')->info('LDAP entry on server @sid created dn=@dn.  @description. username=@username, uid=@uid', []);
         }
       }
       elseif ($result['status'] == 'conflict') {
         if ($this->detailedWatchdog) {
-          \Drupal::logger('ldap_user')->warning('LDAP entry on server %sid not created because of existing ldap entry. %description. username=%username, uid=%uid', []);
+          \Drupal::logger('ldap_user')->warning('LDAP entry on server @sid not created because of existing ldap entry. @description. username=@username, uid=@uid', []);
         }
       }
       elseif ($result['status'] == 'fail') {
-        \Drupal::logger('ldap_user')->error('LDAP entry on server %sid not created because error.  %description. username=%username, uid=%uid', []);
+        \Drupal::logger('ldap_user')->error('LDAP entry on server @sid not created because error.  @description. username=@username, uid=@uid', []);
       }
     }
     return $result;
@@ -760,17 +759,17 @@ class LdapUserConf {
     }
 
     $tokens = array(
-      '%dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
-      '%sid' => $this->ldapEntryProvisionServer,
-      '%username' => $drupal_account->getAccountName(),
-      '%uid' => $drupal_account->id(),
+      '@dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
+      '@sid' => $this->ldapEntryProvisionServer,
+      '@username' => $drupal_account->getAccountName(),
+      '@uid' => $drupal_account->id(),
     );
 
     if ($result) {
-      \Drupal::logger('ldap_user')->info('LDAP entry on server %sid synched dn=%dn. username=%username, uid=%uid', []);
+      \Drupal::logger('ldap_user')->info('LDAP entry on server @sid synched dn=@dn. username=@username, uid=@uid', []);
     }
     else {
-      \Drupal::logger('ldap_user')->error('LDAP entry on server %sid not synched because error. username=%username, uid=%uid', []);
+      \Drupal::logger('ldap_user')->error('LDAP entry on server @sid not synched because error. username=@username, uid=@uid', []);
     }
 
     return $result;
@@ -910,12 +909,12 @@ class LdapUserConf {
           $ldap_server = ldap_servers_get_servers($sid, NULL, TRUE);
           if (is_object($ldap_server) && $dn) {
             $boolean_result = $ldap_server->delete($dn);
-            $tokens = array('%sid' => $sid, '%dn' => $dn, '%username' => $drupal_account->getAccountName(), '%uid' => $drupal_account->id());
+            $tokens = array('@sid' => $sid, '@dn' => $dn, '@username' => $drupal_account->getAccountName(), '@uid' => $drupal_account->id());
             if ($boolean_result) {
-              \Drupal::logger('ldap_user')->info('LDAP entry on server %sid deleted dn=%dn. username=%username, uid=%uid', []);
+              \Drupal::logger('ldap_user')->info('LDAP entry on server @sid deleted dn=@dn. username=@username, uid=@uid', []);
             }
             else {
-              \Drupal::logger('ldap_user')->error('LDAP entry on server %sid not deleted because error. username=%username, uid=%uid', []);
+              \Drupal::logger('ldap_user')->error('LDAP entry on server @sid not deleted because error. username=@username, uid=@uid', []);
             }
           }
           else {
@@ -960,7 +959,7 @@ class LdapUserConf {
     }
 
     $watchdog_tokens = array(
-      '%drupal_username' => $drupal_account->getAccountName(),
+      '@drupal_username' => $drupal_account->getAccountName(),
     );
     $include_count = (isset($params['include_count']) && $params['include_count']);
 
@@ -1059,14 +1058,14 @@ class LdapUserConf {
 
     // Get an LDAP user from the LDAP server.
     if (!$ldap_user) {
-      $watchdog_tokens['%username'] = $user_edit['name'];
+      $watchdog_tokens['@username'] = $user_edit['name'];
       if ($this->drupalAcctProvisionServer) {
         $ldap_user = ldap_servers_get_user_ldap_data($user_edit['name'], $this->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
       }
       // Still no LDAP user.
       if (!$ldap_user) {
         if ($this->detailedWatchdog) {
-          \Drupal::logger('ldap_user')->debug('%username : failed to find associated ldap entry for username in provision.', []);
+          \Drupal::logger('ldap_user')->debug('@username : failed to find associated ldap entry for username in provision.', []);
         }
         return FALSE;
       }
@@ -1076,7 +1075,7 @@ class LdapUserConf {
     if (!$drupal_account->label()) {
       $ldap_server = ldap_servers_get_servers($this->drupalAcctProvisionServer, 'enabled', TRUE);
       $drupal_account->set('name', $ldap_user[$ldap_server->get('user_attr')]);
-      $watchdog_tokens['%username'] = $drupal_account->label();
+      $watchdog_tokens['@username'] = $drupal_account->label();
     }
 
     // Can we get details from an LDAP server?
@@ -1120,23 +1119,23 @@ class LdapUserConf {
       else {
         $this->entryToUserEdit($ldap_user, $drupal_account, $ldap_server, LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, array(LDAP_USER_EVENT_CREATE_DRUPAL_USER));
         if ($save) {
-          $watchdog_tokens = array('%drupal_username' => $drupal_account->get('name'));
+          $watchdog_tokens = array('@drupal_username' => $drupal_account->get('name'));
           if (empty($drupal_account->label())) {
             drupal_set_message(t('User account creation failed because of invalid, empty derived Drupal username.'), 'error');
-            \Drupal::logger('ldap_user')->error('Failed to create Drupal account %drupal_username because drupal username could not be derived.', []);
+            \Drupal::logger('ldap_user')->error('Failed to create Drupal account @drupal_username because drupal username could not be derived.', []);
             return FALSE;
           }
           if (!$mail = $drupal_account->getEmail()) {
             drupal_set_message(t('User account creation failed because of invalid, empty derived email address.'), 'error');
-            \Drupal::logger('ldap_user')->error('Failed to create Drupal account %drupal_username because email address could not be derived by LDAP User module', []);
+            \Drupal::logger('ldap_user')->error('Failed to create Drupal account @drupal_username because email address could not be derived by LDAP User module', []);
             return FALSE;
           }
 
           if ($account_with_same_email = user_load_by_mail($mail)) {
-            $watchdog_tokens['%email'] = $mail;
-            $watchdog_tokens['%duplicate_name'] = $account_with_same_email->name;
-            \Drupal::logger('ldap_user')->error('LDAP user %drupal_username has email address
-              (%email) conflict with a drupal user %duplicate_name', []);
+            $watchdog_tokens['@email'] = $mail;
+            $watchdog_tokens['@duplicate_name'] = $account_with_same_email->name;
+            \Drupal::logger('ldap_user')->error('LDAP user @drupal_username has email address
+              (@email) conflict with a drupal user @duplicate_name', []);
             drupal_set_message(t('Another user already exists in the system with the same email address. You should contact the system administrator in order to solve this conflict.'), 'error');
             return FALSE;
           }
@@ -1172,11 +1171,11 @@ class LdapUserConf {
       $drupal_account = user_load_by_name($drupal_username);
       $ldap_user = ldap_servers_get_user_ldap_data($drupal_username, $this->drupalAcctProvisionServer, 'ldap_user_prov_to_drupal');
       if (!$drupal_account) {
-        \Drupal::logger('ldap_user')->error('Failed to LDAP associate drupal account %drupal_username because account not found', array('%drupal_username' => $drupal_username));
+        \Drupal::logger('ldap_user')->error('Failed to LDAP associate drupal account @drupal_username because account not found', array('@drupal_username' => $drupal_username));
         return FALSE;
       }
       elseif (!$ldap_user) {
-        \Drupal::logger('ldap_user')->error('Failed to LDAP associate drupal account %drupal_username because corresponding LDAP entry not found', array('%drupal_username' => $drupal_username));
+        \Drupal::logger('ldap_user')->error('Failed to LDAP associate drupal account @drupal_username because corresponding LDAP entry not found', array('@drupal_username' => $drupal_username));
         return FALSE;
       }
       else {
