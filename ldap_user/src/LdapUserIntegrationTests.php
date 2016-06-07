@@ -464,11 +464,11 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // @FIXME
       $clone_first =
       // To reset the user cache, use EntityStorageInterface::resetCache().
-      \Drupal::entityManager()->getStorage('user')->load($clone_first_uid);
+      \Drupal\user\Entity\User::load($clone_first_uid);
       // @FIXME
       $clone_last =
       // To reset the user cache, use EntityStorageInterface::resetCache().
-      \Drupal::entityManager()->getStorage('user')->load($clone_last_uid);
+      \Drupal\user\Entity\User::load($clone_last_uid);
 
       // debug("pre ldap delete, clone0 and cloneN $first_clone_username and $last_clone_username"); debug($clone_first);debug($clone_last); //debug($ldap_server->entries);.
       $delete = LDAP_TEST_USER_ORPHAN_CLONE_COUNT - LDAP_TEST_USER_ORPHAN_CLONE_REMOVE_COUNT;
@@ -481,21 +481,21 @@ class LdapUserIntegrationTests extends LdapTestCase {
       // @FIXME
       $clone_first =
       // To reset the user cache, use EntityStorageInterface::resetCache().
-      \Drupal::entityManager()->getStorage('user')->load($clone_first_uid);
+      \Drupal\user\Entity\User::load($clone_first_uid);
       // @FIXME
       $clone_last =
       // To reset the user cache, use EntityStorageInterface::resetCache().
-      \Drupal::entityManager()->getStorage('user')->load($clone_last_uid);
+      \Drupal\user\Entity\User::load($clone_last_uid);
       // debug("post ldap delete and pre cron, clone0 and cloneN"); debug($clone_first->status);debug($clone_last->status);// debug($ldap_server->entries);.
       \Drupal::service("cron")->run();
       // @FIXME
       $clone_first =
       // To reset the user cache, use EntityStorageInterface::resetCache().
-      \Drupal::entityManager()->getStorage('user')->load($clone_first_uid);
+      \Drupal\user\Entity\User::load($clone_first_uid);
       // @FIXME
       $clone_last =
       // To reset the user cache, use EntityStorageInterface::resetCache().
-      \Drupal::entityManager()->getStorage('user')->load($clone_last_uid);
+      \Drupal\user\Entity\User::load($clone_last_uid);
       // debug("post cron, clone0 and cloneN"); debug($clone_first->status);debug($clone_last->status); //debug($ldap_server->entries);.
       switch ($account_option) {
 
@@ -509,7 +509,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
             // debug($account);
           }
           $success = TRUE;
-          $accounts = \Drupal::entityManager()->getStorage('user')->loadMultiple($test_uids);
+          $accounts = \Drupal\user\Entity\User::loadMultiple($test_uids);
           // debug("accounts for $test_id"); debug($accounts);
           foreach ($accounts as $uid => $account) {
             if ($drupal_account->status != 1) {
@@ -553,7 +553,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
             $test_uids[] = $cn_to_account[$name]->id();
           }
           $success = TRUE;
-          $accounts = \Drupal::entityManager()->getStorage('user')->loadMultiple($test_uids);
+          $accounts = \Drupal\user\Entity\User::loadMultiple($test_uids);
           foreach ($accounts as $uid => $account) {
             if ($drupal_account->status != 0) {
               $success = FALSE;
@@ -564,7 +564,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
             // @FIXME
             $clone_last =
             // To reset the user cache, use EntityStorageInterface::resetCache().
-            \Drupal::entityManager()->getStorage('user')->load($clone_last_uid);
+            \Drupal\user\Entity\User::load($clone_last_uid);
             $success = ($clone_last && $clone_last->status == 1);
           }
           break;
@@ -582,14 +582,14 @@ class LdapUserIntegrationTests extends LdapTestCase {
             // debug($account);
           }
           $success = TRUE;
-          $accounts = \Drupal::entityManager()->getStorage('user')->loadMultiple($test_uids);
+          $accounts = \Drupal\user\Entity\User::loadMultiple($test_uids);
           $success = (count($accounts) == LDAP_TEST_USER_ORPHAN_CLONE_COUNT);
 
           if ($success) {
             // @FIXME
             $clone_last =
             // To reset the user cache, use EntityStorageInterface::resetCache().
-            \Drupal::entityManager()->getStorage('user')->load($clone_last_uid);
+            \Drupal\user\Entity\User::load($clone_last_uid);
             $success = ($clone_last && $clone_last->status == 1);
           }
           break;
@@ -617,7 +617,7 @@ class LdapUserIntegrationTests extends LdapTestCase {
 
     // @FIXME
     // To reset the user cache, use EntityStorageInterface::resetCache().
-    return \Drupal::entityManager()->getStorage('user')->load($user->id());
+    return \Drupal\user\Entity\User::load($user->id());
   }
 
 }

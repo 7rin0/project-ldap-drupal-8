@@ -96,7 +96,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
      * LDAP_authen.MM.ULT.user1.goodpwd -- result: Successful logon as user 1
      */
 
-    $user1 = \Drupal::entityManager()->getStorage('user')->load(1);
+    $user1 = \Drupal\user\Entity\User::load(1);
     $password = $this->randomString(20);
     require_once \Drupal::root() . '/includes/password.inc';
     $account_test = array(
@@ -130,10 +130,10 @@ class LdapAuthenticationTestCase extends LdapTestCase {
 
     /** LDAP_authen.MM.ULT.drupal.goodpwd - result: Successful logon **/
 
-    $drupal_user = $this->drupalCreateUser();
-    $raw_pass = $drupal_user->pass_raw;
+    $drupal_account = $this->drupalCreateUser();
+    $raw_pass = $drupal_account->pass_raw;
     $edit = array(
-      'name' => $drupal_user->name,
+      'name' => $drupal_account->name,
       'pass' => $raw_pass,
     );
     $this->drupalPost('user', $edit, t('Log in'));
@@ -142,7 +142,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
 
     /** LDAP_authen.MM.ULT.drupal.badpwd - result: Drupal logon error message. **/
     $edit = array(
-      'name' => $drupal_user->name,
+      'name' => $drupal_account->name,
       'pass' => 'mydabpassword',
     );
     $this->drupalPost('user', $edit, t('Log in'));
@@ -212,7 +212,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
      * LDAP_authen.EM.ULT.user1.goodpwd -- result: Successful logon as user 1
      */
 
-    $user1 = \Drupal::entityManager()->getStorage('user')->load(1);
+    $user1 = \Drupal\user\Entity\User::load(1);
     $password = $this->randomString(20);
     require_once \Drupal::root() . '/includes/password.inc';
     $account_test = array(
@@ -246,10 +246,10 @@ class LdapAuthenticationTestCase extends LdapTestCase {
 
     /** LDAP_authen.EM.ULT.drupal.goodpwd - result: failed logon **/
 
-    $drupal_user = $this->drupalCreateUser();
-    $raw_pass = $drupal_user->pass_raw;
+    $drupal_account = $this->drupalCreateUser();
+    $raw_pass = $drupal_account->pass_raw;
     $edit = array(
-      'name' => $drupal_user->name,
+      'name' => $drupal_account->name,
       'pass' => $raw_pass,
     );
     $this->drupalPost('user', $edit, t('Log in'));
@@ -258,7 +258,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
 
     /** LDAP_authen.EM.ULT.drupal.badpwd - result: Drupal logon error message. **/
     $edit = array(
-      'name' => $drupal_user->name,
+      'name' => $drupal_account->name,
       'pass' => 'mydabpassword',
     );
     $this->drupalPost('user', $edit, t('Log in'));
@@ -308,7 +308,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
   /**
    * Set mock server variables for sso tests.
    *
-   * @param object $drupal_user
+   * @param object $drupal_account
    *   in drupal stdClass format
    * @param array $ldap_user
    *   array
@@ -445,7 +445,7 @@ class LdapAuthenticationTestCase extends LdapTestCase {
      * LDAP_authen.WL.user1  test for user 1 being excluded from white and black list tests
      */
 
-    $user1 = \Drupal::entityManager()->getStorage('user')->load(1);
+    $user1 = \Drupal\user\Entity\User::load(1);
     $password = $this->randomString(20);
     require_once \Drupal::root() . '/includes/password.inc';
     $account_test = array(

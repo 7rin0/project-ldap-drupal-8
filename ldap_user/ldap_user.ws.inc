@@ -85,7 +85,7 @@ function ldap_user_ws($action, $direction_tag, $drupal_user_name_or_dn, $key) {
   ldap_servers_module_load_include('php', 'ldap_user', 'LdapUserConfAdmin.class');
   $ldap_user_conf = new LdapUserConf();
 
-  $drupal_user = ($action == 'create' || $drupal_user_name === FALSE) ? FALSE : user_load_by_name($drupal_user_name);
+  $drupal_account = ($action == 'create' || $drupal_user_name === FALSE) ? FALSE : user_load_by_name($drupal_user_name);
   $user_edit = array();
   $account = array();
 
@@ -107,7 +107,7 @@ function ldap_user_ws($action, $direction_tag, $drupal_user_name_or_dn, $key) {
 
     case 'synch':
       if ($direction = LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) {
-        $saved_account = $ldap_user_conf->synchToDrupalAccount($drupal_user, $user_edit, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER, $ldap_user, TRUE);
+        $saved_account = $ldap_user_conf->synchToDrupalAccount($drupal_account, $user_edit, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER, $ldap_user, TRUE);
         $text = ($saved_account) ? 'Updated Account ' . $drupal_user_name : 'Failed to Update Account ' . $drupal_user_name;
         return ldap_user_ws_out(array((boolean) ($saved_account), $text));
       }
@@ -119,16 +119,15 @@ function ldap_user_ws($action, $direction_tag, $drupal_user_name_or_dn, $key) {
 
     case 'disable':
       if ($direction = LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) {
-        $drupal_user->status = 0;
-        $edit = array('status' => 0);
-        $saved_account = user_save($drupal_user, array('status' => 0));
+        $drupal_account->set('status', 0);
+        $drupal_account->save();
         return ldap_user_ws_out(array((boolean) ($saved_account), 'Disabled Account ' . $drupal_user_name));
       }
       break;
 
     case 'delete':
       if ($direction = LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER) {
-        $drupal_user->delete();
+        $drupal_account->delete();
         return ldap_user_ws_out(array(1, 'Deleted Account ' . $drupal_user_name));
       }
       elseif ($direction = LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY) {

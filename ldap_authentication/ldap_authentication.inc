@@ -229,10 +229,10 @@ function _ldap_authentication_user_login_authenticate_validate(FormStateInterfac
       $drupal_account = $ldap_server_authenticated_on->userUserEntityFromPuid($puid);
       if ($drupal_account) {
         $drupal_account_exists = TRUE;
-        $user_edit = array('name' => $drupal_accountname);
-        $drupal_account = user_save($drupal_account, $user_edit, 'ldap_user');
-        user_set_authmaps($drupal_account, array("authname_ldap_user" => $authname));
         $drupal_account_is_authmapped = TRUE;
+        $drupal_accout->set('name', $drupal_accountname);
+        $drupal_account->save();
+        user_set_authmaps($drupal_account, array("authname_ldap_user" => $authname));
       }
     }
   }
@@ -257,7 +257,7 @@ function _ldap_authentication_user_login_authenticate_validate(FormStateInterfac
     // LDAP_authen.AC.disallow.ldap.drupal.
     else {
       // Add ldap_authentication authmap to user. account name is fine here, though cn could be used.
-      \Drupal::logger('ldap_authentication')->debug($drupal_account);
+      \Drupal::logger('ldap_authentication')->debug($drupal_account->getAccountName());
       \Drupal::logger('ldap_authentication')->debug($authname);
       ldap_user_set_identifier($drupal_account, $authname);
       $drupal_account_is_authmapped = TRUE;

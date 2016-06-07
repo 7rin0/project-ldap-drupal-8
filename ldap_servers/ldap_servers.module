@@ -598,11 +598,11 @@ function ldap_servers_binary($value) {
  * @param scalar $ldap_context
  */
 function ldap_servers_get_user_ldap_data($drupal_username, $id = NULL, $ldap_context = NULL) {
-  $drupal_user_object = user_load_by_name($drupal_username);
+  $drupal_account = user_load_by_name($drupal_username);
   // If no explicit $id, find most appropriate one.
   if (\Drupal::moduleHandler()->moduleExists('ldap_user')) {
-    if ($drupal_user_object && $drupal_user_object->get('ldap_user_puid_sid')->getValue()) {
-      $id = $drupal_user_object->get('ldap_user_puid_sid')->getValue()[0]['value'];
+    if ($drupal_account && $drupal_account->get('ldap_user_puid_sid')->getValue()) {
+      $id = $drupal_account->get('ldap_user_puid_sid')->getValue()[0]['value'];
     }
     else {
       $ldap_user_conf = ldap_user_conf();

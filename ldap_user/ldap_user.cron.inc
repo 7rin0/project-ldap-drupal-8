@@ -42,7 +42,7 @@ function _ldap_user_orphans($ldap_user_conf) {
   //   ->propertyCondition('uid', $last_uid_checked, '>')
   //   ->propertyOrderBy('uid', 'ASC')
   //   ->range(0, $ldap_user_conf->orphanedCheckQty - 1)
-  //   ->addMetaData('account', \Drupal::entityManager()->getStorage('user')->load(1)); // run the query as user 1
+  //   ->addMetaData('account', \Drupal\user\Entity\User::load(1)); // run the query as user 1
   // $result = $query->execute();
   $drupal_users = array();
   $ldap_servers = ldap_servers_get_servers(NULL, 'enabled');
@@ -144,14 +144,13 @@ function _ldap_user_orphans($ldap_user_conf) {
     $email_list = array();
     global $base_url;
   }
-  $check_time = time();
   $email_list = array();
   foreach ($drupal_users as $sid => $puid_x_puid_attrs) {
     foreach ($puid_x_puid_attrs as $puid_attr => $puids) {
       foreach ($puids as $puid => $user_data) {
         $drupal_account = $drupal_accounts[$user_data['uid']];
-        $user_edit['ldap_user_last_checked'][Language::LANGCODE_NOT_SPECIFIED][0]['value'] = $check_time;
-        $drupal_account = user_save($drupal_account, $user_edit, 'ldap_user');
+        $drupal_accout->setValue('ldap_user_last_checked', time());
+        $drupal_account->save();
         if (!$user_data['exists']) {
           /**
            * $ldap_user_conf->orphanedDrupalAcctBehavior will either be

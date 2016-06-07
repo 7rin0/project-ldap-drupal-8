@@ -610,11 +610,11 @@ class LdapUserConf {
 
         // Need to store <sid>|<dn> in ldap_user_prov_entries field, which may contain more than one.
         $ldap_user_prov_entry = $ldap_server->sid . '|' . $proposed_ldap_entry['dn'];
-        if (!$drupal_account->get('ldap_user_prov_entries')->getValue()[0]['value']) {
+        if (!$drupal_account->get('ldap_user_prov_entries')->getValue()) {
           $drupal_account->set('ldap_user_prov_entries', array());
         }
         $ldap_user_prov_entry_exists = FALSE;
-        foreach ($drupal_account->get('ldap_user_prov_entries')->getValue()[0]['value'] as $i => $field_value_instance) {
+        foreach ($drupal_account->get('ldap_user_prov_entries')->getValue() as $i => $field_value_instance) {
           if ($field_value_instance == $ldap_user_prov_entry) {
             $ldap_user_prov_entry_exists = TRUE;
           }
@@ -628,12 +628,8 @@ class LdapUserConf {
               'save_value' => $ldap_user_prov_entry,
             )
           );
-          $edit = array(
-            'ldap_user_prov_entries' => $drupal_account->get('ldap_user_prov_entries')->getValue()[0]['value'],
-          );
-          $drupal_account->save();
         }
-
+        $drupal_account->save();
       }
       else {
         $result['status'] = 'fail';
@@ -824,7 +820,6 @@ class LdapUserConf {
     }
 
     if ($save) {
-      $drupal_account = \Drupal::entityManager()->getStorage('user')->load($drupal_account->id());
       $result = user_save($drupal_account, $user_edit, 'ldap_user');
       return $result;
     }
@@ -899,9 +894,9 @@ class LdapUserConf {
   public function deleteProvisionedLdapEntries(UserInterface $drupal_account) {
     // Determine server that is associated with user.
     $boolean_result = FALSE;
-    $language = ($drupal_account->language) ? $drupal_account->language : 'und';
-    if (isset($drupal_account->ldap_user_prov_entries[$language][0])) {
-      foreach ($drupal_account->ldap_user_prov_entries[$language] as $i => $field_instance) {
+    $language = $drupal_account->language();
+    if ($drupal_account->get('ldap_user_prov_entries')->getValue()) {
+      foreach ($drupal_account->get('ldap_user_prov_entries')->getValue() as $i => $field_instance) {
         $parts = explode('|', $field_instance['value']);
         if (count($parts) == 2) {
 
@@ -1339,6 +1334,7 @@ class LdapUserConf {
 
     // Set ldap_user_last_checked.
     $drupal_account->set('ldap_user_last_checked', time());
+    $drupal_account->save();
   }
 
   /**

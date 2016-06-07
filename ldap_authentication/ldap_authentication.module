@@ -179,10 +179,7 @@ function ldap_authentication_info($field = 0) {
  */
 function ldap_authentication_ldap_authenticated(UserInterface $drupal_account) {
 
-  if (is_numeric($drupal_account)) {
-    $drupal_account = \Drupal::entityManager()->getStorage('user')->load((int) $drupal_account);
-  }
-  if (!is_object($drupal_account) || $drupal_account->id() == 0) {
+  if (!$drupal_account) {
     return FALSE;
   }
 

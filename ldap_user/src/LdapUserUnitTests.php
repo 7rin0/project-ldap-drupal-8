@@ -371,7 +371,7 @@ class LdapUserUnitTests extends LdapTestCase {
     // @FIXME
     $this->assertFalse(
     // To reset the user cache, use EntityStorageInterface::resetCache().
-    \Drupal::entityManager()->getStorage('user')->load($hpotter_uid), t('deleteDrupalAccount deleted hpotter successfully'), $this->testId());
+    \Drupal\user\Entity\User::load($hpotter_uid), t('deleteDrupalAccount deleted hpotter successfully'), $this->testId());
 
     $ldap_server = ldap_servers_get_servers('activedirectory1', 'enabled', TRUE, TRUE);
     $ldap_server->refreshFakeData();
