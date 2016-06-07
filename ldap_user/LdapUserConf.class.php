@@ -762,10 +762,10 @@ class LdapUserConf {
     );
 
     if ($result) {
-      \Drupal::logger('ldap_user')->info('LDAP entry on server @sid synched dn=@dn. username=@username, uid=@uid', []);
+      \Drupal::logger('ldap_user')->info('LDAP entry on server @sid synched dn=@dn. username=@username, uid=@uid', $tokens);
     }
     else {
-      \Drupal::logger('ldap_user')->error('LDAP entry on server @sid not synched because error. username=@username, uid=@uid', []);
+      \Drupal::logger('ldap_user')->error('LDAP entry on server @sid not synched because error. username=@username, uid=@uid', $tokens);
     }
 
     return $result;

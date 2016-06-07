@@ -655,7 +655,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
 
     switch ($scope) {
       case LDAP_SCOPE_SUBTREE:
-        $result = ldap_search($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
+        $result = @ldap_search($this->connection, $params['base_dn'], $params['filter'], $params['attributes'], $params['attrsonly'],
           $params['sizelimit'], $params['timelimit'], $params['deref']);
         if ($params['sizelimit'] && $this->ldapErrorNumber() == LDAP_SIZELIMIT_EXCEEDED) {
           // False positive error thrown.  do not return result limit error when $sizelimit specified.
@@ -674,7 +674,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
         elseif ($this->hasError()) {
           // TODO: Check why is undefined
           $params['query_display'] = isset($params['query_display']) ? $params['query_display'] : '';
-          \Drupal::logger('ldap_server')->error('@ldap_read() function error.  LDAP Error: %message, @ldap_read() parameters: %query', array('%message' => $this->errorMsg('ldap'), '%query' => $params['query_display']));
+          \Drupal::logger('ldap_server')->error('ldap_read() function error.  LDAP Error: %message, ldap_read() parameters: %query', array('%message' => $this->errorMsg('ldap'), '%query' => $params['query_display']));
         }
         break;
 

@@ -93,7 +93,7 @@ foreach ($config['servers'] as $sid => $server) {
     ldap_help_display('server_port', $server['server_port']);
     ldap_help_display('tls', $tls);
 
-    $query_result = ldap_search($con, $server['server_base_dn'], $filter);
+    $query_result = @ldap_search($con, $server['server_base_dn'], $filter);
     if (!$query_result) {
       ldap_help_display(ldap_errno($con), "LDAP search failure for user $filter." . ldap_help_show_error($con));
     }
@@ -138,7 +138,7 @@ foreach ($config['servers'] as $sid => $server) {
 
     ldap_help_display(NULL, "\nprovision, entry[$dn]:");
     if ($provision['delete_if_exists']) {
-      $query_result = ldap_search($con, $server['server_base_dn'], $provision['find_filter']);
+      $query_result = @ldap_search($con, $server['server_base_dn'], $provision['find_filter']);
       if ($query_result) {
         $entries = ldap_get_entries($con, $query_result);
         if ($entries['count'] == 1) {
