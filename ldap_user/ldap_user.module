@@ -1207,10 +1207,6 @@ function ldap_user_token_tokenize_entry(UserInterface $drupal_account, $token_ke
     $token = $pre . $token_key . $post;
     $tokens[$token] = $drupal_account->get($attr)->getValue()[0]['value'];
   }
-  //
-  // var_dump("tokenize");
-  // var_dump($tokens);
-  // die();
 
   return $tokens;
 }

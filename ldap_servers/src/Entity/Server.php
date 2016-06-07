@@ -247,10 +247,6 @@ class Server extends ConfigEntityBase implements ServerInterface {
    * @return boolean result
    */
   public function createLdapEntry($attributes, $dn = NULL) {
-// 
-// debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-// var_dump($dn);
-// die();
     if (!$this->connection) {
       $this->connect();
       $this->bind();
@@ -262,13 +258,6 @@ class Server extends ConfigEntityBase implements ServerInterface {
     elseif (!$dn) {
       return FALSE;
     }
-
-    // var_dump(debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
-    // var_dump($this->connection);
-    // var_dump($dn);
-    // var_dump($attributes);
-    // die();
-
     $result = @ldap_add($this->connection, $dn, $attributes);
     if (!$result) {
       $error = "LDAP Server @ldap_add(%dn) Error Server ID = %sid, LDAP Err No: %ldap_errno LDAP Err Message: %ldap_err2str ";

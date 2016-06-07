@@ -557,10 +557,6 @@ class LdapUserConf {
     );
 
     list($proposed_ldap_entry, $error) = $this->drupalUserToLdapEntry($drupal_account, $ldap_server, $params, $ldap_user);
-    //
-    // var_dump($proposed_ldap_entry);
-    // die();
-
     $proposed_dn = (is_array($proposed_ldap_entry) && isset($proposed_ldap_entry['dn']) && $proposed_ldap_entry['dn']) ? $proposed_ldap_entry['dn'] : NULL;
     $proposed_dn_lcase = Unicode::strtolower($proposed_dn);
     $existing_ldap_entry = ($proposed_dn) ? $ldap_server->dnExists($proposed_dn, 'ldap_entry') : NULL;
@@ -601,11 +597,6 @@ class LdapUserConf {
       \Drupal::moduleHandler()->alter('ldap_entry_pre_provision', $ldap_entries, $ldap_server, $context);
       // Remove altered $proposed_ldap_entry from $ldap_entries array.
       $proposed_ldap_entry = $ldap_entries[$proposed_dn_lcase];
-
-      // var_dump($ldap_entries);
-      // var_dump($proposed_dn);
-      // var_dump($proposed_dn_lcase);
-      // die();
 
       // Create a LDAP User here
       $ldap_entry_created = $ldap_server->createLdapEntry($proposed_ldap_entry, $proposed_dn);
@@ -653,7 +644,7 @@ class LdapUserConf {
         $result['existing'] = NULL;
       }
     }
-    
+
     $tokens = array(
       '%dn' => isset($result['proposed']['dn']) ? $result['proposed']['dn'] : NULL,
       '%sid' => (isset($result['ldap_server']) && $result['ldap_server']) ? $result['ldap_server']->id() : 0,
@@ -967,6 +958,7 @@ class LdapUserConf {
     if (!$drupal_account || !is_object($ldap_server)) {
       return array(NULL, LDAP_USER_PROV_RESULT_BAD_PARAMS);
     }
+
     $watchdog_tokens = array(
       '%drupal_username' => $drupal_account->getAccountName(),
     );
@@ -974,9 +966,6 @@ class LdapUserConf {
 
     $direction = isset($params['direction']) ? $params['direction'] : LDAP_USER_PROV_DIRECTION_ALL;
     $prov_events = empty($params['prov_events']) ? ldap_user_all_events() : $params['prov_events'];
-    //
-    // var_dump($params);
-    // die();
 
     $mappings = $this->getSynchMappings($direction, $prov_events);
     // debug('prov_events'); //debug(join(",",$prov_events));

@@ -53,7 +53,7 @@ function ldap_servers_parse_user_attr_name($user_attr_key) {
  * @return string $text with tokens replaced or NULL if replacement not available
  */
 
-function ldap_servers_token_replace($resource, $text, $resource_type = 'ldap_entry') { // user_account
+function ldap_servers_token_replace($drupal_account, $text, $resource_type = 'ldap_entry') { // user_account
 
   $desired_tokens = ldap_servers_token_tokens_needed_for_template($text);  // desired tokens are of form "cn","mail", etc.
 
@@ -63,11 +63,11 @@ function ldap_servers_token_replace($resource, $text, $resource_type = 'ldap_ent
 
   switch ($resource_type) {
     case 'ldap_entry':
-    $tokens = ldap_servers_token_tokenize_entry($resource, $desired_tokens, LDAP_SERVERS_TOKEN_PRE, LDAP_SERVERS_TOKEN_POST);
+    $tokens = ldap_servers_token_tokenize_entry($drupal_account, $desired_tokens, LDAP_SERVERS_TOKEN_PRE, LDAP_SERVERS_TOKEN_POST);
     break;
 
     case 'user_account':
-    $tokens = ldap_servers_token_tokenize_user_account($resource, $desired_tokens, LDAP_SERVERS_TOKEN_PRE, LDAP_SERVERS_TOKEN_POST);
+    $tokens = ldap_servers_token_tokenize_user_account($drupal_account, $desired_tokens, LDAP_SERVERS_TOKEN_PRE, LDAP_SERVERS_TOKEN_POST);
     break;
   }
 
@@ -336,7 +336,7 @@ function ldap_servers_token_tokenize_entry($ldap_entry, $token_keys = 'all', $pr
 
 /**
  *
- * @param drupal user object $user_account
+ * @param drupal user object $drupal_account
  * @param array or 'all' $token_keys 'all' signifies return
  *   all token/value pairs available; otherwise array lists
  *   token keys (e.g. property.name ...NOT [property.name])
@@ -349,8 +349,7 @@ function ldap_servers_token_tokenize_entry($ldap_entry, $token_keys = 'all', $pr
  *   'uid' => 17
  */
 
-function ldap_servers_token_tokenize_user_account($user_account, $token_keys = 'all', $pre = LDAP_SERVERS_TOKEN_PRE, $post = LDAP_SERVERS_TOKEN_POST) {
-
+function ldap_servers_token_tokenize_user_account($drupal_account, $token_keys = 'all', $pre = LDAP_SERVERS_TOKEN_PRE, $post = LDAP_SERVERS_TOKEN_POST) {
   $detailed_watchdog_log = \Drupal::config('ldap_help.settings')->get('watchdog_detail');
   $tokens = array();
 
@@ -358,14 +357,14 @@ function ldap_servers_token_tokenize_user_account($user_account, $token_keys = '
 
   if ($token_keys == 'all') {
     // add lowercase keyed entries to ldap array
-    foreach ((array)$user_account as $property_name => $value) {
+    foreach ((array)$drupal_account as $property_name => $value) {
       if (is_scalar($value) && $property_name != 'password') {
         $token_keys[] = 'property.' . $property_name;
         if (\Drupal\Component\Utility\Unicode::strtolower($property_name) != $property_name) {
           $token_keys[] = 'property.' . \Drupal\Component\Utility\Unicode::strtolower($property_name);
         }
       }
-      elseif ($user_account->get($attr_name)->getValue() && is_scalar($user_account->get($attr_name)->getValue())) {
+      elseif ($drupal_account->get($attr_name)->getValue() && is_scalar($drupal_account->get($attr_name)->getValue())) {
         $token_keys[] = 'field.' . $property_name;
         if (\Drupal\Component\Utility\Unicode::strtolower($property_name) != $property_name) {
           $token_keys[] = 'field.' . \Drupal\Component\Utility\Unicode::strtolower($property_name);
@@ -392,11 +391,8 @@ function ldap_servers_token_tokenize_user_account($user_account, $token_keys = '
 
     switch ($attr_type) {
       case 'field':
-        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue()[0]['value'] : '';
-      break;
-
       case 'property':
-        $value = is_scalar($user_account->get($attr_name)->getValue()) ? $user_account->get($attr_name)->getValue()[0]['value'] : '';
+        $value = $drupal_account->get($attr_name)->getValue()[0]['value'];
       break;
 
       case 'password':
