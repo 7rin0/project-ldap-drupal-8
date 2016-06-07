@@ -1,0 +1,143 @@
+ldap_user_cron_last_uid_checked: 1
+ldap_user_conf:
+  drupalAcctProvisionServer: ldap_server
+  ldapEntryProvisionServer: ldap_server
+  drupalAcctProvisionTriggers:
+    2: '2'
+    1: '1'
+  ldapEntryProvisionTriggers:
+    6: '6'
+    7: '7'
+    3: '3'
+    8: 0
+  orphanedDrupalAcctBehavior: ldap_user_orphan_email
+  orphanedCheckQty: '100'
+  userConflictResolve: 2
+  manualAccountConflict: '3'
+  acctCreation: 4
+  ldapUserSynchMappings:
+    1:
+      field-pass:
+        ldap_attr: '[userPassword]'
+        user_attr: '[field.pass]'
+        convert: 0
+        direction: '1'
+        user_tokens: null
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 2
+          - 1
+    2:
+      dn:
+        ldap_attr: '[dn]'
+        user_attr: user_tokens
+        convert: 0
+        direction: '2'
+        user_tokens: 'cn=[property.mail],dc=ldap,dc=vm'
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      cn:
+        ldap_attr: '[cn]'
+        user_attr: '[property.mail]'
+        convert: 0
+        direction: '2'
+        user_tokens: '[property.name]'
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      userpassword:
+        ldap_attr: '[userpassword]'
+        user_attr: '[password.user-random]'
+        convert: 0
+        direction: '2'
+        user_tokens: ''
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      mail:
+        ldap_attr: '[mail]'
+        user_attr: '[property.mail]'
+        convert: 0
+        direction: '2'
+        user_tokens: ''
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      uid:
+        ldap_attr: '[uid]'
+        user_attr: '[field.uid]'
+        convert: 0
+        direction: '2'
+        user_tokens: ''
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      'objectclass:0':
+        ldap_attr: '[objectclass:0]'
+        user_attr: user_tokens
+        convert: 0
+        direction: '2'
+        user_tokens: top
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      'objectclass:1':
+        ldap_attr: '[objectclass:1]'
+        user_attr: user_tokens
+        convert: 0
+        direction: '2'
+        user_tokens: person
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      'objectclass:2':
+        ldap_attr: '[objectclass:2]'
+        user_attr: user_tokens
+        convert: 0
+        direction: '2'
+        user_tokens: inetOrgPerson
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+      sn:
+        ldap_attr: '[sn]'
+        user_attr: '[property.mail]'
+        convert: 0
+        direction: '2'
+        user_tokens: ''
+        config_module: ldap_user
+        prov_module: ldap_user
+        enabled: 1
+        prov_events:
+          - 4
+          - 3
+_core:
+  default_config_hash: wWDxm0E1m8H9cZc2TmW29TE81IjrHxYl4OcT6OpBYvw
+langcode: fr

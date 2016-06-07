@@ -1,0 +1,6 @@
+encrypt_key: false
+encryption: 10
+require_ssl_for_credentials: false
+_core:
+  default_config_hash: lnfEHIYtY8hGIV_cog4ogU7Nu0VZq5kgNuIk8pM69cE
+langcode: fr
