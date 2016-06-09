@@ -1334,7 +1334,6 @@ class LdapUserConf {
 
     // Set ldap_user_last_checked.
     $drupal_account->set('ldap_user_last_checked', time());
-    $drupal_account->save();
   }
 
   /**
