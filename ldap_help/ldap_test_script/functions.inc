@@ -105,14 +105,14 @@ function ldap_help_connect($address, $port, $tls, $test = FALSE) {
 
   if ($test) {
     // Test for ldap extensions that don't actually connect until bind.
-    $false_con = ldap_connect("fakehostname.sdfserewerdfsdf.com", 389);
+    $false_con = @ldap_connect("fakehostname.sdfserewerdfsdf.com", 389);
     if (ldap_errno($false_con) == LDAP_SUCCESS) {
-      $con = ldap_connect($address, $port);
-      return array(LDAP_OTHER, "ldap_connect does not actually connect until bind with installed extension, so connect is not a valid test.", $con);
+      $con = @ldap_connect($address, $port);
+      return array(LDAP_OTHER, "@ldap_connect does not actually connect until bind with installed extension, so connect is not a valid test.", $con);
     }
   }
 
-  $con = ldap_connect($address, $port);
+  $con = @ldap_connect($address, $port);
 
   if (!$con || ldap_errno($con) != LDAP_SUCCESS) {
     $err = ldap_errno($con) . ":" . ldap_error($con) . ":" . ldap_err2str(ldap_errno($con)) . "!";

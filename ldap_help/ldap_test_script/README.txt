@@ -1,5 +1,5 @@
 
-This script is intended to help separate LDAP Drupal module configuration and bugs from LDAP server, ldap php extension, and related connectivity and LDAP permissions issues.  It uses the php ldap extension functions like ldap_connect(), ldap_search(), etc. rather than the Drupal LDAP module code.
+This script is intended to help separate LDAP Drupal module configuration and bugs from LDAP server, ldap php extension, and related connectivity and LDAP permissions issues.  It uses the php ldap extension functions like @ldap_connect(), ldap_search(), etc. rather than the Drupal LDAP module code.
 
 Watchout for the following:
 -- The test script does not depend on the Drupal LDAP module and should not be run within a web server context.  -- Command line PHP with the LDAP Extension enabled are requirements.

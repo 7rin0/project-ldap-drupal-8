@@ -66,15 +66,15 @@ class Server extends ConfigEntityBase implements ServerInterface {
     $port = (self::get('port'));
     $address = (self::get('address'));
 
-    $con = ldap_connect($address, $port);
+    $con = @ldap_connect($address, $port);
 
     if (!$con) {
       \Drupal::logger('user')->notice('LDAP Connect failure to ' . $address . ':' . $port, []);
       return LDAP_CONNECT_ERROR;
     }
 
-    ldap_set_option($con, LDAP_OPT_PROTOCOL_VERSION, 3);
-    ldap_set_option($con, LDAP_OPT_REFERRALS, 0);
+    @ldap_set_option($con, LDAP_OPT_PROTOCOL_VERSION, 3);
+    @ldap_set_option($con, LDAP_OPT_REFERRALS, 0);
 
     // Use TLS if we are configured and able to.
     if (self::get('tls')) {
