@@ -8,6 +8,7 @@
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
+use Drupal\user\Entity\User;
 
 require_once 'ldap_user.module';
 /**
@@ -272,12 +273,14 @@ class LdapUserConf {
    * @return array/bool
    *   Array of mappings (may be empty array)
    */
-  public function getSynchMappings($direction = LDAP_USER_PROV_DIRECTION_ALL, $prov_events = NULL) {
+  public function getSynchMappings($direction = LDAP_USER_PROV_DIRECTION_ALL, $prov_events = NULL, $mappingType = 'all') {
     if (!$prov_events) {
       $prov_events = ldap_user_all_events();
     }
 
     $mappings = array();
+    $tokensLdap = array();
+
     if ($direction == LDAP_USER_PROV_DIRECTION_ALL) {
       $directions = array(LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY);
     }
@@ -292,6 +295,7 @@ class LdapUserConf {
             if ($result) {
               if ($direction == LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER && isset($mapping['user_attr'])) {
                 $key = $mapping['user_attr'];
+                $tokensLdap[] = $mapping['ldap_attr'];
               }
               elseif ($direction == LDAP_USER_PROV_DIRECTION_TO_LDAP_ENTRY && isset($mapping['ldap_attr'])) {
                 $key = $mapping['ldap_attr'];
@@ -305,6 +309,12 @@ class LdapUserConf {
         }
       }
     }
+
+    // Return ldap tokens to validate fields after create an user user
+    if ($mappingType = 'tokensLdap') {
+       return $tokensLdap;
+    }
+
     return $mappings;
   }
 
@@ -815,11 +825,12 @@ class LdapUserConf {
 
     if ($this->drupalAcctProvisionServer) {
       $ldap_server = ldap_servers_get_servers($this->drupalAcctProvisionServer, NULL, TRUE);
-      // @FIXME $user_edit is deprecated.
       $this->entryToUserEdit($ldap_user, $user_edit, $ldap_server, LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, array($prov_event));
     }
 
     if ($save) {
+      var_dump('synchToDrupalAccount');
+      die();
       $result = user_save($drupal_account, $user_edit, 'ldap_user');
       return $result;
     }
@@ -1035,14 +1046,9 @@ class LdapUserConf {
   public function provisionDrupalAccount($drupal_account = NULL, &$user_edit, $ldap_user = NULL, $save = TRUE) {
 
     $watchdog_tokens = array();
-    /**
-     * @todo
-     * -- add error catching for conflicts, conflicts should be checked before calling this function.
-     *
-     */
 
     if (!$drupal_account) {
-      $drupal_account = \Drupal::entityManager()->getStorage('user')->create($user_edit);
+      $drupal_account = User::create($user_edit);
     }
     $drupal_account->enforceIsNew();
 
@@ -1104,7 +1110,6 @@ class LdapUserConf {
         ldap_user_set_identifier($drupal_account, $drupal_account->label());
 
         // 2. attempt synch if appropriate for current context.
-        // @FIXME $user_edit is deprecated (LDAP)
         if ($drupal_account) {
           $drupal_account = $this->synchToDrupalAccount($drupal_account, $user_edit, LDAP_USER_EVENT_SYNCH_TO_DRUPAL_USER, $ldap_user, TRUE);
         }
@@ -1114,7 +1119,7 @@ class LdapUserConf {
       else {
         $this->entryToUserEdit($ldap_user, $drupal_account, $ldap_server, LDAP_USER_PROV_DIRECTION_TO_DRUPAL_USER, array(LDAP_USER_EVENT_CREATE_DRUPAL_USER));
         if ($save) {
-          $watchdog_tokens = array('@drupal_username' => $drupal_account->get('name'));
+          $watchdog_tokens = array('@drupal_username' => $drupal_account->getAccountName());
           if (empty($drupal_account->label())) {
             drupal_set_message(t('User account creation failed because of invalid, empty derived Drupal username.'), 'error');
             \Drupal::logger('ldap_user')->error('Failed to create Drupal account @drupal_username because drupal username could not be derived.', []);
@@ -1295,6 +1300,7 @@ class LdapUserConf {
 
     // Get any additional mappings.
     $mappings = $this->getSynchMappings($direction, $prov_events);
+    $tokensLdap = $this->getSynchMappings($direction, $prov_events, 'tokensLdap');
 
     // Loop over the mappings.
     foreach ($mappings as $user_attr_key => $field_detail) {
@@ -1314,13 +1320,11 @@ class LdapUserConf {
       list($value_type, $value_name, $value_instance) = ldap_servers_parse_user_attr_name($user_attr_key);
 
       // $value_instance not used, may have future use case.
-      // Are we dealing with a field?
-      if ($value_type == 'field') {
-        $drupal_account->set($value_name, $value);
-      }
-      elseif ($value_type == 'property') {
-        // Straight property.
-        // @FIXME We don't know if this is right in Drupal 8 or not.
+      // Avoid save tokens on user
+      if(
+        array_search($value, $tokensLdap) === false &&
+        ($value_type == 'field' || $value_type == 'property')
+      ) {
         $drupal_account->set($value_name, $value);
       }
     }
