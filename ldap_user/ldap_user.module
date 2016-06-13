@@ -149,7 +149,7 @@ function ldap_user_preprocess_table(&$variables) {
   // Iterate the variables looking for form elements that have the type hidden.
   foreach ($variables['rows'] as $key => &$row) {
     foreach ($row['cells'] as &$cell) {
-      if ($cell['content']['#type'] == 'hidden') {
+      if (isset($cell['content']['#type']) && $cell['content']['#type'] == 'hidden') {
         $cell['attributes']['hidden'] = TRUE;
         $cell['attributes']['aria-hidden'] = 'true';
         $cell['tag'] = 'span';
