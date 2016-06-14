@@ -364,7 +364,7 @@ class LdapUserConf {
       $attributes_map = $this->getSynchMappings($direction, $prov_events);
       $required_attributes = array();
       foreach ($attributes_map as $detail) {
-        if (count(array_intersect($prov_events, $detail['prov_events']))) {
+        if (isset($detail['prov_events']) && count(array_intersect($prov_events, $detail['prov_events']))) {
           // Add the attribute to our array.
           if ($detail['ldap_attr']) {
             ldap_servers_token_extract_attributes($required_attributes, $detail['ldap_attr']);
