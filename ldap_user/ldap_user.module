@@ -603,9 +603,9 @@ function ldap_user_get_uid_from_map($identifier) {
  */
 function ldap_user_get_identifier_from_map($uid) {
   $authmap = \Drupal::service('externalauth.authmap');
-  $getAuthdata = $authmap->getAuthdata($uid, 'ldap_user');
-  if ($getAuthdata["authname"]) {
-    return $getAuthdata["authname"];
+  $authdata = $authmap->getAuthdata($uid, 'ldap_user');
+  if (isset($authdata['authname']) && !empty($authdata['authname'])) {
+    return $authdata['authname'];
   }
 }
 
